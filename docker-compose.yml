@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:8.0.16
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_DATABASE: db_todo
+    command:
+      - "--character-set-server=utf8"
+      - "--collation-server=utf8_general_ci"
+      - "--sql_mode="
+    volumes:
+      - dbdata:/var/lib/mysql
+    cap_add:
+      - SYS_NICE
+    networks:
+      - nettodo
+
+volumes:
+  dbdata:
+
+networks:
+  nettodo:

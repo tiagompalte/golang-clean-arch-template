@@ -1,0 +1,56 @@
+definitions:
+  handler.CreateTaskCategoryResponse:
+    properties:
+      name:
+        type: string
+      slug:
+        type: string
+    type: object
+  handler.CreateTaskRequest:
+    properties:
+      category_name:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  handler.CreateTaskResponse:
+    properties:
+      category:
+        $ref: '#/definitions/handler.CreateTaskCategoryResponse'
+      description:
+        type: string
+      done:
+        type: boolean
+      name:
+        type: string
+      uuid:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/tasks:
+    post:
+      consumes:
+      - application/json
+      description: Create new Task
+      parameters:
+      - description: New Task
+        in: body
+        name: new_task
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Create Task success
+          schema:
+            $ref: '#/definitions/handler.CreateTaskResponse'
+      summary: Create Task
+      tags:
+      - Task
+swagger: "2.0"
