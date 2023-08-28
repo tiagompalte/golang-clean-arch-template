@@ -143,7 +143,6 @@ func (r TaskRepository) FindAll(ctx context.Context) ([]entity.Task, error) {
 
 	result, err := r.conn.QueryContext(
 		ctx,
-		r.mainTable,
 		q,
 	)
 	list, err := pkgRepo.ParseEntities[entity.Task](
@@ -156,4 +155,34 @@ func (r TaskRepository) FindAll(ctx context.Context) ([]entity.Task, error) {
 	}
 
 	return list, nil
+}
+
+func (r TaskRepository) UpdateDone(ctx context.Context, task entity.Task) error {
+	_, err := r.conn.ExecContext(ctx,
+		`UPDATE tb_task
+			SET done = ?
+		WHERE NOT deleted_at AND id = ?
+		`,
+		task.Done,
+		task.ID,
+	)
+	if err != nil {
+		return errors.Repo(err, r.mainTable)
+	}
+
+	return nil
+}
+
+func (r TaskRepository) Delete(ctx context.Context, task entity.Task) error {
+	_, err := r.conn.ExecContext(ctx,
+		`DELETE FROM tb_task
+			WHERE NOT deleted_at AND id = ?
+		`,
+		task.ID,
+	)
+	if err != nil {
+		return errors.Repo(err, r.mainTable)
+	}
+
+	return nil
 }

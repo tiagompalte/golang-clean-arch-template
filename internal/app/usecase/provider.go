@@ -9,4 +9,7 @@ var ProviderSet = wire.NewSet(
 	NewFindAllCategoryImpl,
 	NewFindAllTaskImpl,
 	NewFindOneTaskImpl,
+	NewUpdateTaskDoneImpl,
+	NewUpdateTaskUndoneImpl,
+	NewDeleteTaskImpl,
 )

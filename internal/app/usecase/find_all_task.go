@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
@@ -10,15 +11,8 @@ import (
 
 type FindAllTask usecasePkg.UseCase[usecasePkg.Blank, FindAllTaskOutput]
 
-type ItemFindAllTaskOutput struct {
-	UUID        string
-	Name        string
-	Description string
-	Done        bool
-}
-
 type FindAllTaskOutput struct {
-	Items []ItemFindAllTaskOutput
+	Items []entity.Task
 }
 
 type FindAllTaskImpl struct {
@@ -37,15 +31,5 @@ func (u FindAllTaskImpl) Execute(ctx context.Context, _ usecasePkg.Blank) (FindA
 		return FindAllTaskOutput{}, errors.Wrap(err)
 	}
 
-	items := make([]ItemFindAllTaskOutput, 0, len(list))
-	for _, task := range list {
-		items = append(items, ItemFindAllTaskOutput{
-			UUID:        task.UUID,
-			Name:        task.Name,
-			Description: task.Description,
-			Done:        task.Done,
-		})
-	}
-
-	return FindAllTaskOutput{Items: items}, nil
+	return FindAllTaskOutput{Items: list}, nil
 }

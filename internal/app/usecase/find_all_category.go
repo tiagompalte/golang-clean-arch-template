@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
@@ -10,13 +11,8 @@ import (
 
 type FindAllCategory usecasePkg.UseCase[usecasePkg.Blank, FindAllCategoryOutput]
 
-type ItemFindAllCategoryOutput struct {
-	Slug string
-	Name string
-}
-
 type FindAllCategoryOutput struct {
-	Items []ItemFindAllCategoryOutput
+	Items []entity.Category
 }
 
 type FindAllCategoryImpl struct {
@@ -35,13 +31,5 @@ func (u FindAllCategoryImpl) Execute(ctx context.Context, _ usecasePkg.Blank) (F
 		return FindAllCategoryOutput{}, errors.Wrap(err)
 	}
 
-	items := make([]ItemFindAllCategoryOutput, 0, len(list))
-	for _, category := range list {
-		items = append(items, ItemFindAllCategoryOutput{
-			Slug: category.GetSlug(),
-			Name: category.Name,
-		})
-	}
-
-	return FindAllCategoryOutput{Items: items}, nil
+	return FindAllCategoryOutput{Items: list}, nil
 }

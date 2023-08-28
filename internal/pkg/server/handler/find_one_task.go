@@ -1,0 +1,51 @@
+package handler
+
+import (
+	"net/http"
+
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
+	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
+)
+
+// @Summary Find One Task
+// @Description Find one task by UUID
+// @Tags Task
+// @Produce json
+// @Param uuid path string true "Task UUID"
+// @Success 200 {object} TaskResponse "Task"
+// @Router /api/v1/tasks/{uuid} [get]
+func FindOneTaskHandler(findOneTaskUseCase usecase.FindOneTask) server.Handler {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		ctx := r.Context()
+
+		uuid, ok := extractParamPath(r, 4)
+		if !ok {
+			return pkgErrors.NewEmptyPathError("uuid")
+		}
+
+		task, err := findOneTaskUseCase.Execute(ctx, uuid)
+		if err != nil {
+			return errors.Wrap(err)
+		}
+
+		resp := TaskResponse{
+			UUID:        task.UUID,
+			Name:        task.Name,
+			Description: task.Description,
+			Done:        task.Done,
+			Category: CategoryResponse{
+				Slug: task.Category.GetSlug(),
+				Name: task.Category.Name,
+			},
+		}
+
+		err = server.RespondJSON(w, http.StatusOK, resp)
+		if err != nil {
+			return errors.Wrap(err)
+		}
+
+		return nil
+	}
+}

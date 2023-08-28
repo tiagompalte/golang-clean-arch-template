@@ -13,9 +13,9 @@ import (
 type CreateTask usecasePkg.UseCase[CreateTaskInput, entity.Task]
 
 type CreateTaskInput struct {
-	Name         string `json:"name"`
-	Description  string `json:"description"`
-	CategoryName string `json:"category_name"`
+	Name         string
+	Description  string
+	CategoryName string
 }
 
 func (i CreateTaskInput) Validate() error {

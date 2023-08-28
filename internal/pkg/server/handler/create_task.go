@@ -23,17 +23,12 @@ func (r CreateTaskRequest) toInput() usecase.CreateTaskInput {
 	}
 }
 
-type CreateTaskResponse struct {
-	UUID        string                     `json:"uuid"`
-	Name        string                     `json:"name"`
-	Description string                     `json:"description"`
-	Done        bool                       `json:"done"`
-	Category    CreateTaskCategoryResponse `json:"category"`
-}
-
-type CreateTaskCategoryResponse struct {
-	Slug string `json:"slug"`
-	Name string `json:"name"`
+type TaskResponse struct {
+	UUID        string           `json:"uuid"`
+	Name        string           `json:"name"`
+	Description string           `json:"description"`
+	Done        bool             `json:"done"`
+	Category    CategoryResponse `json:"category"`
 }
 
 // @Summary Create Task
@@ -42,7 +37,7 @@ type CreateTaskCategoryResponse struct {
 // @Accept json
 // @Produce json
 // @Param new_task body CreateTaskRequest true "New Task"
-// @Success 201 {object} CreateTaskResponse "Create Task success"
+// @Success 201 {object} TaskResponse "Create Task success"
 // @Router /api/v1/tasks [post]
 func CreateTaskHandler(createTaskUseCase usecase.CreateTask) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
@@ -59,12 +54,12 @@ func CreateTaskHandler(createTaskUseCase usecase.CreateTask) server.Handler {
 			return errors.Wrap(err)
 		}
 
-		resp := CreateTaskResponse{
+		resp := TaskResponse{
 			UUID:        task.UUID,
 			Name:        task.Name,
 			Description: task.Description,
 			Done:        task.Done,
-			Category: CreateTaskCategoryResponse{
+			Category: CategoryResponse{
 				Slug: task.Category.GetSlug(),
 				Name: task.Category.Name,
 			},

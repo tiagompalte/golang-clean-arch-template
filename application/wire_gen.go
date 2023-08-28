@@ -30,11 +30,17 @@ func Build() (App, error) {
 	taskRepository := data.NewTaskRepository(dataManager)
 	findAllTask := usecase.NewFindAllTaskImpl(taskRepository)
 	findOneTask := usecase.NewFindOneTaskImpl(taskRepository)
+	updateTaskDone := usecase.NewUpdateTaskDoneImpl(taskRepository)
+	updateTaskUndone := usecase.NewUpdateTaskUndoneImpl(taskRepository)
+	deleteTask := usecase.NewDeleteTaskImpl(taskRepository)
 	useCase := usecase.UseCase{
-		CreateTask:      createTask,
-		FindAllCategory: findAllCategory,
-		FindAllTask:     findAllTask,
-		FindOneTask:     findOneTask,
+		CreateTask:       createTask,
+		FindAllCategory:  findAllCategory,
+		FindAllTask:      findAllTask,
+		FindOneTask:      findOneTask,
+		UpdateTaskDone:   updateTaskDone,
+		UpdateTaskUndone: updateTaskUndone,
+		DeleteTask:       deleteTask,
 	}
 	app := ProvideApplication(configsConfig, serverServer, loggerLogger, useCase)
 	return app, nil

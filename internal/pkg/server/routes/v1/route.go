@@ -10,6 +10,7 @@ func CreateRoute(app application.App) server.GroupRoute {
 		Path: "/v1",
 		GroupRoutes: []server.GroupRoute{
 			CreateGroupTask(app),
+			CreateGroupCategory(app),
 		},
 	}
 }

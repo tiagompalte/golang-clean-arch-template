@@ -1,5 +1,5 @@
 definitions:
-  handler.CreateTaskCategoryResponse:
+  handler.CategoryResponse:
     properties:
       name:
         type: string
@@ -15,10 +15,10 @@ definitions:
       name:
         type: string
     type: object
-  handler.CreateTaskResponse:
+  handler.TaskResponse:
     properties:
       category:
-        $ref: '#/definitions/handler.CreateTaskCategoryResponse'
+        $ref: '#/definitions/handler.CategoryResponse'
       description:
         type: string
       done:
@@ -31,7 +31,36 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/v1/categories:
+    get:
+      description: Find all categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Categories list
+          schema:
+            items:
+              $ref: '#/definitions/handler.CategoryResponse'
+            type: array
+      summary: Find All Categories
+      tags:
+      - Category
   /api/v1/tasks:
+    get:
+      description: Find all tasks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tasks list
+          schema:
+            items:
+              $ref: '#/definitions/handler.TaskResponse'
+            type: array
+      summary: Find All Tasks
+      tags:
+      - Task
     post:
       consumes:
       - application/json
@@ -49,8 +78,71 @@ paths:
         "201":
           description: Create Task success
           schema:
-            $ref: '#/definitions/handler.CreateTaskResponse'
+            $ref: '#/definitions/handler.TaskResponse'
       summary: Create Task
+      tags:
+      - Task
+  /api/v1/tasks/{uuid}:
+    delete:
+      description: Delete task by UUID
+      parameters:
+      - description: Task UUID
+        in: path
+        name: uuid
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      summary: Delete task
+      tags:
+      - Task
+    get:
+      description: Find one task by UUID
+      parameters:
+      - description: Task UUID
+        in: path
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Task
+          schema:
+            $ref: '#/definitions/handler.TaskResponse'
+      summary: Find One Task
+      tags:
+      - Task
+  /api/v1/tasks/{uuid}/done:
+    put:
+      description: Update task as done
+      parameters:
+      - description: Task UUID
+        in: path
+        name: uuid
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      summary: Mark task as done
+      tags:
+      - Task
+  /api/v1/tasks/{uuid}/undone:
+    put:
+      description: Update task as undone
+      parameters:
+      - description: Task UUID
+        in: path
+        name: uuid
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+      summary: Mark task as undone
       tags:
       - Task
 swagger: "2.0"

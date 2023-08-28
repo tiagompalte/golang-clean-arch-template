@@ -17,6 +17,10 @@ func RespondJSON(w http.ResponseWriter, statusCode int, data any) error {
 	return nil
 }
 
+func RespondNoContent(w http.ResponseWriter) {
+	w.WriteHeader(http.StatusNoContent)
+}
+
 func RespondAggregateError(w http.ResponseWriter, statusCode int, err errors.AggregatedError) error {
 	results := make([]ErrorResponse, len(err))
 	for i := range err {
