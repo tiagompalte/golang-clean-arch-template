@@ -19,6 +19,7 @@ type DataManager interface {
 	Connector
 	Begin() (TransactionManager, error)
 	Close() error
+	PingContext(ctx context.Context) error
 }
 
 type TransactionManager interface {

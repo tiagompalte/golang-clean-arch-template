@@ -5,9 +5,18 @@ type ConfigDatabase struct {
 	ConnectionSource string `mapstructure:"CONNECTION_SOURCE"`
 }
 
+type ConfigRedis struct {
+	Host   string `mapstructure:"HOST"`
+	Port   int    `mapstructure:"PORT"`
+	DB     int    `mapstructure:"db"`
+	Pass   string `mapstructure:"pass"`
+	Prefix string `mapstructure:"prefix"`
+}
+
 type ConfigCache struct {
-	DriverName       string `mapstructure:"DRIVER_NAME"`
-	ConnectionSource string `mapstructure:"CONNECTION_SOURCE"`
+	DriverName       string      `mapstructure:"DRIVER_NAME"`
+	ConnectionSource string      `mapstructure:"CONNECTION_SOURCE"`
+	Redis            ConfigRedis `mapstructure:"REDIS"`
 }
 
 type Config struct {

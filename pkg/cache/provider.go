@@ -9,6 +9,14 @@ func ProviderSet(
 ) Cache {
 	if config.Cache.DriverName == "memory" {
 		return NewMemoryCache()
+	} else if config.Cache.DriverName == "redis" {
+		return NewRedisCache(
+			config.Cache.Redis.Host,
+			config.Cache.Redis.Port,
+			config.Cache.Redis.DB,
+			config.Cache.Redis.Pass,
+			config.Cache.Redis.Prefix,
+		)
 	}
 	panic("None cache define")
 }

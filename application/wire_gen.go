@@ -10,6 +10,7 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/cache"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/config"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/logger"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
@@ -33,6 +34,8 @@ func Build() (App, error) {
 	updateTaskDone := usecase.NewUpdateTaskDoneImpl(taskRepository)
 	updateTaskUndone := usecase.NewUpdateTaskUndoneImpl(taskRepository)
 	deleteTask := usecase.NewDeleteTaskImpl(taskRepository)
+	cacheCache := cache.ProviderSet(configsConfig)
+	healthCheck := usecase.NewHealthCheckImpl(dataManager, cacheCache)
 	useCase := usecase.UseCase{
 		CreateTask:       createTask,
 		FindAllCategory:  findAllCategory,
@@ -41,6 +44,7 @@ func Build() (App, error) {
 		UpdateTaskDone:   updateTaskDone,
 		UpdateTaskUndone: updateTaskUndone,
 		DeleteTask:       deleteTask,
+		HealthCheck:      healthCheck,
 	}
 	app := ProvideApplication(configsConfig, serverServer, loggerLogger, useCase)
 	return app, nil

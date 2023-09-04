@@ -2,12 +2,9 @@ package cache
 
 import (
 	"context"
-	"errors"
 	"sync"
 	"time"
 )
-
-var ErrItemNotFound = errors.New("cache: item not found")
 
 type item struct {
 	value     interface{}
@@ -79,5 +76,9 @@ func (c *MemoryCache) ClearAll(ctx context.Context) error {
 	c.cache = make(map[string]*item)
 	c.Unlock()
 
+	return nil
+}
+
+func (c *MemoryCache) Ping(ctx context.Context) error {
 	return nil
 }

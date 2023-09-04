@@ -8,4 +8,5 @@ type UseCase struct {
 	UpdateTaskDone   UpdateTaskDone
 	UpdateTaskUndone UpdateTaskUndone
 	DeleteTask       DeleteTask
+	HealthCheck      HealthCheck
 }

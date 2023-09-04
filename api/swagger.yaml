@@ -31,6 +31,17 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/health-check:
+    get:
+      description: Verify health check application
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Health Check
+      tags:
+      - Health Check
   /api/v1/categories:
     get:
       description: Find all categories

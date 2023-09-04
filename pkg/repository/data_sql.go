@@ -47,3 +47,7 @@ func (d *DataSql) QueryRowContext(ctx context.Context, query string, args ...int
 func (d *DataSql) QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
 	return d.db.QueryContext(ctx, query, args...)
 }
+
+func (d *DataSql) PingContext(ctx context.Context) error {
+	return d.db.PingContext(ctx)
+}

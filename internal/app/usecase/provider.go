@@ -12,4 +12,5 @@ var ProviderSet = wire.NewSet(
 	NewUpdateTaskDoneImpl,
 	NewUpdateTaskUndoneImpl,
 	NewDeleteTaskImpl,
+	NewHealthCheckImpl,
 )
