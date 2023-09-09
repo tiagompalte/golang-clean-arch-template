@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
@@ -19,8 +20,8 @@ func UpdateTaskUndoneHandler(updateTaskUndoneUseCase usecase.UpdateTaskUndone) s
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		uuid, ok := extractParamPath(r, 4)
-		if !ok {
+		uuid := chi.URLParam(r, "uuid")
+		if uuid == "" {
 			return pkgErrors.NewEmptyPathError("uuid")
 		}
 

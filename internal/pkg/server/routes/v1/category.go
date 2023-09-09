@@ -9,7 +9,7 @@ import (
 func CreateGroupCategory(app application.App) server.GroupRoute {
 	routes := []server.Route{
 		{
-			Path:    "",
+			Path:    "/",
 			Method:  "GET",
 			Handler: handler.FindAllCategoryHandler(app.UseCase().FindAllCategory),
 		},

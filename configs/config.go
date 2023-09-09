@@ -20,9 +20,8 @@ type ConfigCache struct {
 }
 
 type Config struct {
-	AppName   string         `mapstructure:"APP_NAME"`
-	WebServer string         `mapstructure:"WEB_SERVER"`
-	WebPort   string         `mapstructure:"WEB_PORT"`
-	Database  ConfigDatabase `mapstructure:"DATABASE"`
-	Cache     ConfigCache    `mapstructure:"CACHE"`
+	AppName  string         `mapstructure:"APP_NAME"`
+	WebPort  string         `mapstructure:"WEB_PORT"`
+	Database ConfigDatabase `mapstructure:"DATABASE"`
+	Cache    ConfigCache    `mapstructure:"CACHE"`
 }

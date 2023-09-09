@@ -7,8 +7,5 @@ import (
 func ProviderSet(
 	config configs.Config,
 ) Server {
-	if config.WebServer == "fiber" {
-		return NewFiberServer(config)
-	}
-	panic("None web server define")
+	return NewGoChiServer(config)
 }

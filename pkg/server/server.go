@@ -6,7 +6,7 @@ import (
 
 type Handler func(w http.ResponseWriter, r *http.Request) error
 
-type Middleware func(h http.Handler) http.Handler
+type Middleware func(next http.Handler) http.Handler
 
 type GroupRoute struct {
 	Path        string

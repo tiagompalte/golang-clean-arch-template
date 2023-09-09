@@ -9,32 +9,32 @@ import (
 func CreateGroupTask(app application.App) server.GroupRoute {
 	routes := []server.Route{
 		{
-			Path:    "",
+			Path:    "/",
 			Method:  "POST",
 			Handler: handler.CreateTaskHandler(app.UseCase().CreateTask),
 		},
 		{
-			Path:    "",
+			Path:    "/",
 			Method:  "GET",
 			Handler: handler.FindAllTaskHandler(app.UseCase().FindAllTask),
 		},
 		{
-			Path:    "/:uuid",
+			Path:    "/{uuid}",
 			Method:  "GET",
 			Handler: handler.FindOneTaskHandler(app.UseCase().FindOneTask),
 		},
 		{
-			Path:    "/:uuid/done",
+			Path:    "/{uuid}/done",
 			Method:  "PUT",
 			Handler: handler.UpdateTaskDoneHandler(app.UseCase().UpdateTaskDone),
 		},
 		{
-			Path:    "/:uuid/undone",
+			Path:    "/{uuid}/undone",
 			Method:  "PUT",
 			Handler: handler.UpdateTaskUndoneHandler(app.UseCase().UpdateTaskUndone),
 		},
 		{
-			Path:    "/:uuid",
+			Path:    "/{uuid}",
 			Method:  "DELETE",
 			Handler: handler.DeleteTaskHandler(app.UseCase().DeleteTask),
 		},
