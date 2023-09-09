@@ -8,9 +8,9 @@ type ConfigDatabase struct {
 type ConfigRedis struct {
 	Host   string `mapstructure:"HOST"`
 	Port   int    `mapstructure:"PORT"`
-	DB     int    `mapstructure:"db"`
-	Pass   string `mapstructure:"pass"`
-	Prefix string `mapstructure:"prefix"`
+	DB     int    `mapstructure:"DB"`
+	Pass   string `mapstructure:"PASS"`
+	Prefix string `mapstructure:"PREFIX"`
 }
 
 type ConfigCache struct {

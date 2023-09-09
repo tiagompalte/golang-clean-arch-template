@@ -12,7 +12,6 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/cache"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/config"
-	"github.com/tiagompalte/golang-clean-arch-template/pkg/logger"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -22,7 +21,6 @@ import (
 func Build() (App, error) {
 	configsConfig := config.ProviderSet()
 	serverServer := server.ProviderSet(configsConfig)
-	loggerLogger := logger.NewLogrus()
 	dataManager := repository.ProviderSet(configsConfig)
 	uowUow := uow.NewUow(dataManager)
 	createTask := usecase.NewCreateTaskImpl(uowUow)
@@ -46,6 +44,6 @@ func Build() (App, error) {
 		DeleteTask:       deleteTask,
 		HealthCheck:      healthCheck,
 	}
-	app := ProvideApplication(configsConfig, serverServer, loggerLogger, useCase)
+	app := ProvideApplication(configsConfig, serverServer, useCase)
 	return app, nil
 }
