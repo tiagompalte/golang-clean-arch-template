@@ -12,6 +12,7 @@ type Category struct {
 	UpdatedAt time.Time
 	slug      string
 	Name      string
+	UserID    uint32
 }
 
 var regexSlugReplace = regexp.MustCompile(`\s+`)

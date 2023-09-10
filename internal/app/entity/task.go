@@ -13,4 +13,5 @@ type Task struct {
 	Description string
 	Done        bool
 	Category    Category
+	UserID      uint32
 }
