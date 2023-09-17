@@ -9,23 +9,23 @@ import (
 	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type FindAllTask usecasePkg.UseCase[usecasePkg.Blank, FindAllTaskOutput]
+type FindAllTaskUseCase usecasePkg.UseCase[usecasePkg.Blank, FindAllTaskOutput]
 
 type FindAllTaskOutput struct {
 	Items []entity.Task
 }
 
-type FindAllTaskImpl struct {
+type FindAllTaskUseCaseImpl struct {
 	taskRepository repository.TaskRepository
 }
 
-func NewFindAllTaskImpl(taskRepository repository.TaskRepository) FindAllTask {
-	return FindAllTaskImpl{
+func NewFindAllTaskUseCaseImpl(taskRepository repository.TaskRepository) FindAllTaskUseCase {
+	return FindAllTaskUseCaseImpl{
 		taskRepository: taskRepository,
 	}
 }
 
-func (u FindAllTaskImpl) Execute(ctx context.Context, _ usecasePkg.Blank) (FindAllTaskOutput, error) {
+func (u FindAllTaskUseCaseImpl) Execute(ctx context.Context, _ usecasePkg.Blank) (FindAllTaskOutput, error) {
 	list, err := u.taskRepository.FindAll(ctx)
 	if err != nil {
 		return FindAllTaskOutput{}, errors.Wrap(err)

@@ -16,7 +16,7 @@ import (
 // @Param uuid path string true "Task UUID"
 // @Success 204
 // @Router /api/v1/tasks/{uuid}/undone [put]
-func UpdateTaskUndoneHandler(updateTaskUndoneUseCase usecase.UpdateTaskUndone) server.Handler {
+func UpdateTaskUndoneHandler(updateTaskUndoneUseCase usecase.UpdateTaskUndoneUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 

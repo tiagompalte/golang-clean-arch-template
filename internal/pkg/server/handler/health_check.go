@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Success 204
 // @Router /api/health-check [get]
-func HealthCheckHandler(healthCheck usecase.HealthCheck) server.Handler {
+func HealthCheckHandler(healthCheck usecase.HealthCheckUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 

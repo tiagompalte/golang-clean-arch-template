@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Success 200 {object} []TaskResponse "Tasks list"
 // @Router /api/v1/tasks [get]
-func FindAllTaskHandler(findAllTaskUseCase usecase.FindAllTask) server.Handler {
+func FindAllTaskHandler(findAllTaskUseCase usecase.FindAllTaskUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 

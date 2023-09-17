@@ -9,7 +9,7 @@ import (
 
 func RespondJSON(w http.ResponseWriter, statusCode int, data any) error {
 	w.WriteHeader(statusCode)
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("content-type", "application/json; charset=UTF-8")
 	err := json.NewEncoder(w).Encode(data)
 	if err != nil {
 		return errors.Wrap(err)
@@ -40,9 +40,5 @@ func RespondAggregateError(w http.ResponseWriter, statusCode int, err errors.Agg
 }
 
 func RespondError(w http.ResponseWriter, err errors.AppError) error {
-	statusCode, ok := HttpStatusCode[err.Code]
-	if !ok {
-		statusCode = http.StatusInternalServerError
-	}
-	return RespondAggregateError(w, statusCode, errors.NewAggregatedError(err))
+	return RespondAggregateError(w, err.StatusCode, errors.NewAggregatedError(err))
 }

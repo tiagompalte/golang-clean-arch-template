@@ -11,7 +11,6 @@ func NewAggregatedError(errs ...error) AggregatedError {
 }
 
 func (e AggregatedError) Error() string {
-
 	var message string
 	for _, err := range e {
 		message += fmt.Sprintf("- %s\n", err.Error())

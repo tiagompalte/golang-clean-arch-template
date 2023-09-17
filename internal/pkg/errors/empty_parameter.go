@@ -1,6 +1,8 @@
 package errors
 
 import (
+	"net/http"
+
 	pkg "github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
@@ -9,7 +11,8 @@ const ErrorCodeEmptyParameter = "empty-parameter"
 
 func NewEmptyParameterError(field string) pkg.AppError {
 	return pkg.AppError{
-		Code:  ErrorCodeEmptyParameter,
-		Field: field,
+		StatusCode: http.StatusBadRequest,
+		Code:       ErrorCodeEmptyParameter,
+		Field:      field,
 	}
 }

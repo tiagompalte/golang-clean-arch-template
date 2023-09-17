@@ -44,6 +44,71 @@
                 }
             }
         },
+        "/api/v1/signin": {
+            "post": {
+                "description": "Login user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User | SignIn"
+                ],
+                "summary": "Sign In",
+                "parameters": [
+                    {
+                        "description": "Login User",
+                        "name": "signin",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.SigninRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Tokens",
+                        "schema": {
+                            "$ref": "#/definitions/handler.SigninResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/signup": {
+            "post": {
+                "description": "Create new User",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User | SignUp"
+                ],
+                "summary": "Sign Up",
+                "parameters": [
+                    {
+                        "description": "New User",
+                        "name": "signup",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.SignupRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Tokens",
+                        "schema": {
+                            "$ref": "#/definitions/handler.SignupResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/tasks": {
             "get": {
                 "description": "Find all tasks",
@@ -218,6 +283,47 @@
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.SigninRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.SigninResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.SignupRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.SignupResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
                     "type": "string"
                 }
             }

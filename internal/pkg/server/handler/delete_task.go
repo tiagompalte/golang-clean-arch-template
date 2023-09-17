@@ -16,7 +16,7 @@ import (
 // @Param uuid path string true "Task UUID"
 // @Success 204
 // @Router /api/v1/tasks/{uuid} [delete]
-func DeleteTaskHandler(deleteTaskUseCase usecase.DeleteTask) server.Handler {
+func DeleteTaskHandler(deleteTaskUseCase usecase.DeleteTaskUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 

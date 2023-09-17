@@ -8,19 +8,19 @@ import (
 	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type UpdateTaskDone usecasePkg.UseCase[string, usecasePkg.Blank]
+type UpdateTaskDoneUseCase usecasePkg.UseCase[string, usecasePkg.Blank]
 
-type UpdateTaskDoneImpl struct {
+type UpdateTaskDoneUseCaseImpl struct {
 	taskRepository repository.TaskRepository
 }
 
-func NewUpdateTaskDoneImpl(taskRepository repository.TaskRepository) UpdateTaskDone {
-	return UpdateTaskDoneImpl{
+func NewUpdateTaskDoneUseCaseImpl(taskRepository repository.TaskRepository) UpdateTaskDoneUseCase {
+	return UpdateTaskDoneUseCaseImpl{
 		taskRepository: taskRepository,
 	}
 }
 
-func (u UpdateTaskDoneImpl) Execute(ctx context.Context, uuid string) (usecasePkg.Blank, error) {
+func (u UpdateTaskDoneUseCaseImpl) Execute(ctx context.Context, uuid string) (usecasePkg.Blank, error) {
 	task, err := u.taskRepository.FindByUUID(ctx, uuid)
 	if err != nil {
 		return usecasePkg.Blank{}, errors.Wrap(err)

@@ -11,7 +11,7 @@ func CreateGroupCategory(app application.App) server.GroupRoute {
 		{
 			Path:    "/",
 			Method:  "GET",
-			Handler: handler.FindAllCategoryHandler(app.UseCase().FindAllCategory),
+			Handler: handler.FindAllCategoryHandler(app.UseCase().FindAllCategoryUseCase),
 		},
 	}
 

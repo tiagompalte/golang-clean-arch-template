@@ -5,13 +5,13 @@ import (
 )
 
 type AppError struct {
-	Code    string
-	Field   string
-	Message string
+	StatusCode int
+	Code       string
+	Field      string
+	Message    string
 }
 
 func (e AppError) Error() string {
-
 	if e.Message != "" {
 		return e.Message
 	}
@@ -19,6 +19,7 @@ func (e AppError) Error() string {
 	if e.Field == "" {
 		return fmt.Sprintf("error code %s", e.Code)
 	}
+
 	return fmt.Sprintf("error code %s on field %s", e.Code, e.Field)
 }
 
