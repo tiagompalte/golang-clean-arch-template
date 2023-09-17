@@ -10,7 +10,7 @@ import (
 	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type CreateTask usecasePkg.UseCase[CreateTaskInput, entity.Task]
+type CreateTaskUseCase usecasePkg.UseCase[CreateTaskInput, entity.Task]
 
 type CreateTaskInput struct {
 	Name         string
@@ -37,17 +37,17 @@ func (i CreateTaskInput) Validate() error {
 	return nil
 }
 
-type CreateTaskImpl struct {
+type CreateTaskUseCaseImpl struct {
 	uow uow.Uow
 }
 
-func NewCreateTaskImpl(uow uow.Uow) CreateTask {
-	return CreateTaskImpl{
+func NewCreateTaskUseCaseImpl(uow uow.Uow) CreateTaskUseCase {
+	return CreateTaskUseCaseImpl{
 		uow: uow,
 	}
 }
 
-func (u CreateTaskImpl) Execute(ctx context.Context, input CreateTaskInput) (entity.Task, error) {
+func (u CreateTaskUseCaseImpl) Execute(ctx context.Context, input CreateTaskInput) (entity.Task, error) {
 	err := input.Validate()
 	if err != nil {
 		return entity.Task{}, errors.Wrap(err)

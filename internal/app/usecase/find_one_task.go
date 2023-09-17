@@ -9,19 +9,19 @@ import (
 	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type FindOneTask usecasePkg.UseCase[string, entity.Task]
+type FindOneTaskUseCase usecasePkg.UseCase[string, entity.Task]
 
-type FindOneTaskImpl struct {
+type FindOneTaskUseCaseImpl struct {
 	taskRepository repository.TaskRepository
 }
 
-func NewFindOneTaskImpl(taskRepository repository.TaskRepository) FindOneTask {
-	return FindOneTaskImpl{
+func NewFindOneTaskUseCaseImpl(taskRepository repository.TaskRepository) FindOneTaskUseCase {
+	return FindOneTaskUseCaseImpl{
 		taskRepository: taskRepository,
 	}
 }
 
-func (u FindOneTaskImpl) Execute(ctx context.Context, uuid string) (entity.Task, error) {
+func (u FindOneTaskUseCaseImpl) Execute(ctx context.Context, uuid string) (entity.Task, error) {
 	task, err := u.taskRepository.FindByUUID(ctx, uuid)
 	if err != nil {
 		return entity.Task{}, errors.Wrap(err)

@@ -8,17 +8,20 @@ import (
 type RepositoryManager interface {
 	Task() repository.TaskRepository
 	Category() repository.CategoryRepository
+	User() repository.UserRepository
 }
 
 type repo struct {
 	task     repository.TaskRepository
 	category repository.CategoryRepository
+	user     repository.UserRepository
 }
 
 func NewRepositoryManager(conn pkgRepo.Connector) RepositoryManager {
 	return repo{
 		task:     NewTaskRepository(conn),
 		category: NewCategoryRepository(conn),
+		user:     NewUserRepository(conn),
 	}
 }
 
@@ -28,4 +31,8 @@ func (r repo) Task() repository.TaskRepository {
 
 func (r repo) Category() repository.CategoryRepository {
 	return r.category
+}
+
+func (r repo) User() repository.UserRepository {
+	return r.user
 }

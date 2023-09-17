@@ -10,8 +10,10 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/auth"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/cache"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/config"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -23,26 +25,35 @@ func Build() (App, error) {
 	serverServer := server.ProviderSet(configsConfig)
 	dataManager := repository.ProviderSet(configsConfig)
 	uowUow := uow.NewUow(dataManager)
-	createTask := usecase.NewCreateTaskImpl(uowUow)
+	createTaskUseCase := usecase.NewCreateTaskUseCaseImpl(uowUow)
 	categoryRepository := data.NewCategoryRepository(dataManager)
-	findAllCategory := usecase.NewFindAllCategoryImpl(categoryRepository)
+	findAllCategoryUseCase := usecase.NewFindAllCategoryUseCaseImpl(categoryRepository)
 	taskRepository := data.NewTaskRepository(dataManager)
-	findAllTask := usecase.NewFindAllTaskImpl(taskRepository)
-	findOneTask := usecase.NewFindOneTaskImpl(taskRepository)
-	updateTaskDone := usecase.NewUpdateTaskDoneImpl(taskRepository)
-	updateTaskUndone := usecase.NewUpdateTaskUndoneImpl(taskRepository)
-	deleteTask := usecase.NewDeleteTaskImpl(taskRepository)
+	findAllTaskUseCase := usecase.NewFindAllTaskUseCaseImpl(taskRepository)
+	findOneTaskUseCase := usecase.NewFindOneTaskUseCaseImpl(taskRepository)
+	updateTaskDoneUseCase := usecase.NewUpdateTaskDoneUseCaseImpl(taskRepository)
+	updateTaskUndoneUseCase := usecase.NewUpdateTaskUndoneUseCaseImpl(taskRepository)
+	deleteTaskUseCase := usecase.NewDeleteTaskUseCaseImpl(taskRepository)
 	cacheCache := cache.ProviderSet(configsConfig)
-	healthCheck := usecase.NewHealthCheckImpl(dataManager, cacheCache)
+	healthCheckUseCase := usecase.NewHealthCheckUseCaseImpl(dataManager, cacheCache)
+	userRepository := data.NewUserRepository(dataManager)
+	cryptoCrypto := crypto.ProviderSet(configsConfig)
+	createUserUseCase := usecase.NewCreateUserUseCaseImpl(userRepository, cryptoCrypto)
+	validateUserPasswordUseCase := usecase.NewValidateUserPasswordUseCaseImpl(userRepository, cryptoCrypto)
+	authAuth := auth.ProviderSet(configsConfig)
+	generateUserTokenUseCase := usecase.NewGenerateUserTokenUseCaseImpl(authAuth)
 	useCase := usecase.UseCase{
-		CreateTask:       createTask,
-		FindAllCategory:  findAllCategory,
-		FindAllTask:      findAllTask,
-		FindOneTask:      findOneTask,
-		UpdateTaskDone:   updateTaskDone,
-		UpdateTaskUndone: updateTaskUndone,
-		DeleteTask:       deleteTask,
-		HealthCheck:      healthCheck,
+		CreateTaskUseCase:           createTaskUseCase,
+		FindAllCategoryUseCase:      findAllCategoryUseCase,
+		FindAllTaskUseCase:          findAllTaskUseCase,
+		FindOneTaskUseCase:          findOneTaskUseCase,
+		UpdateTaskDoneUseCase:       updateTaskDoneUseCase,
+		UpdateTaskUndoneUseCase:     updateTaskUndoneUseCase,
+		DeleteTaskUseCase:           deleteTaskUseCase,
+		HealthCheckUseCase:          healthCheckUseCase,
+		CreateUserUseCase:           createUserUseCase,
+		ValidateUserPasswordUseCase: validateUserPasswordUseCase,
+		GenerateUserTokenUseCase:    generateUserTokenUseCase,
 	}
 	app := ProvideApplication(configsConfig, serverServer, useCase)
 	return app, nil

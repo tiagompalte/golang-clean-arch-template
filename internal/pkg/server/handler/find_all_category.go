@@ -19,7 +19,7 @@ type CategoryResponse struct {
 // @Produce json
 // @Success 200 {object} []CategoryResponse "Categories list"
 // @Router /api/v1/categories [get]
-func FindAllCategoryHandler(findAllCategoryUseCase usecase.FindAllCategory) server.Handler {
+func FindAllCategoryHandler(findAllCategoryUseCase usecase.FindAllCategoryUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 

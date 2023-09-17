@@ -17,7 +17,7 @@ import (
 // @Param uuid path string true "Task UUID"
 // @Success 200 {object} TaskResponse "Task"
 // @Router /api/v1/tasks/{uuid} [get]
-func FindOneTaskHandler(findOneTaskUseCase usecase.FindOneTask) server.Handler {
+func FindOneTaskHandler(findOneTaskUseCase usecase.FindOneTaskUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 

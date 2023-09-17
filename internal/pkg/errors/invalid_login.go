@@ -7,12 +7,11 @@ import (
 )
 
 // ErrorCodeEmptyPath means that path is empty
-const ErrorCodeEmptyPath = "empty-path"
+const ErrorCodeInvalidLogin = "invalid-login"
 
-func NewEmptyPathError(field string) pkg.AppError {
+func NewInvalidLoginError() pkg.AppError {
 	return pkg.AppError{
-		StatusCode: http.StatusBadRequest,
-		Code:       ErrorCodeEmptyPath,
-		Field:      field,
+		StatusCode: http.StatusUnauthorized,
+		Code:       ErrorCodeInvalidLogin,
 	}
 }

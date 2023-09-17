@@ -1,11 +1,14 @@
 package errors
 
+import "net/http"
+
 // ErrorCodeNotFound means the request resource was not found
 const ErrorCodeNotFound = "not-found"
 
 func NewAppNotFoundError(field string) AppError {
 	return AppError{
-		Code:  ErrorCodeNotFound,
-		Field: field,
+		StatusCode: http.StatusNotFound,
+		Code:       ErrorCodeNotFound,
+		Field:      field,
 	}
 }

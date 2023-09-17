@@ -39,7 +39,7 @@ type TaskResponse struct {
 // @Param new_task body CreateTaskRequest true "New Task"
 // @Success 201 {object} TaskResponse "Create Task success"
 // @Router /api/v1/tasks [post]
-func CreateTaskHandler(createTaskUseCase usecase.CreateTask) server.Handler {
+func CreateTaskHandler(createTaskUseCase usecase.CreateTaskUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 

@@ -15,6 +15,32 @@ definitions:
       name:
         type: string
     type: object
+  handler.SigninRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  handler.SigninResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
+  handler.SignupRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  handler.SignupResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
   handler.TaskResponse:
     properties:
       category:
@@ -57,6 +83,48 @@ paths:
       summary: Find All Categories
       tags:
       - Category
+  /api/v1/signin:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: Login User
+        in: body
+        name: signin
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SigninRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Tokens
+          schema:
+            $ref: '#/definitions/handler.SigninResponse'
+      summary: Sign In
+      tags:
+      - User | SignIn
+  /api/v1/signup:
+    post:
+      consumes:
+      - application/json
+      description: Create new User
+      parameters:
+      - description: New User
+        in: body
+        name: signup
+        required: true
+        schema:
+          $ref: '#/definitions/handler.SignupRequest'
+      responses:
+        "201":
+          description: Tokens
+          schema:
+            $ref: '#/definitions/handler.SignupResponse'
+      summary: Sign Up
+      tags:
+      - User | SignUp
   /api/v1/tasks:
     get:
       description: Find all tasks

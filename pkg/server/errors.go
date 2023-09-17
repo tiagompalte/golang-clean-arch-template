@@ -66,18 +66,3 @@ func prepareError(w http.ResponseWriter, r *http.Request, err error) {
 		prepareError(w, r, respError)
 	}
 }
-
-var HttpStatusCode = map[string]int{
-	// 4xx
-	errors.ErrorCodeBadRequest:          400,
-	errors.ErrorCodeUnauthorized:        401,
-	errors.ErrorCodeForbidden:           403,
-	errors.ErrorCodeNotFound:            404,
-	errors.ErrorCodeConflict:            409,
-	errors.ErrorCodeUnprocessableEntity: 422,
-
-	// 5xx
-	errors.ErrorCodeInternalServerError: 500,
-	errors.ErrorCodeBadGateway:          502,
-	errors.ErrorCodeGatewayTimeout:      504,
-}

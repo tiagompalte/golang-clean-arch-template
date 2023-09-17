@@ -12,9 +12,7 @@ type errorWrapper interface {
 }
 
 func Wrap(err error, messages ...string) error {
-
 	if err != nil {
-
 		// Gets caller function path.
 		pc := make([]uintptr, 10)
 		runtime.Callers(2, pc)
@@ -47,7 +45,6 @@ type WrappedError struct {
 }
 
 func (e WrappedError) Error() string {
-
 	errPath := e.path
 	if len(e.messages) > 0 {
 
