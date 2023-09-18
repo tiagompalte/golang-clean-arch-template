@@ -50,10 +50,33 @@ func (a JwtAuth) ValidateToken(ctx context.Context, token string) (bool, error) 
 
 	claims, ok := jwtToken.Claims.(jwt.MapClaims)
 	if !ok {
-		return false, errors.Wrap(err)
+		return false, nil
 	}
 
 	isValid := claims.VerifyExpiresAt(time.Now().Local().Unix(), true)
 
 	return isValid, nil
+}
+
+func (a JwtAuth) ValidateExtractToken(ctx context.Context, token string) (map[string]any, bool, error) {
+	jwtToken, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		return []byte(a.keySecret), nil
+	})
+	if err != nil {
+		return map[string]any{}, false, errors.Wrap(err)
+	}
+
+	claims, ok := jwtToken.Claims.(jwt.MapClaims)
+	if !ok {
+		return map[string]any{}, false, nil
+	}
+
+	isValid := claims.VerifyExpiresAt(time.Now().Local().Unix(), true)
+
+	ret := make(map[string]any, 0)
+	for key, value := range claims {
+		ret[key] = value
+	}
+
+	return ret, isValid, nil
 }

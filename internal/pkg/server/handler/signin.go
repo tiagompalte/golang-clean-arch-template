@@ -27,7 +27,7 @@ type SigninResponse struct {
 
 // @Summary Sign In
 // @Description Login user
-// @Tags User
+// @Tags Sign In
 // @Accept json
 // @Produce json
 // @Param signin body SigninRequest true "Login User"

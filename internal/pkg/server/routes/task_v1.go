@@ -1,12 +1,14 @@
-package v1
+package routes
 
 import (
 	"github.com/tiagompalte/golang-clean-arch-template/application"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/handler"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/middleware"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
 
-func CreateGroupTask(app application.App) server.GroupRoute {
+func CreateGroupTaskV1(app application.App) server.GroupRoute {
 	routes := []server.Route{
 		{
 			Path:    "/",
@@ -41,7 +43,10 @@ func CreateGroupTask(app application.App) server.GroupRoute {
 	}
 
 	return server.GroupRoute{
-		Path:   "/tasks",
+		Path: "/tasks",
+		Middlewares: []server.Middleware{
+			middleware.ValidateExtractUserTokenMiddleware(constant.Authorization, app.Auth(), app.UseCase().FindUserUUIDUseCase),
+		},
 		Routes: routes,
 	}
 }

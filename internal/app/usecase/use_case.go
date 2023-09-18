@@ -12,4 +12,5 @@ type UseCase struct {
 	CreateUserUseCase
 	ValidateUserPasswordUseCase
 	GenerateUserTokenUseCase
+	FindUserUUIDUseCase
 }

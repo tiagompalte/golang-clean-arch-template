@@ -42,6 +42,7 @@ func Build() (App, error) {
 	validateUserPasswordUseCase := usecase.NewValidateUserPasswordUseCaseImpl(userRepository, cryptoCrypto)
 	authAuth := auth.ProviderSet(configsConfig)
 	generateUserTokenUseCase := usecase.NewGenerateUserTokenUseCaseImpl(authAuth)
+	findUserUUIDUseCase := usecase.NewFindUserUUIDUseCaseImpl(userRepository)
 	useCase := usecase.UseCase{
 		CreateTaskUseCase:           createTaskUseCase,
 		FindAllCategoryUseCase:      findAllCategoryUseCase,
@@ -54,7 +55,8 @@ func Build() (App, error) {
 		CreateUserUseCase:           createUserUseCase,
 		ValidateUserPasswordUseCase: validateUserPasswordUseCase,
 		GenerateUserTokenUseCase:    generateUserTokenUseCase,
+		FindUserUUIDUseCase:         findUserUUIDUseCase,
 	}
-	app := ProvideApplication(configsConfig, serverServer, useCase)
+	app := ProvideApplication(configsConfig, serverServer, useCase, authAuth)
 	return app, nil
 }

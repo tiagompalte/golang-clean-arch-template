@@ -29,7 +29,7 @@ func (r SignupRequest) toInput() usecase.CreateUserInput {
 
 // @Summary Sign Up
 // @Description Create new User
-// @Tags User
+// @Tags Sign Up
 // @Accept json
 // @Produce json
 // @Param signup body SignupRequest true "New User"

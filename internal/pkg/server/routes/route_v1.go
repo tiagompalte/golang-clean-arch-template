@@ -1,4 +1,4 @@
-package v1
+package routes
 
 import (
 	"github.com/tiagompalte/golang-clean-arch-template/application"
@@ -6,12 +6,13 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
 
-func CreateRoute(app application.App) server.GroupRoute {
+func CreateRouteV1(app application.App) server.GroupRoute {
 	return server.GroupRoute{
 		Path: "/v1",
 		GroupRoutes: []server.GroupRoute{
-			CreateGroupTask(app),
-			CreateGroupCategory(app),
+			CreateGroupTaskV1(app),
+			CreateGroupCategoryV1(app),
+			CreateGroupCurrentUserV1(app),
 		},
 		Routes: []server.Route{
 			{

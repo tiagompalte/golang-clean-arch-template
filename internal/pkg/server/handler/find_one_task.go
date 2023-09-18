@@ -14,6 +14,7 @@ import (
 // @Description Find one task by UUID
 // @Tags Task
 // @Produce json
+// @Security BearerAuth
 // @Param uuid path string true "Task UUID"
 // @Success 200 {object} TaskResponse "Task"
 // @Router /api/v1/tasks/{uuid} [get]

@@ -35,6 +35,11 @@ const docTemplate = `{
         },
         "/api/v1/categories": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Find all categories",
                 "produces": [
                     "application/json"
@@ -56,6 +61,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/current/user": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Find user logged",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User Logged",
+                "responses": {
+                    "200": {
+                        "description": "User",
+                        "schema": {
+                            "$ref": "#/definitions/handler.UserResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/signin": {
             "post": {
                 "description": "Login user",
@@ -66,7 +96,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User | SignIn"
+                    "Sign In"
                 ],
                 "summary": "Sign In",
                 "parameters": [
@@ -96,8 +126,11 @@ const docTemplate = `{
                 "consumes": [
                     "application/json"
                 ],
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
-                    "User | SignUp"
+                    "Sign Up"
                 ],
                 "summary": "Sign Up",
                 "parameters": [
@@ -123,6 +156,11 @@ const docTemplate = `{
         },
         "/api/v1/tasks": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Find all tasks",
                 "produces": [
                     "application/json"
@@ -144,6 +182,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create new Task",
                 "consumes": [
                     "application/json"
@@ -178,6 +221,11 @@ const docTemplate = `{
         },
         "/api/v1/tasks/{uuid}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Find one task by UUID",
                 "produces": [
                     "application/json"
@@ -205,6 +253,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Delete task by UUID",
                 "tags": [
                     "Task"
@@ -228,6 +281,11 @@ const docTemplate = `{
         },
         "/api/v1/tasks/{uuid}/done": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update task as done",
                 "tags": [
                     "Task"
@@ -251,6 +309,11 @@ const docTemplate = `{
         },
         "/api/v1/tasks/{uuid}/undone": {
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Update task as undone",
                 "tags": [
                     "Task"
@@ -359,6 +422,30 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "handler.UserResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

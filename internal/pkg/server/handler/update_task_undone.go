@@ -13,6 +13,7 @@ import (
 // @Summary Mark task as undone
 // @Description Update task as undone
 // @Tags Task
+// @Security BearerAuth
 // @Param uuid path string true "Task UUID"
 // @Success 204
 // @Router /api/v1/tasks/{uuid}/undone [put]
