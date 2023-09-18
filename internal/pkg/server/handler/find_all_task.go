@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -12,13 +13,14 @@ import (
 // @Description Find all tasks
 // @Tags Task
 // @Produce json
+// @Security BearerAuth
 // @Success 200 {object} []TaskResponse "Tasks list"
 // @Router /api/v1/tasks [get]
 func FindAllTaskHandler(findAllTaskUseCase usecase.FindAllTaskUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		result, err := findAllTaskUseCase.Execute(ctx, blank)
+		result, err := findAllTaskUseCase.Execute(ctx, constant.Blank)
 		if err != nil {
 			return errors.Wrap(err)
 		}

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -17,13 +18,14 @@ type CategoryResponse struct {
 // @Description Find all categories
 // @Tags Category
 // @Produce json
+// @Security BearerAuth
 // @Success 200 {object} []CategoryResponse "Categories list"
 // @Router /api/v1/categories [get]
 func FindAllCategoryHandler(findAllCategoryUseCase usecase.FindAllCategoryUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		result, err := findAllCategoryUseCase.Execute(ctx, blank)
+		result, err := findAllCategoryUseCase.Execute(ctx, constant.Blank)
 		if err != nil {
 			return errors.Wrap(err)
 		}

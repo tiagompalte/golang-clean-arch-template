@@ -16,4 +16,5 @@ var ProviderSet = wire.NewSet(
 	NewCreateUserUseCaseImpl,
 	NewValidateUserPasswordUseCaseImpl,
 	NewGenerateUserTokenUseCaseImpl,
+	NewFindUserUUIDUseCaseImpl,
 )

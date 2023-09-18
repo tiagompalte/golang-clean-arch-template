@@ -17,9 +17,9 @@ import (
 // @license.url					http://www.apache.org/licenses/LICENSE-2.0.html
 // @BasePath					/
 // @schemes						https
-// @securityDefinitions.apiKey	JWT
-// @in							header
-// @name						Authorization
+// @securityDefinitions.apikey 	BearerAuth
+// @in 							header
+// @name 						Authorization
 func NewServer(app application.App) error {
 	app.Server().RegisterGroupRoutes(routes.CreateRoute(app))
 	return app.Server().Start()

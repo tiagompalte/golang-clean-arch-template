@@ -36,6 +36,7 @@ type TaskResponse struct {
 // @Tags Task
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param new_task body CreateTaskRequest true "New Task"
 // @Success 201 {object} TaskResponse "Create Task success"
 // @Router /api/v1/tasks [post]

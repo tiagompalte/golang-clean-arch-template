@@ -13,6 +13,7 @@ import (
 // @Summary Mark task as done
 // @Description Update task as done
 // @Tags Task
+// @Security BearerAuth
 // @Param uuid path string true "Task UUID"
 // @Success 204
 // @Router /api/v1/tasks/{uuid}/done [put]
