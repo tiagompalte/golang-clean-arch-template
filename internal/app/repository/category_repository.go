@@ -8,6 +8,6 @@ import (
 
 type CategoryRepository interface {
 	Insert(ctx context.Context, category entity.Category) (uint32, error)
-	FindBySlug(ctx context.Context, slug string) (entity.Category, error)
-	FindAll(ctx context.Context) ([]entity.Category, error)
+	FindBySlugAndUserID(ctx context.Context, slug string, userID uint32) (entity.Category, error)
+	FindByUserID(ctx context.Context, userID uint32) ([]entity.Category, error)
 }

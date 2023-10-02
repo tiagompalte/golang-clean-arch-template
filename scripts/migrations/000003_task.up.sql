@@ -11,6 +11,10 @@ CREATE TABLE IF NOT EXISTS tb_task (
     , user_id       INT UNSIGNED NOT NULL
 
     , UNIQUE INDEX `uuid_uidx` (`uuid` ASC)
+    , INDEX `user_uidx` (
+        `user_id`       ASC
+        , `deleted_at`  ASC
+    )
     , CONSTRAINT fk_task_category_id
         FOREIGN KEY (category_id)
         REFERENCES tb_category (id)

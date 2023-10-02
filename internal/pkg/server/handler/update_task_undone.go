@@ -4,8 +4,10 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -26,7 +28,15 @@ func UpdateTaskUndoneHandler(updateTaskUndoneUseCase usecase.UpdateTaskUndoneUse
 			return pkgErrors.NewEmptyPathError("uuid")
 		}
 
-		_, err := updateTaskUndoneUseCase.Execute(ctx, uuid)
+		user, ok := ctx.Value(constant.ContextUser).(entity.User)
+		if !ok {
+			return errors.Wrap(pkgErrors.NewInvalidUserError())
+		}
+
+		_, err := updateTaskUndoneUseCase.Execute(ctx, usecase.UpdateTaskUndoneUseCaseInput{
+			UUID:   uuid,
+			UserID: user.ID,
+		})
 		if err != nil {
 			return errors.Wrap(err)
 		}

@@ -9,7 +9,7 @@ import (
 	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type FindAllCategoryUseCase usecasePkg.UseCase[usecasePkg.Blank, FindAllCategoryOutput]
+type FindAllCategoryUseCase usecasePkg.UseCase[uint32, FindAllCategoryOutput]
 
 type FindAllCategoryOutput struct {
 	Items []entity.Category
@@ -25,8 +25,8 @@ func NewFindAllCategoryUseCaseImpl(categoryRepository repository.CategoryReposit
 	}
 }
 
-func (u FindAllCategoryUseCaseImpl) Execute(ctx context.Context, _ usecasePkg.Blank) (FindAllCategoryOutput, error) {
-	list, err := u.categoryRepository.FindAll(ctx)
+func (u FindAllCategoryUseCaseImpl) Execute(ctx context.Context, userID uint32) (FindAllCategoryOutput, error) {
+	list, err := u.categoryRepository.FindByUserID(ctx, userID)
 	if err != nil {
 		return FindAllCategoryOutput{}, errors.Wrap(err)
 	}
