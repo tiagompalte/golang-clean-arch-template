@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
+	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
@@ -30,7 +31,7 @@ func FindUserLogged() server.Handler {
 
 		user, ok := ctx.Value(constant.ContextUser).(entity.User)
 		if !ok {
-			return errors.NewAppBadRequestError("invalid user")
+			return errors.Wrap(pkgErrors.NewInvalidUserError())
 		}
 
 		resp := UserResponse{

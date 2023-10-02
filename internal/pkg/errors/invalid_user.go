@@ -6,12 +6,12 @@ import (
 	pkg "github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
-// ErrorCodeInvalidLogin means that path is empty
-const ErrorCodeInvalidLogin = "invalid-login"
+// ErrorCodeInvalidUser means that user is invalid
+const ErrorCodeInvalidUser = "invalid-user"
 
-func NewInvalidLoginError() pkg.AppError {
+func NewInvalidUserError() pkg.AppError {
 	return pkg.AppError{
 		StatusCode: http.StatusUnauthorized,
-		Code:       ErrorCodeInvalidLogin,
+		Code:       ErrorCodeInvalidUser,
 	}
 }

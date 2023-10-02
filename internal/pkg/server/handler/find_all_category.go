@@ -3,7 +3,9 @@ package handler
 import (
 	"net/http"
 
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
+	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
@@ -25,7 +27,12 @@ func FindAllCategoryHandler(findAllCategoryUseCase usecase.FindAllCategoryUseCas
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		result, err := findAllCategoryUseCase.Execute(ctx, constant.Blank)
+		user, ok := ctx.Value(constant.ContextUser).(entity.User)
+		if !ok {
+			return errors.Wrap(pkgErrors.NewInvalidUserError())
+		}
+
+		result, err := findAllCategoryUseCase.Execute(ctx, user.ID)
 		if err != nil {
 			return errors.Wrap(err)
 		}

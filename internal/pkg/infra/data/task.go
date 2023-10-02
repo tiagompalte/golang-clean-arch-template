@@ -36,6 +36,8 @@ func NewTaskRepository(conn pkgRepo.Connector) repository.TaskRepository {
 			, c.updated_at
 			, c.slug
 			, c.name
+
+			, t.user_id
 			
 			FROM tb_task t
 
@@ -60,6 +62,7 @@ func (r TaskRepository) parseEntity(s pkgRepo.Scanner) (entity.Task, error) {
 		&task.Category.UpdatedAt,
 		&categorySlug,
 		&task.Category.Name,
+		&task.UserID,
 	)
 	if err != nil {
 		return entity.Task{}, errors.Repo(err, r.mainTable)
@@ -76,11 +79,12 @@ func (r TaskRepository) Insert(ctx context.Context, task entity.Task) (uint32, e
 	}
 
 	res, err := r.conn.ExecContext(ctx,
-		"INSERT INTO tb_task (uuid, name, description, category_id) VALUES (?, ?, ?, ?)",
+		"INSERT INTO tb_task (uuid, name, description, category_id, user_id) VALUES (?,?,?,?,?)",
 		uuid,
 		task.Name,
 		task.Description,
 		task.Category.ID,
+		task.UserID,
 	)
 	if err != nil {
 		return 0, errors.Repo(err, r.mainTable)
@@ -134,16 +138,17 @@ func (r TaskRepository) FindByUUID(ctx context.Context, uuid string) (entity.Tas
 	return task, nil
 }
 
-func (r TaskRepository) FindAll(ctx context.Context) ([]entity.Task, error) {
+func (r TaskRepository) FindByUserID(ctx context.Context, userID uint32) ([]entity.Task, error) {
 	query := `
 		SELECT %s
-			WHERE NOT t.deleted_at`
+			WHERE NOT t.deleted_at AND user_id = ?`
 
 	q := fmt.Sprintf(query, r.selectFields)
 
 	result, err := r.conn.QueryContext(
 		ctx,
 		q,
+		userID,
 	)
 	list, err := pkgRepo.ParseEntities[entity.Task](
 		r.parseEntity,

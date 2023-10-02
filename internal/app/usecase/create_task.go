@@ -16,6 +16,7 @@ type CreateTaskInput struct {
 	Name         string
 	Description  string
 	CategoryName string
+	UserID       uint32
 }
 
 func (i CreateTaskInput) Validate() error {
@@ -28,6 +29,9 @@ func (i CreateTaskInput) Validate() error {
 	}
 	if i.CategoryName == "" {
 		aggrErr.Add(errPkg.NewEmptyParameterError("category"))
+	}
+	if i.UserID == 0 {
+		aggrErr.Add(errPkg.NewEmptyParameterError("user_id"))
 	}
 
 	if aggrErr.Len() > 0 {
@@ -56,10 +60,11 @@ func (u CreateTaskUseCaseImpl) Execute(ctx context.Context, input CreateTaskInpu
 	var task entity.Task
 	err = u.uow.Do(ctx, func(uow *uow.Uow) error {
 		categoryNew := entity.Category{
-			Name: input.CategoryName,
+			Name:   input.CategoryName,
+			UserID: input.UserID,
 		}
 
-		category, err := uow.Repository().Category().FindBySlug(ctx, categoryNew.GetSlug())
+		category, err := uow.Repository().Category().FindBySlugAndUserID(ctx, categoryNew.GetSlug(), categoryNew.UserID)
 		if err != nil && !errors.IsAppError(err, errors.ErrorCodeNotFound) {
 			return errors.Wrap(err)
 		} else if errors.IsAppError(err, errors.ErrorCodeNotFound) {
@@ -73,6 +78,7 @@ func (u CreateTaskUseCaseImpl) Execute(ctx context.Context, input CreateTaskInpu
 			Name:        input.Name,
 			Description: input.Description,
 			Category:    category,
+			UserID:      input.UserID,
 		})
 		if err != nil {
 			return errors.Wrap(err)

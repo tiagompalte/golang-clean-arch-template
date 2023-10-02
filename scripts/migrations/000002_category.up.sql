@@ -9,6 +9,11 @@ CREATE TABLE IF NOT EXISTS tb_category (
 
     , UNIQUE INDEX `slug_uidx` ( 
         `slug`          ASC
+        , `user_id`     ASC
+        , `deleted_at`  ASC
+    )
+    , INDEX `user_uidx` (
+        `user_id`       ASC
         , `deleted_at`  ASC
     )
     , CONSTRAINT fk_category_user_id

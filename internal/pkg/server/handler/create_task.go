@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
+	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -44,13 +47,21 @@ func CreateTaskHandler(createTaskUseCase usecase.CreateTaskUseCase) server.Handl
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		var input CreateTaskRequest
-		err := json.NewDecoder(r.Body).Decode(&input)
+		var request CreateTaskRequest
+		err := json.NewDecoder(r.Body).Decode(&request)
 		if err != nil {
 			return errors.Wrap(err)
 		}
 
-		task, err := createTaskUseCase.Execute(ctx, input.toInput())
+		user, ok := ctx.Value(constant.ContextUser).(entity.User)
+		if !ok {
+			return errors.Wrap(pkgErrors.NewInvalidUserError())
+		}
+
+		input := request.toInput()
+		input.UserID = user.ID
+
+		task, err := createTaskUseCase.Execute(ctx, input)
 		if err != nil {
 			return errors.Wrap(err)
 		}
