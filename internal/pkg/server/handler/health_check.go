@@ -6,7 +6,6 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
-	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
 // @Summary Health Check
@@ -19,7 +18,7 @@ func HealthCheckHandler(healthCheck usecase.HealthCheckUseCase) server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		_, err := healthCheck.Execute(ctx, usecasePkg.Blank{})
+		err := healthCheck.Execute(ctx)
 		if err != nil {
 			return errors.Wrap(err)
 		}

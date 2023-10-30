@@ -13,6 +13,7 @@ require (
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.1
 	golang.org/x/crypto v0.13.0
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 )
 
 require (

@@ -6,10 +6,11 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type DeleteTaskUseCase usecasePkg.UseCase[DeleteTaskUseCaseInput, usecasePkg.Blank]
+type DeleteTaskUseCase interface {
+	Execute(ctx context.Context, input DeleteTaskUseCaseInput) error
+}
 
 type DeleteTaskUseCaseInput struct {
 	UUID   string
@@ -26,20 +27,20 @@ func NewDeleteTaskUseCaseImpl(taskRepository repository.TaskRepository) DeleteTa
 	}
 }
 
-func (u DeleteTaskUseCaseImpl) Execute(ctx context.Context, input DeleteTaskUseCaseInput) (usecasePkg.Blank, error) {
+func (u DeleteTaskUseCaseImpl) Execute(ctx context.Context, input DeleteTaskUseCaseInput) error {
 	task, err := u.taskRepository.FindByUUID(ctx, input.UUID)
 	if err != nil {
-		return usecasePkg.Blank{}, errors.Wrap(err)
+		return errors.Wrap(err)
 	}
 
 	if task.UserID != input.UserID {
-		return usecasePkg.Blank{}, errors.Wrap(pkgErrors.NewInvalidUserError())
+		return errors.Wrap(pkgErrors.NewInvalidUserError())
 	}
 
-	err = u.taskRepository.Delete(ctx, task)
+	err = u.taskRepository.DeleteByID(ctx, task.ID)
 	if err != nil {
-		return usecasePkg.Blank{}, errors.Wrap(err)
+		return errors.Wrap(err)
 	}
 
-	return usecasePkg.Blank{}, nil
+	return nil
 }

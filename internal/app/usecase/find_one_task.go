@@ -6,10 +6,11 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type FindOneTaskUseCase usecasePkg.UseCase[string, entity.Task]
+type FindOneTaskUseCase interface {
+	Execute(ctx context.Context, uuid string) (entity.Task, error)
+}
 
 type FindOneTaskUseCaseImpl struct {
 	taskRepository repository.TaskRepository

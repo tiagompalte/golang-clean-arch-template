@@ -12,5 +12,5 @@ type TaskRepository interface {
 	FindByUUID(ctx context.Context, uuid string) (entity.Task, error)
 	FindByUserID(ctx context.Context, userID uint32) ([]entity.Task, error)
 	UpdateDone(ctx context.Context, task entity.Task) error
-	Delete(ctx context.Context, task entity.Task) error
+	DeleteByID(ctx context.Context, taskID uint32) error
 }

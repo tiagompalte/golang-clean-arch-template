@@ -6,10 +6,11 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type UpdateTaskDoneUseCase usecasePkg.UseCase[UpdateTaskDoneUseCaseInput, usecasePkg.Blank]
+type UpdateTaskDoneUseCase interface {
+	Execute(ctx context.Context, input UpdateTaskDoneUseCaseInput) error
+}
 
 type UpdateTaskDoneUseCaseInput struct {
 	UUID   string
@@ -26,25 +27,25 @@ func NewUpdateTaskDoneUseCaseImpl(taskRepository repository.TaskRepository) Upda
 	}
 }
 
-func (u UpdateTaskDoneUseCaseImpl) Execute(ctx context.Context, input UpdateTaskDoneUseCaseInput) (usecasePkg.Blank, error) {
+func (u UpdateTaskDoneUseCaseImpl) Execute(ctx context.Context, input UpdateTaskDoneUseCaseInput) error {
 	task, err := u.taskRepository.FindByUUID(ctx, input.UUID)
 	if err != nil {
-		return usecasePkg.Blank{}, errors.Wrap(err)
+		return errors.Wrap(err)
 	}
 
 	if input.UserID != task.UserID {
-		return usecasePkg.Blank{}, errors.Wrap(pkgErrors.NewInvalidUserError())
+		return errors.Wrap(pkgErrors.NewInvalidUserError())
 	}
 
 	if task.Done {
-		return usecasePkg.Blank{}, nil
+		return nil
 	}
 
 	task.Done = true
 	err = u.taskRepository.UpdateDone(ctx, task)
 	if err != nil {
-		return usecasePkg.Blank{}, errors.Wrap(err)
+		return errors.Wrap(err)
 	}
 
-	return usecasePkg.Blank{}, nil
+	return nil
 }

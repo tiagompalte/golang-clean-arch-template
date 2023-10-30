@@ -7,10 +7,11 @@ import (
 	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type CreateTaskUseCase usecasePkg.UseCase[CreateTaskInput, entity.Task]
+type CreateTaskUseCase interface {
+	Execute(ctx context.Context, input CreateTaskInput) (entity.Task, error)
+}
 
 type CreateTaskInput struct {
 	Name         string

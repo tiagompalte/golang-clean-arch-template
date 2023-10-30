@@ -33,7 +33,7 @@ func DeleteTaskHandler(deleteTaskUseCase usecase.DeleteTaskUseCase) server.Handl
 			return errors.Wrap(pkgErrors.NewInvalidUserError())
 		}
 
-		_, err := deleteTaskUseCase.Execute(ctx, usecase.DeleteTaskUseCaseInput{
+		err := deleteTaskUseCase.Execute(ctx, usecase.DeleteTaskUseCaseInput{
 			UUID:   uuid,
 			UserID: user.ID,
 		})

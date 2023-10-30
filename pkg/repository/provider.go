@@ -7,5 +7,5 @@ import (
 func ProviderSet(
 	config configs.Config,
 ) DataManager {
-	return NewSqlConnect(config.Database)
+	return NewDataSqlWithConfig(config.Database)
 }

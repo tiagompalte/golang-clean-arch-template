@@ -141,7 +141,7 @@ func (r TaskRepository) FindByUUID(ctx context.Context, uuid string) (entity.Tas
 func (r TaskRepository) FindByUserID(ctx context.Context, userID uint32) ([]entity.Task, error) {
 	query := `
 		SELECT %s
-			WHERE NOT t.deleted_at AND user_id = ?`
+			WHERE NOT t.deleted_at AND t.user_id = ?`
 
 	q := fmt.Sprintf(query, r.selectFields)
 
@@ -178,12 +178,10 @@ func (r TaskRepository) UpdateDone(ctx context.Context, task entity.Task) error 
 	return nil
 }
 
-func (r TaskRepository) Delete(ctx context.Context, task entity.Task) error {
+func (r TaskRepository) DeleteByID(ctx context.Context, taskID uint32) error {
 	_, err := r.conn.ExecContext(ctx,
-		`DELETE FROM tb_task
-			WHERE NOT deleted_at AND id = ?
-		`,
-		task.ID,
+		`UPDATE tb_task	SET deleted_at = NOW() WHERE NOT deleted_at AND id = ?`,
+		taskID,
 	)
 	if err != nil {
 		return errors.Repo(err, r.mainTable)
