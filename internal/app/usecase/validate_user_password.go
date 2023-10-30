@@ -8,10 +8,11 @@ import (
 	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type ValidateUserPasswordUseCase usecasePkg.UseCase[ValidateUserPasswordInput, entity.User]
+type ValidateUserPasswordUseCase interface {
+	Execute(ctx context.Context, input ValidateUserPasswordInput) (entity.User, error)
+}
 
 type ValidateUserPasswordInput struct {
 	Email    string

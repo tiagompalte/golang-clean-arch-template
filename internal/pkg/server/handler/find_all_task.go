@@ -27,21 +27,21 @@ func FindAllTaskHandler(findAllTaskUseCase usecase.FindAllTaskUseCase) server.Ha
 			return errors.Wrap(pkgErrors.NewInvalidUserError())
 		}
 
-		result, err := findAllTaskUseCase.Execute(ctx, user.ID)
+		items, err := findAllTaskUseCase.Execute(ctx, user.ID)
 		if err != nil {
 			return errors.Wrap(err)
 		}
 
-		resp := make([]TaskResponse, len(result.Items))
-		for i := range result.Items {
+		resp := make([]TaskResponse, len(items))
+		for i := range items {
 			resp[i] = TaskResponse{
-				UUID:        result.Items[i].UUID,
-				Name:        result.Items[i].Name,
-				Description: result.Items[i].Description,
-				Done:        result.Items[i].Done,
+				UUID:        items[i].UUID,
+				Name:        items[i].Name,
+				Description: items[i].Description,
+				Done:        items[i].Done,
 				Category: CategoryResponse{
-					Slug: result.Items[i].Category.GetSlug(),
-					Name: result.Items[i].Category.Name,
+					Slug: items[i].Category.GetSlug(),
+					Name: items[i].Category.Name,
 				},
 			}
 		}

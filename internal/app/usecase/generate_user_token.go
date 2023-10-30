@@ -6,10 +6,11 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/auth"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type GenerateUserTokenUseCase usecasePkg.UseCase[entity.User, GenerateUserTokenOutput]
+type GenerateUserTokenUseCase interface {
+	Execute(ctx context.Context, user entity.User) (GenerateUserTokenOutput, error)
+}
 
 type GenerateUserTokenOutput struct {
 	AccessToken string

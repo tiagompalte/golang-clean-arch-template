@@ -8,10 +8,11 @@ import (
 	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	usecasePkg "github.com/tiagompalte/golang-clean-arch-template/pkg/usecase"
 )
 
-type CreateUserUseCase usecasePkg.UseCase[CreateUserInput, entity.User]
+type CreateUserUseCase interface {
+	Execute(ctx context.Context, input CreateUserInput) (entity.User, error)
+}
 
 type CreateUserInput struct {
 	Name     string

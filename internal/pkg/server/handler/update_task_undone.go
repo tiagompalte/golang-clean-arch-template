@@ -33,7 +33,7 @@ func UpdateTaskUndoneHandler(updateTaskUndoneUseCase usecase.UpdateTaskUndoneUse
 			return errors.Wrap(pkgErrors.NewInvalidUserError())
 		}
 
-		_, err := updateTaskUndoneUseCase.Execute(ctx, usecase.UpdateTaskUndoneUseCaseInput{
+		err := updateTaskUndoneUseCase.Execute(ctx, usecase.UpdateTaskUndoneUseCaseInput{
 			UUID:   uuid,
 			UserID: user.ID,
 		})

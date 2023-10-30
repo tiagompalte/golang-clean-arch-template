@@ -58,7 +58,7 @@ func (r UserRepository) Insert(ctx context.Context, user entity.User, passEncryp
 	}
 
 	res, err := r.conn.ExecContext(ctx,
-		"INSERT INTO tb_user (uuid, name, email, pass_encrypted) VALUES (?, ?, ?, ?)",
+		"INSERT INTO tb_user (uuid, name, email, pass_encrypted) VALUES (?,?,?,?)",
 		uuid,
 		user.Name,
 		user.Email,

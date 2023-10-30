@@ -13,14 +13,17 @@ type DataSql struct {
 	db *sql.DB
 }
 
-func NewSqlConnect(config configs.ConfigDatabase) DataManager {
-	data := new(DataSql)
+func NewDataSqlWithConfig(config configs.ConfigDatabase) DataManager {
 	db, err := sql.Open(config.DriverName, config.ConnectionSource)
 	if err != nil {
 		panic(fmt.Sprintf("error to connect in database: %v", err))
 	}
-	data.db = db
+	return NewDataSql(db)
+}
 
+func NewDataSql(db *sql.DB) DataManager {
+	data := new(DataSql)
+	data.db = db
 	return data
 }
 

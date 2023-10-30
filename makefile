@@ -10,7 +10,7 @@ migrate-up:
 	migrate -path ./scripts/migrations -database "mysql://root:root@tcp(localhost:3306)/db_todo" -verbose up
 
 tests:
-	go run github.com/onsi/ginkgo/v2/ginkgo -r
+	go test ./...
 
 run-server:
 	go run cmd/server/main.go

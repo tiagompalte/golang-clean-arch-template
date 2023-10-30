@@ -12,9 +12,9 @@ type Bcrypt struct {
 	round int
 }
 
-func NewBcrypt(config configs.Config) Crypto {
+func NewBcrypt(config configs.ConfigBcrypt) Crypto {
 	return Bcrypt{
-		round: config.Bcrypt.Round,
+		round: config.Round,
 	}
 }
 

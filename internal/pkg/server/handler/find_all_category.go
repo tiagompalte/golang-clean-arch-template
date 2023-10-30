@@ -32,16 +32,16 @@ func FindAllCategoryHandler(findAllCategoryUseCase usecase.FindAllCategoryUseCas
 			return errors.Wrap(pkgErrors.NewInvalidUserError())
 		}
 
-		result, err := findAllCategoryUseCase.Execute(ctx, user.ID)
+		items, err := findAllCategoryUseCase.Execute(ctx, user.ID)
 		if err != nil {
 			return errors.Wrap(err)
 		}
 
-		resp := make([]CategoryResponse, len(result.Items))
-		for i := range result.Items {
+		resp := make([]CategoryResponse, len(items))
+		for i := range items {
 			resp[i] = CategoryResponse{
-				Slug: result.Items[i].GetSlug(),
-				Name: result.Items[i].Name,
+				Slug: items[i].GetSlug(),
+				Name: items[i].Name,
 			}
 		}
 
