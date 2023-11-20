@@ -11,7 +11,10 @@ import (
 )
 
 func TestFindUserUUIDExecute(t *testing.T) {
+	t.Parallel()
+
 	t.Run("should be find user by UUID", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()

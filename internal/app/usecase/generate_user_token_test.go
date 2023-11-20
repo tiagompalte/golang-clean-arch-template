@@ -9,7 +9,10 @@ import (
 )
 
 func TestNewGenerateUserTokenExecute(t *testing.T) {
+	t.Parallel()
+
 	t.Run("should be return token", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		auth := auth.NewAuthMock("token", map[string]any{})

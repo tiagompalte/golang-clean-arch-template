@@ -13,7 +13,10 @@ import (
 )
 
 func TestUpdateTaskUndoneExecute(t *testing.T) {
+	t.Parallel()
+
 	t.Run("should be update task to undone", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -47,6 +50,7 @@ func TestUpdateTaskUndoneExecute(t *testing.T) {
 	})
 
 	t.Run("should be return invalid user error if userID is differente", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()

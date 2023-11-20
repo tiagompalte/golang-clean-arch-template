@@ -13,7 +13,10 @@ import (
 )
 
 func TestDeleteTaskExecute(t *testing.T) {
+	t.Parallel()
+
 	t.Run("should delete task", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -50,6 +53,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 	})
 
 	t.Run("should return error if user is invalid", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -82,6 +86,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 	})
 
 	t.Run("should return error if does not find task", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()

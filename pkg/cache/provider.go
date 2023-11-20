@@ -7,9 +7,12 @@ import (
 func ProviderSet(
 	config configs.Config,
 ) Cache {
-	if config.Cache.DriverName == "memory" {
+	switch config.Cache.DriverName {
+	case "memory":
 		return NewMemoryCache()
-	} else if config.Cache.DriverName == "redis" {
+	case "mock":
+		return NewMockCache()
+	case "redis":
 		return NewRedisCache(
 			config.Cache.Redis.Host,
 			config.Cache.Redis.Port,

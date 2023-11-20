@@ -11,7 +11,10 @@ import (
 )
 
 func TestFindAllTaskExecute(t *testing.T) {
+	t.Parallel()
+
 	t.Run("should return list tasks", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
