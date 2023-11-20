@@ -9,7 +9,7 @@ generate: wire swagger
 migrate-up: 
 	migrate -path ./scripts/migrations -database "mysql://root:root@tcp(localhost:3306)/db_todo" -verbose up
 
-tests:
+unit-tests:
 	go test ./...
 
 run-server:

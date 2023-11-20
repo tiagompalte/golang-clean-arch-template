@@ -14,7 +14,10 @@ import (
 )
 
 func TestCreateTaskExecute(t *testing.T) {
+	t.Parallel()
+
 	t.Run("should return error if is invalid", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, _, err := sqlmock.New()
@@ -40,6 +43,7 @@ func TestCreateTaskExecute(t *testing.T) {
 	})
 
 	t.Run("should insert category and task", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -99,6 +103,7 @@ func TestCreateTaskExecute(t *testing.T) {
 	})
 
 	t.Run("should insert task and find exists category", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -156,6 +161,7 @@ func TestCreateTaskExecute(t *testing.T) {
 	})
 
 	t.Run("should rollback if cause error to insert task", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -200,6 +206,8 @@ func TestCreateTaskExecute(t *testing.T) {
 }
 
 func TestCreateTaskInputValidate(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name        string
 		input       CreateTaskInput
@@ -256,7 +264,10 @@ func TestCreateTaskInputValidate(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			err := tt.input.Validate()
 
 			if tt.expectedErr == nil && err != nil {

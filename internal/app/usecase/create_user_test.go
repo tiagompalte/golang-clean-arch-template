@@ -14,9 +14,11 @@ import (
 )
 
 func TestCreateUserExecute(t *testing.T) {
+	t.Parallel()
 	crypto := crypto.NewCryptoMock()
 
 	t.Run("should insert new user", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -67,6 +69,7 @@ func TestCreateUserExecute(t *testing.T) {
 	})
 
 	t.Run("should return error if repository insert return error", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -103,6 +106,7 @@ func TestCreateUserExecute(t *testing.T) {
 	})
 
 	t.Run("should return error if is invalid", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, _, err := sqlmock.New()
@@ -132,6 +136,8 @@ func TestCreateUserExecute(t *testing.T) {
 }
 
 func TestCreateUserInputValidate(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name        string
 		input       CreateUserInput
@@ -174,7 +180,9 @@ func TestCreateUserInputValidate(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			err := tt.input.Validate()
 
 			if tt.expectedErr == nil && err != nil {

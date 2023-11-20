@@ -11,7 +11,10 @@ import (
 )
 
 func TestFindOneTaskExecute(t *testing.T) {
+	t.Parallel()
+
 	t.Run("should return one task", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()

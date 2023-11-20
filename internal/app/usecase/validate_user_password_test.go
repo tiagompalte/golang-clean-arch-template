@@ -14,8 +14,11 @@ import (
 )
 
 func TestValidateUserPasswordExecute(t *testing.T) {
+	t.Parallel()
 	crypto := crypto.NewCryptoMock()
+
 	t.Run("Should be return user", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
@@ -62,6 +65,7 @@ func TestValidateUserPasswordExecute(t *testing.T) {
 	})
 
 	t.Run("Should be return invalid login error if password is wrong", func(t *testing.T) {
+		t.Parallel()
 		ctx := context.Background()
 
 		db, mock, err := sqlmock.New()
