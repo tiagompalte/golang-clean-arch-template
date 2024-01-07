@@ -14,9 +14,8 @@ type ConfigRedis struct {
 }
 
 type ConfigCache struct {
-	DriverName       string      `mapstructure:"DRIVER_NAME"`
-	ConnectionSource string      `mapstructure:"CONNECTION_SOURCE"`
-	Redis            ConfigRedis `mapstructure:"REDIS"`
+	DriverName string      `mapstructure:"DRIVER_NAME"`
+	Redis      ConfigRedis `mapstructure:"REDIS"`
 }
 
 type ConfigBcrypt struct {

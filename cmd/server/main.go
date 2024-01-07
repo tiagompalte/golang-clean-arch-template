@@ -14,7 +14,8 @@ func main() {
 		log.Fatalf("failed to build the application (error: %v)", err)
 	}
 
-	err = server.NewServer(app)
+	httpServer := server.NewServer(app)
+	err = app.Server().Start(httpServer)
 	if err != nil {
 		log.Fatalf("failed to start the http server (error: %v)", err)
 	}

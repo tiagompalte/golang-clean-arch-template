@@ -1,0 +1,31 @@
+FROM golang:1.21.5-alpine3.19
+
+USER root
+
+RUN apk update && \
+apk upgrade && \
+apk add --no-cache \
+py-pip \
+py-setuptools \
+ca-certificates \
+gcc \
+g++ \
+curl \
+groff \
+less \
+git \
+bash \
+docker
+
+WORKDIR /app
+
+COPY go.* /app
+
+RUN go mod download
+
+COPY . /app
+
+RUN go install github.com/google/wire/cmd/wire@latest
+RUN wire ./application
+
+CMD [ "go", "test", "-tags=integration", "-parallel=256", "-p=256", "-cpu=256", "-timeout=20m", "./test"]

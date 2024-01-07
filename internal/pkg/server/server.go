@@ -1,6 +1,8 @@
 package server
 
 import (
+	"net/http"
+
 	_ "github.com/tiagompalte/golang-clean-arch-template/api"
 	"github.com/tiagompalte/golang-clean-arch-template/application"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/routes"
@@ -20,7 +22,7 @@ import (
 // @securityDefinitions.apikey 	BearerAuth
 // @in 							header
 // @name 						Authorization
-func NewServer(app application.App) error {
-	app.Server().RegisterGroupRoutes(routes.CreateRoute(app))
-	return app.Server().Start()
+func NewServer(app application.App) *http.Server {
+	groupRoutes := routes.CreateRoute(app)
+	return app.Server().NewServer(groupRoutes)
 }
