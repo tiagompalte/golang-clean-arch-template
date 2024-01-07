@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"os/signal"
 	"syscall"
@@ -86,14 +87,12 @@ func (s goChiServer) appendGroupRoutes(routeMain *chi.Mux, groupRoutes []GroupRo
 	}
 }
 
-func (s goChiServer) RegisterGroupRoutes(groupRoutes []GroupRoute) {
+func (s goChiServer) NewServer(groupRoutes []GroupRoute) *http.Server {
 	s.appendGroupRoutes(s.mux, groupRoutes)
+	return &http.Server{Addr: s.config.WebPort, Handler: s.mux}
 }
 
-func (s goChiServer) Start() error {
-	// The HTTP Server
-	server := &http.Server{Addr: s.config.WebPort, Handler: s.mux}
-
+func (s goChiServer) Start(server *http.Server) error {
 	// Server run context
 	serverCtx, serverStopCtx := context.WithCancel(context.Background())
 
@@ -131,4 +130,8 @@ func (s goChiServer) Start() error {
 	<-serverCtx.Done()
 
 	return nil
+}
+
+func (s goChiServer) StartTest(httpServer *http.Server) *httptest.Server {
+	return httptest.NewServer(httpServer.Handler)
 }

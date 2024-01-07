@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"net/http/httptest"
 )
 
 type Handler func(w http.ResponseWriter, r *http.Request) error
@@ -23,6 +24,7 @@ type Route struct {
 }
 
 type Server interface {
-	RegisterGroupRoutes(groupRoutes []GroupRoute)
-	Start() error
+	NewServer(groupRoutes []GroupRoute) *http.Server
+	Start(httpServer *http.Server) error
+	StartTest(httpServer *http.Server) *httptest.Server
 }
