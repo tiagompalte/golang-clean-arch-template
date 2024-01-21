@@ -25,7 +25,7 @@ type UserResponse struct {
 // @Security BearerAuth
 // @Success 200 {object} UserResponse "User"
 // @Router /api/v1/current/user [get]
-func FindUserLogged() server.Handler {
+func FindUserLoggedHandler() server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 

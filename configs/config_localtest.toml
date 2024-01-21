@@ -1,0 +1,17 @@
+APP_NAME = "TODO API"
+WEB_PORT = ":5000"
+
+[DATABASE]
+DRIVER_NAME = "mysql"
+CONNECTION_SOURCE = "root:root@tcp(localhost:3306)/db_todo_test?parseTime=true"
+
+[CACHE]
+DRIVER_NAME = "mock"
+
+[BCRYPT]
+ROUND = 12
+
+[JWT]
+ALGORITHM = "HS256"
+KEY_SECRET = "Secr3t"
+DURATION = 60000 # seconds

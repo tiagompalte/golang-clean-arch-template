@@ -118,3 +118,24 @@ func (r CategoryRepository) FindByUserID(ctx context.Context, userID uint32) ([]
 
 	return list, nil
 }
+
+func (r CategoryRepository) FindByID(ctx context.Context, id uint32) (entity.Category, error) {
+	query := `
+		SELECT %s
+			WHERE NOT deleted_at AND id = ?
+	`
+
+	q := fmt.Sprintf(query, r.selectFields)
+
+	category, err := r.parseEntity(
+		r.conn.QueryRowContext(
+			ctx,
+			q,
+			id,
+		))
+	if err != nil {
+		return entity.Category{}, errors.Repo(err, r.mainTable)
+	}
+
+	return category, nil
+}

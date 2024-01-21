@@ -13,7 +13,7 @@ func CreateGroupCurrentUserV1(app application.App) server.GroupRoute {
 		{
 			Path:    "/",
 			Method:  "GET",
-			Handler: handler.FindUserLogged(),
+			Handler: handler.FindUserLoggedHandler(),
 		},
 	}
 
