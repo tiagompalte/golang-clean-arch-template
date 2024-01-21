@@ -24,9 +24,10 @@ func Build() (App, error) {
 	configsConfig := config.ProviderSet()
 	serverServer := server.ProviderSet(configsConfig)
 	dataManager := repository.ProviderSet(configsConfig)
+	categoryRepository := data.NewCategoryRepository(dataManager)
+	createCategoryUseCase := usecase.NewCreateCategoryUseCaseImpl(categoryRepository)
 	uowUow := uow.NewUow(dataManager)
 	createTaskUseCase := usecase.NewCreateTaskUseCaseImpl(uowUow)
-	categoryRepository := data.NewCategoryRepository(dataManager)
 	findAllCategoryUseCase := usecase.NewFindAllCategoryUseCaseImpl(categoryRepository)
 	taskRepository := data.NewTaskRepository(dataManager)
 	findAllTaskUseCase := usecase.NewFindAllTaskUseCaseImpl(taskRepository)
@@ -44,6 +45,7 @@ func Build() (App, error) {
 	generateUserTokenUseCase := usecase.NewGenerateUserTokenUseCaseImpl(authAuth)
 	findUserUUIDUseCase := usecase.NewFindUserUUIDUseCaseImpl(userRepository)
 	useCase := usecase.UseCase{
+		CreateCategoryUseCase:       createCategoryUseCase,
 		CreateTaskUseCase:           createTaskUseCase,
 		FindAllCategoryUseCase:      findAllCategoryUseCase,
 		FindAllTaskUseCase:          findAllTaskUseCase,

@@ -1,6 +1,7 @@
 package usecase
 
 type UseCase struct {
+	CreateCategoryUseCase
 	CreateTaskUseCase
 	FindAllCategoryUseCase
 	FindAllTaskUseCase

@@ -5,26 +5,22 @@ package test
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"testing"
 
 	"github.com/tiagompalte/golang-clean-arch-template/application"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server"
-	"github.com/tiagompalte/golang-clean-arch-template/pkg/config"
 )
 
+var app application.App
 var httpTestUrl = ""
-var bearerToken = ""
 
 func TestMain(t *testing.M) {
-	ctx := context.Background()
-
-	os.Setenv(config.Env, config.EnvTest)
-
-	app, err := application.Build()
+	var err error
+	app, err = application.Build()
 	if err != nil {
 		log.Fatalf("failed to build the application: %v", err)
 	}
@@ -37,9 +33,17 @@ func TestMain(t *testing.M) {
 	defer httpTest.Close()
 	defer httpServer.Close()
 
+	code := t.Run()
+
+	os.Exit(code)
+}
+
+func GenerateUserAndToken() (entity.User, string) {
+	ctx := context.Background()
+
 	createUserInput := usecase.CreateUserInput{
-		Name:     "User Logged",
-		Email:    "user_logged@email.com",
+		Name:     RandomName(),
+		Email:    Email(),
 		Password: "Pass!1234",
 	}
 
@@ -52,9 +56,6 @@ func TestMain(t *testing.M) {
 	if err != nil {
 		log.Fatalf("failed to generate token: %v", err)
 	}
-	bearerToken = token.AccessToken
 
-	code := t.Run()
-
-	fmt.Println(code)
+	return userLogged, token.AccessToken
 }
