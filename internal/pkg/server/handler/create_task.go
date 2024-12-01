@@ -6,7 +6,6 @@ import (
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
-	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
@@ -55,7 +54,7 @@ func CreateTaskHandler(createTaskUseCase usecase.CreateTaskUseCase) server.Handl
 
 		user, ok := ctx.Value(constant.ContextUser).(entity.User)
 		if !ok {
-			return errors.Wrap(pkgErrors.NewInvalidUserError())
+			return errors.Wrap(errors.NewInvalidUserError())
 		}
 
 		input := request.toInput()

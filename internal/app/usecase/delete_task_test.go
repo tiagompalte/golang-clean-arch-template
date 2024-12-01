@@ -6,7 +6,6 @@ import (
 	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
@@ -80,7 +79,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 		}
 		err = us.Execute(ctx, input)
 
-		if err == nil || !errors.IsAppError(err, pkgErrors.ErrorCodeInvalidUser) {
+		if err == nil || !errors.IsAppError(err, errors.ErrorCodeInvalidUser) {
 			t.Error(err)
 		}
 	})

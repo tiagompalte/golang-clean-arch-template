@@ -7,7 +7,6 @@ import (
 	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
@@ -230,7 +229,7 @@ func TestCreateTaskInputValidate(t *testing.T) {
 				CategoryName: "category",
 				UserID:       uint32(1),
 			},
-			expectedErr: errors.AggregatedError{errPkg.NewEmptyParameterError("name")},
+			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("name")},
 		},
 		{
 			name: "ShouldReturnErrorIfDescriptionIsEmpty",
@@ -240,7 +239,7 @@ func TestCreateTaskInputValidate(t *testing.T) {
 				CategoryName: "category",
 				UserID:       uint32(1),
 			},
-			expectedErr: errors.AggregatedError{errPkg.NewEmptyParameterError("description")},
+			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("description")},
 		},
 		{
 			name: "ShouldReturnErrorIfCategoryNameIsEmpty",
@@ -250,7 +249,7 @@ func TestCreateTaskInputValidate(t *testing.T) {
 				CategoryName: "",
 				UserID:       uint32(1),
 			},
-			expectedErr: errors.AggregatedError{errPkg.NewEmptyParameterError("category")},
+			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("category")},
 		},
 		{
 			name: "ShouldReturnErrorIfUserIDIsEmpty",
@@ -260,7 +259,7 @@ func TestCreateTaskInputValidate(t *testing.T) {
 				CategoryName: "category",
 				UserID:       0,
 			},
-			expectedErr: errors.AggregatedError{errPkg.NewEmptyParameterError("user_id")},
+			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("user_id")},
 		},
 	}
 	for _, tt := range tests {

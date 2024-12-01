@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
-	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
@@ -23,16 +22,16 @@ type CreateTaskInput struct {
 func (i CreateTaskInput) Validate() error {
 	aggrErr := errors.NewAggregatedError()
 	if i.Name == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("name"))
+		aggrErr.Add(errors.NewEmptyParameterError("name"))
 	}
 	if i.Description == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("description"))
+		aggrErr.Add(errors.NewEmptyParameterError("description"))
 	}
 	if i.CategoryName == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("category"))
+		aggrErr.Add(errors.NewEmptyParameterError("category"))
 	}
 	if i.UserID == 0 {
-		aggrErr.Add(errPkg.NewEmptyParameterError("user_id"))
+		aggrErr.Add(errors.NewEmptyParameterError("user_id"))
 	}
 
 	if aggrErr.Len() > 0 {

@@ -5,7 +5,6 @@ import (
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
-	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
@@ -21,10 +20,10 @@ type CreateCategoryInput struct {
 func (i CreateCategoryInput) Validate() error {
 	aggrErr := errors.NewAggregatedError()
 	if i.Name == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("name"))
+		aggrErr.Add(errors.NewEmptyParameterError("name"))
 	}
 	if i.UserID == 0 {
-		aggrErr.Add(errPkg.NewEmptyParameterError("user_id"))
+		aggrErr.Add(errors.NewEmptyParameterError("user_id"))
 	}
 
 	if aggrErr.Len() > 0 {

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
@@ -158,7 +157,7 @@ func TestCreateUserInputValidate(t *testing.T) {
 				Email:    "user@email.com",
 				Password: "pass",
 			},
-			expectedErr: errors.AggregatedError{errPkg.NewEmptyParameterError("name")},
+			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("name")},
 		},
 		{
 			name: "ShouldReturnErrorIfEmailIsEmpty",
@@ -167,7 +166,7 @@ func TestCreateUserInputValidate(t *testing.T) {
 				Email:    "",
 				Password: "pass",
 			},
-			expectedErr: errors.AggregatedError{errPkg.NewEmptyParameterError("email")},
+			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("email")},
 		},
 		{
 			name: "ShouldReturnErrorIfPasswordIsEmpty",
@@ -176,7 +175,7 @@ func TestCreateUserInputValidate(t *testing.T) {
 				Email:    "user@email.com",
 				Password: "",
 			},
-			expectedErr: errors.AggregatedError{errPkg.NewEmptyParameterError("password")},
+			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("password")},
 		},
 	}
 	for _, tt := range tests {

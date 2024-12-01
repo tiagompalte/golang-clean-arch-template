@@ -6,7 +6,6 @@ import (
 	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-	internalErr "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
@@ -76,7 +75,7 @@ func TestUpdateTaskUndoneExecute(t *testing.T) {
 			UUID:   "uuid",
 		})
 
-		if !errors.IsAppError(err, internalErr.ErrorCodeInvalidUser) {
+		if !errors.IsAppError(err, errors.ErrorCodeInvalidUser) {
 			t.Error(err)
 		}
 	})

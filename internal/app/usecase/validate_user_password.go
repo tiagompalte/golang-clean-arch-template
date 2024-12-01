@@ -5,7 +5,6 @@ import (
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
-	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
@@ -22,10 +21,10 @@ type ValidateUserPasswordInput struct {
 func (i ValidateUserPasswordInput) Validate() error {
 	aggrErr := errors.NewAggregatedError()
 	if i.Email == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("email"))
+		aggrErr.Add(errors.NewEmptyParameterError("email"))
 	}
 	if i.Password == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("password"))
+		aggrErr.Add(errors.NewEmptyParameterError("password"))
 	}
 
 	if aggrErr.Len() > 0 {
@@ -55,7 +54,7 @@ func (u ValidateUserPasswordUseCaseImpl) Execute(ctx context.Context, input Vali
 
 	passEncrypted, err := u.userRepository.GetPassEncryptedByEmail(ctx, input.Email)
 	if err != nil {
-		return entity.User{}, errors.Wrap(errPkg.NewInvalidLoginError())
+		return entity.User{}, errors.Wrap(errors.NewInvalidLoginError())
 	}
 
 	isValid, err := u.crypto.VerifyHash(ctx, input.Password, passEncrypted)
@@ -64,7 +63,7 @@ func (u ValidateUserPasswordUseCaseImpl) Execute(ctx context.Context, input Vali
 	}
 
 	if !isValid {
-		return entity.User{}, errors.Wrap(errPkg.NewInvalidLoginError())
+		return entity.User{}, errors.Wrap(errors.NewInvalidLoginError())
 	}
 
 	user, err := u.userRepository.FindByEmail(ctx, input.Email)

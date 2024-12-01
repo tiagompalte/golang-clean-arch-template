@@ -5,7 +5,6 @@ import (
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
-	errPkg "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
@@ -23,13 +22,13 @@ type CreateUserInput struct {
 func (i CreateUserInput) Validate() error {
 	aggrErr := errors.NewAggregatedError()
 	if i.Name == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("name"))
+		aggrErr.Add(errors.NewEmptyParameterError("name"))
 	}
 	if i.Email == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("email"))
+		aggrErr.Add(errors.NewEmptyParameterError("email"))
 	}
 	if i.Password == "" {
-		aggrErr.Add(errPkg.NewEmptyParameterError("password"))
+		aggrErr.Add(errors.NewEmptyParameterError("password"))
 	}
 
 	if aggrErr.Len() > 0 {

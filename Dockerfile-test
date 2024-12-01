@@ -3,19 +3,19 @@ FROM golang:1.22-alpine3.19
 USER root
 
 RUN apk update && \
-apk upgrade && \
-apk add --no-cache \
-py-pip \
-py-setuptools \
-ca-certificates \
-gcc \
-g++ \
-curl \
-groff \
-less \
-git \
-bash \
-docker
+    apk upgrade && \
+    apk add --no-cache \
+    py-pip \
+    py-setuptools \
+    ca-certificates \
+    gcc \
+    g++ \
+    curl \
+    groff \
+    less \
+    git \
+    bash \
+    docker
 
 WORKDIR /app
 

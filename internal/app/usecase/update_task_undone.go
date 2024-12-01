@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
-	pkgErrors "github.com/tiagompalte/golang-clean-arch-template/internal/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
@@ -34,7 +33,7 @@ func (u UpdateTaskUndoneUseCaseImpl) Execute(ctx context.Context, input UpdateTa
 	}
 
 	if input.UserID != task.UserID {
-		return errors.Wrap(pkgErrors.NewInvalidUserError())
+		return errors.Wrap(errors.NewInvalidUserError())
 	}
 
 	if !task.Done {
