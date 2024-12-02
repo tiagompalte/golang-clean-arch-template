@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/middleware"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -28,18 +28,18 @@ func FindOneTaskHandler(findOneTaskUseCase usecase.FindOneTaskUseCase) server.Ha
 			return errors.NewEmptyPathError("uuid")
 		}
 
-		user, ok := ctx.Value(constant.ContextUser).(entity.User)
+		user, ok := ctx.Value(constant.ContextUser).(middleware.UserToken)
 		if !ok {
 			return errors.Wrap(errors.NewInvalidUserError())
 		}
 
-		task, err := findOneTaskUseCase.Execute(ctx, uuid)
+		var input usecase.FindOneTaskInput
+		input.TaskUUID = uuid
+		input.UserID = user.ID
+
+		task, err := findOneTaskUseCase.Execute(ctx, input)
 		if err != nil {
 			return errors.Wrap(err)
-		}
-
-		if task.UserID != user.ID {
-			return errors.Wrap(errors.NewInvalidUserError())
 		}
 
 		resp := TaskResponse{
@@ -48,8 +48,8 @@ func FindOneTaskHandler(findOneTaskUseCase usecase.FindOneTaskUseCase) server.Ha
 			Description: task.Description,
 			Done:        task.Done,
 			Category: CategoryResponse{
-				Slug: task.Category.GetSlug(),
-				Name: task.Category.Name,
+				Slug: task.CategorySlug,
+				Name: task.CategoryName,
 			},
 		}
 

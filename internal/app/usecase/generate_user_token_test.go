@@ -4,7 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/auth"
 )
 
@@ -21,7 +20,7 @@ func TestNewGenerateUserTokenExecute(t *testing.T) {
 			auth: auth,
 		}
 
-		result, err := us.Execute(ctx, entity.User{})
+		result, err := us.Execute(ctx, GenerateUserTokenInput{})
 
 		if err != nil {
 			t.Error(err)

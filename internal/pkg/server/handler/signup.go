@@ -42,18 +42,23 @@ func SignupHandler(
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		var input SignupRequest
-		err := json.NewDecoder(r.Body).Decode(&input)
+		var signupRequest SignupRequest
+		err := json.NewDecoder(r.Body).Decode(&signupRequest)
 		if err != nil {
 			return errors.Wrap(err)
 		}
 
-		user, err := createUserUseCase.Execute(ctx, input.toInput())
+		user, err := createUserUseCase.Execute(ctx, signupRequest.toInput())
 		if err != nil {
 			return errors.Wrap(err)
 		}
 
-		output, err := generateUserTokenUseCase.Execute(ctx, user)
+		var input usecase.GenerateUserTokenInput
+		input.UUID = user.UUID
+		input.Name = user.Name
+		input.Email = user.Email
+
+		output, err := generateUserTokenUseCase.Execute(ctx, input)
 		if err != nil {
 			return errors.Wrap(err)
 		}

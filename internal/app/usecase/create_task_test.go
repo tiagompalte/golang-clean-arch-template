@@ -96,8 +96,8 @@ func TestCreateTaskExecute(t *testing.T) {
 			t.Errorf("done should be false but is %t", result.Done)
 		}
 
-		if result.Category.Name != "category" {
-			t.Errorf("category name should be category but is %s", result.Category.Name)
+		if result.CategoryName != "category" {
+			t.Errorf("category name should be category but is %s", result.CategoryName)
 		}
 	})
 
@@ -154,8 +154,8 @@ func TestCreateTaskExecute(t *testing.T) {
 			t.Errorf("done should be false but is %t", result.Done)
 		}
 
-		if result.Category.Name != "category" {
-			t.Errorf("category name should be category but is %s", result.Category.Name)
+		if result.CategoryName != "category" {
+			t.Errorf("category name should be category but is %s", result.CategoryName)
 		}
 	})
 
@@ -198,84 +198,8 @@ func TestCreateTaskExecute(t *testing.T) {
 			t.Errorf("error should be conflict but is %s", errors.Cause(err))
 		}
 
-		if result.ID != 0 {
-			t.Errorf("id should be 0 but is %d", result.ID)
+		if result.UUID != "" {
+			t.Errorf("UUID should be empty but is %s", result.UUID)
 		}
 	})
-}
-
-func TestCreateTaskInputValidate(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name        string
-		input       CreateTaskInput
-		expectedErr error
-	}{
-		{
-			name: "ShouldNotReturnError",
-			input: CreateTaskInput{
-				Name:         "task",
-				Description:  "new task",
-				CategoryName: "category",
-				UserID:       uint32(1),
-			},
-		},
-		{
-			name: "ShouldReturnErrorIfNameIsEmpty",
-			input: CreateTaskInput{
-				Name:         "",
-				Description:  "new task",
-				CategoryName: "category",
-				UserID:       uint32(1),
-			},
-			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("name")},
-		},
-		{
-			name: "ShouldReturnErrorIfDescriptionIsEmpty",
-			input: CreateTaskInput{
-				Name:         "task",
-				Description:  "",
-				CategoryName: "category",
-				UserID:       uint32(1),
-			},
-			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("description")},
-		},
-		{
-			name: "ShouldReturnErrorIfCategoryNameIsEmpty",
-			input: CreateTaskInput{
-				Name:         "task",
-				Description:  "new task",
-				CategoryName: "",
-				UserID:       uint32(1),
-			},
-			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("category")},
-		},
-		{
-			name: "ShouldReturnErrorIfUserIDIsEmpty",
-			input: CreateTaskInput{
-				Name:         "task",
-				Description:  "new task",
-				CategoryName: "category",
-				UserID:       0,
-			},
-			expectedErr: errors.AggregatedError{errors.NewEmptyParameterError("user_id")},
-		},
-	}
-	for _, tt := range tests {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			err := tt.input.Validate()
-
-			if tt.expectedErr == nil && err != nil {
-				t.Errorf("should return no err but return %v", err)
-			} else if tt.expectedErr != nil && err != nil && tt.expectedErr.Error() != errors.Cause(err).Error() {
-				t.Errorf("should return %v but return %v", tt.expectedErr, err)
-			} else if tt.expectedErr != nil && err == nil {
-				t.Errorf("should return %v but non return", tt.expectedErr)
-			}
-		})
-	}
 }

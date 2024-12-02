@@ -11,6 +11,13 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
 
+type UserToken struct {
+	ID    uint32
+	UUID  string
+	Name  string
+	Email string
+}
+
 func ValidateExtractUserTokenMiddleware(header string, auth auth.Auth, findUserUUIDUseCase usecase.FindUserUUIDUseCase) server.Middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +41,13 @@ func ValidateExtractUserTokenMiddleware(header string, auth auth.Auth, findUserU
 				return
 			}
 
-			ctx = contextNative.WithValue(ctx, constant.ContextUser, user)
+			var userToken UserToken
+			userToken.ID = user.ID
+			userToken.UUID = user.UUID
+			userToken.Name = user.Name
+			userToken.Email = user.Email
+
+			ctx = contextNative.WithValue(ctx, constant.ContextUser, userToken)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

@@ -35,14 +35,14 @@ func TestFindOneTaskExecute(t *testing.T) {
 			"t.id", "t.created_at", "t.updated_at", "t.uuid", "t.name", "t.description", "t.done", "c.id", "c.created_at", "c.updated_at", "c.slug", "c.name", "t.user_id",
 		}).AddRow(1, time.Time{}, time.Time{}, "uuid", "task", "new task", false, 1, time.Time{}, time.Time{}, "category", "category", 1))
 
-		task, err := us.Execute(ctx, "uuid")
+		var input FindOneTaskInput
+		input.TaskUUID = "uuid"
+		input.UserID = 1
+
+		task, err := us.Execute(ctx, input)
 
 		if err != nil {
 			t.Error(err)
-		}
-
-		if task.ID != 1 {
-			t.Errorf("task id should be 1 but is %d", task.ID)
 		}
 
 		if task.UUID != "uuid" {

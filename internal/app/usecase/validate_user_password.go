@@ -3,14 +3,13 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
 type ValidateUserPasswordUseCase interface {
-	Execute(ctx context.Context, input ValidateUserPasswordInput) (entity.User, error)
+	Execute(ctx context.Context, input ValidateUserPasswordInput) (ValidateUserPasswordOutput, error)
 }
 
 type ValidateUserPasswordInput struct {
@@ -18,20 +17,10 @@ type ValidateUserPasswordInput struct {
 	Password string
 }
 
-func (i ValidateUserPasswordInput) Validate() error {
-	aggrErr := errors.NewAggregatedError()
-	if i.Email == "" {
-		aggrErr.Add(errors.NewEmptyParameterError("email"))
-	}
-	if i.Password == "" {
-		aggrErr.Add(errors.NewEmptyParameterError("password"))
-	}
-
-	if aggrErr.Len() > 0 {
-		return errors.Wrap(aggrErr)
-	}
-
-	return nil
+type ValidateUserPasswordOutput struct {
+	UUID  string
+	Name  string
+	Email string
 }
 
 type ValidateUserPasswordUseCaseImpl struct {
@@ -46,30 +35,52 @@ func NewValidateUserPasswordUseCaseImpl(userRepository repository.UserRepository
 	}
 }
 
-func (u ValidateUserPasswordUseCaseImpl) Execute(ctx context.Context, input ValidateUserPasswordInput) (entity.User, error) {
-	err := input.Validate()
+func (u ValidateUserPasswordUseCaseImpl) validateInput(input ValidateUserPasswordInput) error {
+	aggrErr := errors.NewAggregatedError()
+
+	if input.Email == "" {
+		aggrErr.Add(errors.NewEmptyParameterError("email"))
+	}
+	if input.Password == "" {
+		aggrErr.Add(errors.NewEmptyParameterError("password"))
+	}
+
+	if aggrErr.Len() > 0 {
+		return errors.Wrap(aggrErr)
+	}
+
+	return nil
+}
+
+func (u ValidateUserPasswordUseCaseImpl) Execute(ctx context.Context, input ValidateUserPasswordInput) (ValidateUserPasswordOutput, error) {
+	err := u.validateInput(input)
 	if err != nil {
-		return entity.User{}, errors.Wrap(err)
+		return ValidateUserPasswordOutput{}, errors.Wrap(err)
 	}
 
 	passEncrypted, err := u.userRepository.GetPassEncryptedByEmail(ctx, input.Email)
 	if err != nil {
-		return entity.User{}, errors.Wrap(errors.NewInvalidLoginError())
+		return ValidateUserPasswordOutput{}, errors.Wrap(errors.NewInvalidLoginError())
 	}
 
 	isValid, err := u.crypto.VerifyHash(ctx, input.Password, passEncrypted)
 	if err != nil {
-		return entity.User{}, errors.Wrap(err)
+		return ValidateUserPasswordOutput{}, errors.Wrap(err)
 	}
 
 	if !isValid {
-		return entity.User{}, errors.Wrap(errors.NewInvalidLoginError())
+		return ValidateUserPasswordOutput{}, errors.Wrap(errors.NewInvalidLoginError())
 	}
 
 	user, err := u.userRepository.FindByEmail(ctx, input.Email)
 	if err != nil {
-		return entity.User{}, errors.Wrap(err)
+		return ValidateUserPasswordOutput{}, errors.Wrap(err)
 	}
 
-	return user, nil
+	var output ValidateUserPasswordOutput
+	output.UUID = user.UUID
+	output.Name = user.Name
+	output.Email = user.Email
+
+	return output, nil
 }

@@ -54,10 +54,6 @@ func TestValidateUserPasswordExecute(t *testing.T) {
 			t.Error(err)
 		}
 
-		if user.ID != 1 {
-			t.Errorf("task id should be 1 but is %d", user.ID)
-		}
-
 		if user.UUID != "uuid" {
 			t.Errorf("task uuid should be uuid but is %s", user.UUID)
 		}

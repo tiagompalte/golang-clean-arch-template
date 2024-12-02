@@ -38,7 +38,11 @@ func TestUpdateTaskDoneHandler(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, http.StatusNoContent, resp.StatusCode)
 
-		taskUpdated, err := app.UseCase().FindOneTaskUseCase.Execute(ctx, task.UUID)
+		var input usecase.FindOneTaskInput
+		input.TaskUUID = task.UUID
+		input.UserID = user.ID
+
+		taskUpdated, err := app.UseCase().FindOneTaskUseCase.Execute(ctx, input)
 		assert.NoError(t, err)
 
 		assert.True(t, taskUpdated.Done)

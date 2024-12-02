@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/tiagompalte/golang-clean-arch-template/application"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server"
 )
@@ -38,7 +37,7 @@ func TestMain(t *testing.M) {
 	os.Exit(code)
 }
 
-func GenerateUserAndToken() (entity.User, string) {
+func GenerateUserAndToken() (usecase.CreateUserOutput, string) {
 	ctx := context.Background()
 
 	createUserInput := usecase.CreateUserInput{
@@ -52,7 +51,12 @@ func GenerateUserAndToken() (entity.User, string) {
 		log.Fatalf("failed to create user logged: %v", err)
 	}
 
-	token, err := app.UseCase().GenerateUserTokenUseCase.Execute(ctx, userLogged)
+	var generateUserTokenInput usecase.GenerateUserTokenInput
+	generateUserTokenInput.UUID = userLogged.UUID
+	generateUserTokenInput.Name = userLogged.Name
+	generateUserTokenInput.Email = userLogged.Email
+
+	token, err := app.UseCase().GenerateUserTokenUseCase.Execute(ctx, generateUserTokenInput)
 	if err != nil {
 		log.Fatalf("failed to generate token: %v", err)
 	}

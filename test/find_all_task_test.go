@@ -59,8 +59,8 @@ func TestFindAllTaskHandler(t *testing.T) {
 			assert.True(t, item.Name == task1.Name || item.Name == task2.Name)
 			assert.True(t, item.Description == task1.Description || item.Description == task2.Description)
 			assert.True(t, item.Done == task1.Done || item.Done == task2.Done)
-			assert.True(t, item.Category.Name == task1.Category.Name || item.Category.Name == task2.Category.Name)
-			assert.True(t, item.Category.Slug == task1.Category.GetSlug() || item.Category.Slug == task2.Category.GetSlug())
+			assert.True(t, item.Category.Name == task1.CategoryName || item.Category.Name == task2.CategoryName)
+			assert.True(t, item.Category.Slug == task1.CategorySlug || item.Category.Slug == task2.CategorySlug)
 		}
 	})
 }

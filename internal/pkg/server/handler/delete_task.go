@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/middleware"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -27,7 +27,7 @@ func DeleteTaskHandler(deleteTaskUseCase usecase.DeleteTaskUseCase) server.Handl
 			return errors.Wrap(errors.NewEmptyPathError("uuid"))
 		}
 
-		user, ok := ctx.Value(constant.ContextUser).(entity.User)
+		user, ok := ctx.Value(constant.ContextUser).(middleware.UserToken)
 		if !ok {
 			return errors.Wrap(errors.NewInvalidUserError())
 		}

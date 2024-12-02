@@ -3,13 +3,19 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
 type FindUserUUIDUseCase interface {
-	Execute(ctx context.Context, uuid string) (entity.User, error)
+	Execute(ctx context.Context, uuid string) (FindUserUUIDOutput, error)
+}
+
+type FindUserUUIDOutput struct {
+	ID    uint32
+	UUID  string
+	Name  string
+	Email string
 }
 
 type FindUserUUIDUseCaseImpl struct {
@@ -22,11 +28,17 @@ func NewFindUserUUIDUseCaseImpl(userRepository repository.UserRepository) FindUs
 	}
 }
 
-func (u FindUserUUIDUseCaseImpl) Execute(ctx context.Context, uuid string) (entity.User, error) {
+func (u FindUserUUIDUseCaseImpl) Execute(ctx context.Context, uuid string) (FindUserUUIDOutput, error) {
 	user, err := u.userRepository.FindByUUID(ctx, uuid)
 	if err != nil {
-		return entity.User{}, errors.Wrap(err)
+		return FindUserUUIDOutput{}, errors.Wrap(err)
 	}
 
-	return user, nil
+	var output FindUserUUIDOutput
+	output.ID = user.ID
+	output.UUID = user.UUID
+	output.Name = user.Name
+	output.Email = user.Email
+
+	return output, nil
 }

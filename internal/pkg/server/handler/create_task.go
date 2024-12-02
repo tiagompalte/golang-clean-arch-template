@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/middleware"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -52,7 +52,7 @@ func CreateTaskHandler(createTaskUseCase usecase.CreateTaskUseCase) server.Handl
 			return errors.Wrap(err)
 		}
 
-		user, ok := ctx.Value(constant.ContextUser).(entity.User)
+		user, ok := ctx.Value(constant.ContextUser).(middleware.UserToken)
 		if !ok {
 			return errors.Wrap(errors.NewInvalidUserError())
 		}
@@ -71,8 +71,8 @@ func CreateTaskHandler(createTaskUseCase usecase.CreateTaskUseCase) server.Handl
 			Description: task.Description,
 			Done:        task.Done,
 			Category: CategoryResponse{
-				Slug: task.Category.GetSlug(),
-				Name: task.Category.Name,
+				Slug: task.CategorySlug,
+				Name: task.CategoryName,
 			},
 		}
 

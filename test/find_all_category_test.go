@@ -52,7 +52,7 @@ func TestFindAllCategoryHandler(t *testing.T) {
 
 		for _, item := range respBody {
 			assert.True(t, item.Name == category1.Name || item.Name == category2.Name)
-			assert.True(t, item.Slug == category1.GetSlug() || item.Slug == category2.GetSlug())
+			assert.True(t, item.Slug == category1.Slug || item.Slug == category2.Slug)
 		}
 	})
 }

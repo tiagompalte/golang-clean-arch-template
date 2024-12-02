@@ -50,8 +50,8 @@ func TestFindOneTaskHandler(t *testing.T) {
 		assert.Equal(t, task.Name, respBody.Name)
 		assert.Equal(t, task.Description, respBody.Description)
 		assert.Equal(t, task.Done, respBody.Done)
-		assert.Equal(t, task.Category.Name, respBody.Category.Name)
-		assert.Equal(t, task.Category.GetSlug(), respBody.Category.Slug)
+		assert.Equal(t, task.CategoryName, respBody.Category.Name)
+		assert.Equal(t, task.CategorySlug, respBody.Category.Slug)
 
 	})
 

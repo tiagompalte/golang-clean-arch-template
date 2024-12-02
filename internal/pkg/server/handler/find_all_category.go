@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/middleware"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -26,7 +26,7 @@ func FindAllCategoryHandler(findAllCategoryUseCase usecase.FindAllCategoryUseCas
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		user, ok := ctx.Value(constant.ContextUser).(entity.User)
+		user, ok := ctx.Value(constant.ContextUser).(middleware.UserToken)
 		if !ok {
 			return errors.Wrap(errors.NewInvalidUserError())
 		}
@@ -39,7 +39,7 @@ func FindAllCategoryHandler(findAllCategoryUseCase usecase.FindAllCategoryUseCas
 		resp := make([]CategoryResponse, len(items))
 		for i := range items {
 			resp[i] = CategoryResponse{
-				Slug: items[i].GetSlug(),
+				Slug: items[i].Slug,
 				Name: items[i].Name,
 			}
 		}

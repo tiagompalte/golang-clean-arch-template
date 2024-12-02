@@ -3,17 +3,21 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
 type FindAllTaskUseCase interface {
-	Execute(ctx context.Context, userID uint32) ([]entity.Task, error)
+	Execute(ctx context.Context, userID uint32) ([]FindAllTaskOutput, error)
 }
 
 type FindAllTaskOutput struct {
-	Items []entity.Task
+	UUID         string
+	Name         string
+	Description  string
+	CategorySlug string
+	CategoryName string
+	Done         bool
 }
 
 type FindAllTaskUseCaseImpl struct {
@@ -26,11 +30,21 @@ func NewFindAllTaskUseCaseImpl(taskRepository repository.TaskRepository) FindAll
 	}
 }
 
-func (u FindAllTaskUseCaseImpl) Execute(ctx context.Context, userID uint32) ([]entity.Task, error) {
+func (u FindAllTaskUseCaseImpl) Execute(ctx context.Context, userID uint32) ([]FindAllTaskOutput, error) {
 	list, err := u.taskRepository.FindByUserID(ctx, userID)
 	if err != nil {
-		return []entity.Task{}, errors.Wrap(err)
+		return []FindAllTaskOutput{}, errors.Wrap(err)
 	}
 
-	return list, nil
+	output := make([]FindAllTaskOutput, len(list))
+	for i := range list {
+		output[i].UUID = list[i].UUID
+		output[i].Name = list[i].Name
+		output[i].Description = list[i].Description
+		output[i].CategorySlug = list[i].Category.GetSlug()
+		output[i].CategoryName = list[i].Category.Name
+		output[i].Done = list[i].Done
+	}
+
+	return output, nil
 }

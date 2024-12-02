@@ -9,7 +9,7 @@ import (
 )
 
 type CreateCategoryUseCase interface {
-	Execute(ctx context.Context, input CreateCategoryInput) (entity.Category, error)
+	Execute(ctx context.Context, input CreateCategoryInput) (CreateCategoryOutput, error)
 }
 
 type CreateCategoryInput struct {
@@ -17,20 +17,9 @@ type CreateCategoryInput struct {
 	UserID uint32
 }
 
-func (i CreateCategoryInput) Validate() error {
-	aggrErr := errors.NewAggregatedError()
-	if i.Name == "" {
-		aggrErr.Add(errors.NewEmptyParameterError("name"))
-	}
-	if i.UserID == 0 {
-		aggrErr.Add(errors.NewEmptyParameterError("user_id"))
-	}
-
-	if aggrErr.Len() > 0 {
-		return errors.Wrap(aggrErr)
-	}
-
-	return nil
+type CreateCategoryOutput struct {
+	Slug string
+	Name string
 }
 
 type CreateCategoryUseCaseImpl struct {
@@ -43,31 +32,34 @@ func NewCreateCategoryUseCaseImpl(categoryRepository repository.CategoryReposito
 	}
 }
 
-func (u CreateCategoryUseCaseImpl) Execute(ctx context.Context, input CreateCategoryInput) (entity.Category, error) {
-	err := input.Validate()
-	if err != nil {
-		return entity.Category{}, errors.Wrap(err)
-	}
-
+func (u CreateCategoryUseCaseImpl) Execute(ctx context.Context, input CreateCategoryInput) (CreateCategoryOutput, error) {
 	categoryNew := entity.Category{
 		Name:   input.Name,
 		UserID: input.UserID,
 	}
 
+	err := categoryNew.ValidateNew()
+	if err != nil {
+		return CreateCategoryOutput{}, errors.Wrap(err)
+	}
+
 	category, err := u.categoryRepository.FindBySlugAndUserID(ctx, categoryNew.GetSlug(), categoryNew.UserID)
 	if err != nil && !errors.IsAppError(err, errors.ErrorCodeNotFound) {
-		return entity.Category{}, errors.Wrap(err)
+		return CreateCategoryOutput{}, errors.Wrap(err)
 	} else if errors.IsAppError(err, errors.ErrorCodeNotFound) {
 		categoryID, err := u.categoryRepository.Insert(ctx, categoryNew)
 		if err != nil {
-			return entity.Category{}, errors.Wrap(err)
+			return CreateCategoryOutput{}, errors.Wrap(err)
 		}
 
 		category, err = u.categoryRepository.FindByID(ctx, categoryID)
 		if err != nil {
-			return entity.Category{}, errors.Wrap(err)
+			return CreateCategoryOutput{}, errors.Wrap(err)
 		}
 	}
 
-	return category, nil
+	return CreateCategoryOutput{
+		Slug: category.GetSlug(),
+		Name: category.Name,
+	}, nil
 }

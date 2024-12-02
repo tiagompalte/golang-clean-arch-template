@@ -10,7 +10,7 @@ import (
 )
 
 type CreateUserUseCase interface {
-	Execute(ctx context.Context, input CreateUserInput) (entity.User, error)
+	Execute(ctx context.Context, input CreateUserInput) (CreateUserOutput, error)
 }
 
 type CreateUserInput struct {
@@ -19,23 +19,11 @@ type CreateUserInput struct {
 	Password string
 }
 
-func (i CreateUserInput) Validate() error {
-	aggrErr := errors.NewAggregatedError()
-	if i.Name == "" {
-		aggrErr.Add(errors.NewEmptyParameterError("name"))
-	}
-	if i.Email == "" {
-		aggrErr.Add(errors.NewEmptyParameterError("email"))
-	}
-	if i.Password == "" {
-		aggrErr.Add(errors.NewEmptyParameterError("password"))
-	}
-
-	if aggrErr.Len() > 0 {
-		return errors.Wrap(aggrErr)
-	}
-
-	return nil
+type CreateUserOutput struct {
+	ID    uint32
+	UUID  string
+	Name  string
+	Email string
 }
 
 type CreateUserUseCaseImpl struct {
@@ -50,30 +38,39 @@ func NewCreateUserUseCaseImpl(userRepository repository.UserRepository, crypto c
 	}
 }
 
-func (u CreateUserUseCaseImpl) Execute(ctx context.Context, input CreateUserInput) (entity.User, error) {
-	err := input.Validate()
-	if err != nil {
-		return entity.User{}, errors.Wrap(err)
-	}
-
+func (u CreateUserUseCaseImpl) Execute(ctx context.Context, input CreateUserInput) (CreateUserOutput, error) {
 	var user entity.User
 	user.Name = input.Name
 	user.Email = input.Email
 
+	err := user.ValidateNew()
+	if err != nil {
+		return CreateUserOutput{}, errors.Wrap(err)
+	}
+
+	if input.Password == "" {
+		return CreateUserOutput{}, errors.Wrap(errors.NewEmptyParameterError("password"))
+	}
+
 	passEncrypted, err := u.crypto.GenerateHash(ctx, input.Password)
 	if err != nil {
-		return entity.User{}, errors.Wrap(err)
+		return CreateUserOutput{}, errors.Wrap(err)
 	}
 
 	id, err := u.userRepository.Insert(ctx, user, passEncrypted)
 	if err != nil {
-		return entity.User{}, errors.Wrap(err)
+		return CreateUserOutput{}, errors.Wrap(err)
 	}
 
 	user, err = u.userRepository.FindByID(ctx, id)
 	if err != nil {
-		return entity.User{}, errors.Wrap(err)
+		return CreateUserOutput{}, errors.Wrap(err)
 	}
 
-	return user, nil
+	return CreateUserOutput{
+		ID:    user.ID,
+		UUID:  user.UUID,
+		Name:  user.Name,
+		Email: user.Email,
+	}, nil
 }

@@ -41,10 +41,6 @@ func TestFindUserUUIDExecute(t *testing.T) {
 			t.Error(err)
 		}
 
-		if task.ID != 1 {
-			t.Errorf("task id should be 1 but is %d", task.ID)
-		}
-
 		if task.UUID != "uuid" {
 			t.Errorf("task uuid should be uuid but is %s", task.UUID)
 		}

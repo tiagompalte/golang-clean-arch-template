@@ -3,13 +3,17 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
 type FindAllCategoryUseCase interface {
-	Execute(ctx context.Context, userID uint32) ([]entity.Category, error)
+	Execute(ctx context.Context, userID uint32) ([]FindAllCategoryOutput, error)
+}
+
+type FindAllCategoryOutput struct {
+	Slug string
+	Name string
 }
 
 type FindAllCategoryUseCaseImpl struct {
@@ -22,11 +26,17 @@ func NewFindAllCategoryUseCaseImpl(categoryRepository repository.CategoryReposit
 	}
 }
 
-func (u FindAllCategoryUseCaseImpl) Execute(ctx context.Context, userID uint32) ([]entity.Category, error) {
+func (u FindAllCategoryUseCaseImpl) Execute(ctx context.Context, userID uint32) ([]FindAllCategoryOutput, error) {
 	list, err := u.categoryRepository.FindByUserID(ctx, userID)
 	if err != nil {
-		return []entity.Category{}, errors.Wrap(err)
+		return []FindAllCategoryOutput{}, errors.Wrap(err)
 	}
 
-	return list, nil
+	output := make([]FindAllCategoryOutput, len(list))
+	for i := range list {
+		output[i].Slug = list[i].GetSlug()
+		output[i].Name = list[i].Name
+	}
+
+	return output, nil
 }

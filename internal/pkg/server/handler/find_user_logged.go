@@ -2,19 +2,17 @@ package handler
 
 import (
 	"net/http"
-	"time"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/middleware"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
 
 type UserResponse struct {
-	UUID      string    `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	Name      string    `json:"name"`
-	Email     string    `json:"email"`
+	UUID  string `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 // @Summary User Logged
@@ -28,16 +26,15 @@ func FindUserLoggedHandler() server.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		user, ok := ctx.Value(constant.ContextUser).(entity.User)
+		user, ok := ctx.Value(constant.ContextUser).(middleware.UserToken)
 		if !ok {
 			return errors.Wrap(errors.NewInvalidUserError())
 		}
 
 		resp := UserResponse{
-			UUID:      user.UUID,
-			CreatedAt: user.CreatedAt,
-			Name:      user.Name,
-			Email:     user.Email,
+			UUID:  user.UUID,
+			Name:  user.Name,
+			Email: user.Email,
 		}
 
 		err := server.RespondJSON(w, http.StatusOK, resp)

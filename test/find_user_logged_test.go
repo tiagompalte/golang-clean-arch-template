@@ -37,7 +37,6 @@ func TestFindUserLoggedHandler(t *testing.T) {
 		assert.Equal(t, user.UUID, respBody.UUID)
 		assert.Equal(t, user.Name, respBody.Name)
 		assert.Equal(t, user.Email, respBody.Email)
-		assert.Equal(t, user.CreatedAt, respBody.CreatedAt)
 	})
 
 }

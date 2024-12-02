@@ -40,18 +40,23 @@ func SigninHandler(
 	return func(w http.ResponseWriter, r *http.Request) error {
 		ctx := r.Context()
 
-		var input SigninRequest
-		err := json.NewDecoder(r.Body).Decode(&input)
+		var signinRequest SigninRequest
+		err := json.NewDecoder(r.Body).Decode(&signinRequest)
 		if err != nil {
 			return errors.Wrap(err)
 		}
 
-		user, err := validateUserPasswordUseCase.Execute(ctx, input.toInput())
+		user, err := validateUserPasswordUseCase.Execute(ctx, signinRequest.toInput())
 		if err != nil {
 			return errors.Wrap(err)
 		}
 
-		output, err := generateUserTokenUseCase.Execute(ctx, user)
+		var input usecase.GenerateUserTokenInput
+		input.UUID = user.UUID
+		input.Name = user.Name
+		input.Email = user.Email
+
+		output, err := generateUserTokenUseCase.Execute(ctx, input)
 		if err != nil {
 			return errors.Wrap(err)
 		}
