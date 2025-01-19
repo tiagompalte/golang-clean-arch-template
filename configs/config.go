@@ -28,6 +28,11 @@ type ConfigJwt struct {
 	Duration  int    `mapstructure:"DURATION"`
 }
 
+type ConfigMigrate struct {
+	Migrate        string `mapstructure:"migrate"`
+	PathMigrations string `mapstructure:"PATH_MIGRATIONS"`
+}
+
 type Config struct {
 	AppName  string         `mapstructure:"APP_NAME"`
 	WebPort  string         `mapstructure:"WEB_PORT"`
@@ -35,4 +40,5 @@ type Config struct {
 	Cache    ConfigCache    `mapstructure:"CACHE"`
 	Bcrypt   ConfigBcrypt   `mapstructure:"BCRYPT"`
 	Jwt      ConfigJwt      `mapstructure:"JWT"`
+	Migrate  ConfigMigrate  `mapstructure:"MIGRATE"`
 }

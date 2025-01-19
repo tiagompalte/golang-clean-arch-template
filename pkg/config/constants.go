@@ -10,3 +10,8 @@ const (
 const (
 	Env = "ENV"
 )
+
+const (
+	ViperTomlConfigurationType = "toml"
+	ViperConfigurationName     = "config"
+)
