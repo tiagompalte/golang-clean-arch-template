@@ -15,3 +15,7 @@ ROUND = 12
 ALGORITHM = "HS256"
 KEY_SECRET = "Secr3t"
 DURATION = 60000 # seconds
+
+[MIGRATE]
+MIGRATE = "native"
+PATH_MIGRATIONS = "./scripts/migrations"

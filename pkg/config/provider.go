@@ -26,13 +26,13 @@ func ProviderSet() configs.Config {
 		}
 	}
 
-	configName := configs.ViperConfigurationName
+	configName := ViperConfigurationName
 	env := os.Getenv(Env)
 	if env != "" {
 		configName = fmt.Sprintf("%s_%s", configName, env)
 	}
 
-	cfg, err := viper.Load(configName, configs.ViperTomlConfigurationType, path)
+	cfg, err := viper.Load(configName, ViperTomlConfigurationType, path)
 	if err != nil {
 		panic(err)
 	}

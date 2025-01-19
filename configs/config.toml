@@ -22,3 +22,8 @@ ROUND = 12
 ALGORITHM = "HS256"
 KEY_SECRET = "Secr3t"
 DURATION = 60000 # seconds
+
+[MIGRATE]
+# MIGRATE = "golang-migrate"
+PATH_MIGRATIONS = "./scripts/migrations"
+# PATH_MIGRATIONS = "./../../scripts/migrations"

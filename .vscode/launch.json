@@ -5,11 +5,20 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch file",
+      "name": "Server",
       "type": "go",
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}/cmd/server/main.go",
+      "env": {}
+    },
+    {
+      "name": "Migrate",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/cmd/migrate/main.go",
+      "args": ["up", "create_user"],
       "env": {}
     }
   ]
