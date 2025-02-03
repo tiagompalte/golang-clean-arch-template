@@ -14,7 +14,7 @@ type DataSql struct {
 }
 
 func NewDataSqlWithConfig(config configs.ConfigDatabase) DataManager {
-	db, err := sql.Open(config.DriverName, config.ConnectionSource)
+	db, err := sql.Open(config.DriverName.String(), config.ConnectionSource)
 	if err != nil {
 		panic(fmt.Sprintf("error to connect in database: %v", err))
 	}

@@ -10,8 +10,10 @@ func ProviderSet(
 	config configs.Config,
 	data repository.DataManager,
 ) Migrate {
-	if config.Migrate.Migrate == "golang-migrate" {
+	if config.Migrate.DriverName == configs.GolangMigrate {
 		return NewGolangMigrate(config)
+	} else if config.Migrate.DriverName == configs.NativeMigrate {
+		return nativemigrate.NewNativeMigrate(data, config.Migrate)
 	}
-	return nativemigrate.NewNativeMigrate(data, config.Migrate)
+	panic("None migrate define")
 }

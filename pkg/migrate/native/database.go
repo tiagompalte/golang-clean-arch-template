@@ -31,8 +31,8 @@ func (m NativeMigrate) insertBatch(ctx context.Context, names []string) error {
 		args = append(args, n)
 	}
 
-	params := strings.Repeat("(?),", len(args))
-	query := fmt.Sprintf(`INSERT IGNORE INTO tb_db_version (name) VALUES %s`, params[:len(params)-1])
+	params := strings.Repeat(",(?)", len(args))[1:]
+	query := fmt.Sprintf(`INSERT IGNORE INTO tb_db_version (name) VALUES %s`, params)
 
 	_, err := m.data.ExecContext(
 		ctx,

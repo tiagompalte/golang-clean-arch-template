@@ -8,11 +8,11 @@ func ProviderSet(
 	config configs.Config,
 ) Cache {
 	switch config.Cache.DriverName {
-	case "memory":
+	case configs.CacheMemory:
 		return NewMemoryCache()
-	case "mock":
+	case configs.CacheMock:
 		return NewMockCache()
-	case "redis":
+	case configs.CacheRedis:
 		return NewRedisCache(
 			config.Cache.Redis.Host,
 			config.Cache.Redis.Port,

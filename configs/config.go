@@ -1,8 +1,8 @@
 package configs
 
 type ConfigDatabase struct {
-	DriverName       string `mapstructure:"DRIVER_NAME"`
-	ConnectionSource string `mapstructure:"CONNECTION_SOURCE"`
+	DriverName       DatabaseType `mapstructure:"DRIVER_NAME"`
+	ConnectionSource string       `mapstructure:"CONNECTION_SOURCE"`
 }
 
 type ConfigRedis struct {
@@ -14,7 +14,7 @@ type ConfigRedis struct {
 }
 
 type ConfigCache struct {
-	DriverName string      `mapstructure:"DRIVER_NAME"`
+	DriverName CacheType   `mapstructure:"DRIVER_NAME"`
 	Redis      ConfigRedis `mapstructure:"REDIS"`
 }
 
@@ -29,8 +29,8 @@ type ConfigJwt struct {
 }
 
 type ConfigMigrate struct {
-	Migrate        string `mapstructure:"migrate"`
-	PathMigrations string `mapstructure:"PATH_MIGRATIONS"`
+	DriverName     MigrateType `mapstructure:"DRIVER_NAME"`
+	PathMigrations string      `mapstructure:"PATH_MIGRATIONS"`
 }
 
 type Config struct {
