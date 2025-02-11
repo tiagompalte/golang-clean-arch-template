@@ -1,13 +1,22 @@
 package nativemigrate
 
 import (
+	"fmt"
 	"os"
 	"regexp"
 
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
-func (m NativeMigrate) createFile(filename string) error {
+type FileImpl struct {
+	path string
+}
+
+func NewFileImpl(path string) File {
+	return FileImpl{path: path}
+}
+
+func (f FileImpl) createFile(filename string) error {
 	file, err := os.Create(filename)
 	if err != nil {
 		return errors.Wrap(err)
@@ -17,13 +26,39 @@ func (m NativeMigrate) createFile(filename string) error {
 	return nil
 }
 
-func (m NativeMigrate) listFileScripts() (map[string]Script, error) {
-	files, err := os.ReadDir(m.pathMigrations())
+func (f FileImpl) CreateUpAndDownFile(version int64, name string) error {
+	filenameUp := f.PathFileUp(fmt.Sprintf("%d_%s", version, name))
+	filenameDown := f.PathFileDown(fmt.Sprintf("%d_%s", version, name))
+
+	var err error
+	defer func(err error) {
+		if err == nil {
+			return
+		}
+		os.Remove(filenameUp)
+		os.Remove(filenameDown)
+	}(err)
+
+	err = f.createFile(filenameUp)
 	if err != nil {
-		return map[string]Script{}, errors.Wrap(err)
+		return errors.Wrap(err)
 	}
 
-	mapFiles := make(map[string]Script)
+	err = f.createFile(filenameDown)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	return nil
+}
+
+func (f FileImpl) ListFileScripts() (map[string]Migrate, error) {
+	files, err := os.ReadDir(f.path)
+	if err != nil {
+		return map[string]Migrate{}, errors.Wrap(err)
+	}
+
+	mapFiles := make(map[string]Migrate)
 	reg := regexp.MustCompile(`(?<name>.+).(?<type>(?:up|down)).sql`)
 
 	for _, file := range files {
@@ -56,11 +91,19 @@ func (m NativeMigrate) listFileScripts() (map[string]Script, error) {
 	return mapFiles, nil
 }
 
-func (m NativeMigrate) readScript(filename string) (string, error) {
+func (f FileImpl) ReadScript(filename string) (string, error) {
 	fileByte, err := os.ReadFile(filename)
 	if err != nil {
 		return "", errors.Wrap(err)
 	}
 
 	return string(fileByte), nil
+}
+
+func (f FileImpl) PathFileUp(name string) string {
+	return fmt.Sprintf("%s/%s.up.sql", f.path, name)
+}
+
+func (f FileImpl) PathFileDown(name string) string {
+	return fmt.Sprintf("%s/%s.down.sql", f.path, name)
 }

@@ -3,51 +3,93 @@ package nativemigrate
 import (
 	"context"
 	"fmt"
-	"os"
 	"sort"
 	"time"
 
-	"github.com/tiagompalte/golang-clean-arch-template/configs"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
 
 type NativeMigrate struct {
-	data          repository.DataManager
-	configMigrate configs.ConfigMigrate
+	file File
+	repo RepositoryManager
 }
 
 func NewNativeMigrate(
-	data repository.DataManager,
-	configMigrate configs.ConfigMigrate,
+	file File,
+	repo RepositoryManager,
 ) NativeMigrate {
 	return NativeMigrate{
-		data:          data,
-		configMigrate: configMigrate,
+		file: file,
+		repo: repo,
 	}
 }
 
 func (m NativeMigrate) Create(ctx context.Context, name string) error {
 	version := time.Now().Unix()
+	return m.file.CreateUpAndDownFile(version, name)
+}
 
-	filenameUp := fmt.Sprintf("%s/%d_%s.up.sql", m.pathMigrations(), version, name)
-	filenameDown := fmt.Sprintf("%s/%d_%s.down.sql", m.pathMigrations(), version, name)
+func (m NativeMigrate) insertNames(ctx context.Context, names []string) error {
+	tx, err := m.repo.Data().Begin()
+	if err != nil {
+		return errors.Wrap(err)
+	}
+	defer tx.Rollback()
 
-	var err error
-	defer func(err error) {
-		if err == nil {
-			return
-		}
-		os.Remove(filenameUp)
-		os.Remove(filenameDown)
-	}(err)
+	versionRepo := m.repo.Version(tx)
 
-	err = m.createFile(filenameUp)
+	err = versionRepo.CreateTable(ctx)
 	if err != nil {
 		return errors.Wrap(err)
 	}
 
-	err = m.createFile(filenameDown)
+	err = versionRepo.InsertBatch(ctx, names)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	return nil
+}
+
+func (m NativeMigrate) execUpScript(ctx context.Context, name string) error {
+	tx, err := m.repo.Data().Begin()
+	if err != nil {
+		return errors.Wrap(err)
+	}
+	defer tx.Rollback()
+
+	versionRepo := m.repo.Version(tx)
+
+	isAlreadyApply, err := versionRepo.IsAlreadyApply(ctx, name)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	if !isAlreadyApply {
+		filenameUp := m.file.PathFileUp(name)
+		script, err := m.file.ReadScript(filenameUp)
+		if err != nil {
+			return errors.Wrap(err)
+		}
+
+		err = versionRepo.ExecScript(ctx, script)
+		if err != nil {
+			return errors.Wrap(err)
+		}
+
+		now := time.Now()
+		err = versionRepo.UpdateAppliedAt(ctx, name, &now)
+		if err != nil {
+			return errors.Wrap(err)
+		}
+	}
+
+	err = tx.Commit()
 	if err != nil {
 		return errors.Wrap(err)
 	}
@@ -56,40 +98,28 @@ func (m NativeMigrate) Create(ctx context.Context, name string) error {
 }
 
 func (m NativeMigrate) Up(ctx context.Context) error {
-	scripts, err := m.listFileScripts()
-	if err != nil {
-		return errors.Wrap(err)
-	}
-
-	err = m.insertScripts(ctx, scripts)
+	scripts, err := m.file.ListFileScripts()
 	if err != nil {
 		return errors.Wrap(err)
 	}
 
 	names := make([]string, 0, len(scripts))
-	for name := range scripts {
+	for name, script := range scripts {
+		if !script.IsValid() {
+			return errors.Wrap(fmt.Errorf("migrate(%s): script is invalid", name))
+		}
+
 		names = append(names, name)
 	}
 	sort.Strings(names)
 
+	err = m.insertNames(ctx, names)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
 	for _, name := range names {
-		isApplied, err := m.alreadyApply(ctx, name)
-		if err != nil {
-			return errors.Wrap(err)
-		}
-
-		if isApplied {
-			continue
-		}
-
-		filenameUp := fmt.Sprintf("%s/%s.up.sql", m.pathMigrations(), name)
-
-		script, err := m.readScript(filenameUp)
-		if err != nil {
-			return errors.Wrap(err)
-		}
-
-		err = m.execUpScript(ctx, name, script)
+		err = m.execUpScript(ctx, name)
 		if err != nil {
 			return errors.Wrap(err)
 		}
@@ -99,19 +129,36 @@ func (m NativeMigrate) Up(ctx context.Context) error {
 }
 
 func (m NativeMigrate) Down(ctx context.Context) error {
-	scriptName, err := m.findLastInserted(ctx)
+	tx, err := m.repo.Data().Begin()
+	if err != nil {
+		return errors.Wrap(err)
+	}
+	defer tx.Rollback()
+
+	versionRepo := m.repo.Version(tx)
+
+	name, err := versionRepo.FindLastInserted(ctx)
 	if err != nil {
 		return errors.Wrap(err)
 	}
 
-	filenameDown := fmt.Sprintf("%s/%s.down.sql", m.pathMigrations(), scriptName)
-
-	script, err := m.readScript(filenameDown)
+	filenameDown := m.file.PathFileDown(name)
+	script, err := m.file.ReadScript(filenameDown)
 	if err != nil {
 		return errors.Wrap(err)
 	}
 
-	err = m.execDownScript(ctx, scriptName, script)
+	err = versionRepo.ExecScript(ctx, script)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	err = versionRepo.UpdateAppliedAt(ctx, name, nil)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	err = tx.Commit()
 	if err != nil {
 		return errors.Wrap(err)
 	}

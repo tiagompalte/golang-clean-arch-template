@@ -13,7 +13,9 @@ func ProviderSet(
 	if config.Migrate.DriverName == configs.GolangMigrate {
 		return NewGolangMigrate(config)
 	} else if config.Migrate.DriverName == configs.NativeMigrate {
-		return nativemigrate.NewNativeMigrate(data, config.Migrate)
+		file := nativemigrate.NewFileImpl(config.Migrate.PathMigrations)
+		repositoryManager := nativemigrate.NewRepositoryManager(data)
+		return nativemigrate.NewNativeMigrate(file, repositoryManager)
 	}
 	panic("None migrate define")
 }

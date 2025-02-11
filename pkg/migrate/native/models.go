@@ -2,12 +2,12 @@ package nativemigrate
 
 import "strings"
 
-type Script struct {
+type Migrate struct {
 	Name    string
 	HasUp   bool
 	HasDown bool
 }
 
-func (s Script) IsValid() bool {
-	return len(strings.TrimSpace(s.Name)) > 0 && s.HasUp && s.HasDown
+func (m Migrate) IsValid() bool {
+	return len(strings.TrimSpace(m.Name)) > 0 && m.HasUp && m.HasDown
 }
