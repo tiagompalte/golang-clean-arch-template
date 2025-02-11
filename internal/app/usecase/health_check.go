@@ -5,6 +5,7 @@ import (
 
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/healthcheck"
+	"golang.org/x/sync/errgroup"
 )
 
 type HealthCheckUseCase interface {
@@ -22,11 +23,22 @@ func NewHealthCheckUseCaseImpl(implements []healthcheck.HealthCheck) HealthCheck
 }
 
 func (u HealthCheckUseCaseImpl) Execute(ctx context.Context) error {
+	group := errgroup.Group{}
+	group.SetLimit(len(u.implements))
+
 	for _, i := range u.implements {
-		isHealthy, err := i.IsHealthy(ctx)
-		if !isHealthy {
-			return errors.Wrap(err)
-		}
+		group.Go(func() error {
+			_, err := i.IsHealthy(ctx)
+			if err != nil {
+				return errors.Wrap(err)
+			}
+			return nil
+		})
+	}
+
+	err := group.Wait()
+	if err != nil {
+		return errors.Wrap(err)
 	}
 
 	return nil
