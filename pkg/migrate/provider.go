@@ -8,7 +8,7 @@ import (
 
 func ProviderSet(
 	config configs.Config,
-	data repository.DataManager,
+	data repository.DataSqlManager,
 ) Migrate {
 	if config.Migrate.DriverName == configs.GolangMigrate {
 		return NewGolangMigrate(config)

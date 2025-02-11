@@ -10,8 +10,6 @@ func ProviderSet(
 	switch config.Cache.DriverName {
 	case configs.CacheMemory:
 		return NewMemoryCache()
-	case configs.CacheMock:
-		return NewMockCache()
 	case configs.CacheRedis:
 		return NewRedisCache(
 			config.Cache.Redis.Host,
@@ -20,6 +18,7 @@ func ProviderSet(
 			config.Cache.Redis.Pass,
 			config.Cache.Redis.Prefix,
 		)
+	default: // configs.CacheMock
+		return NewMockCache()
 	}
-	panic("None cache define")
 }

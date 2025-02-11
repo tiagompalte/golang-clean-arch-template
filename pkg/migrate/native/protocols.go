@@ -16,8 +16,8 @@ type File interface {
 }
 
 type RepositoryManager interface {
-	Data() repository.DataManager
-	Version(conn repository.Connector) VersionRepository
+	Data() repository.DataSqlManager
+	Version(conn repository.ConnectorSql) VersionRepository
 }
 
 type VersionRepository interface {

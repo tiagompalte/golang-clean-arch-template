@@ -23,7 +23,7 @@ func main() {
 	}
 
 	conf := config.ProviderSet()
-	dataManager := repository.ProviderSet(conf)
+	dataManager := repository.ProviderDataSqlManagerSet(conf)
 
 	mig := migrate.ProviderSet(conf, dataManager)
 

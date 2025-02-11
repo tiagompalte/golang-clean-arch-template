@@ -11,12 +11,12 @@ import (
 )
 
 type CategoryRepository struct {
-	conn         pkgRepo.Connector
+	conn         pkgRepo.ConnectorSql
 	mainTable    string
 	selectFields string
 }
 
-func NewCategoryRepository(conn pkgRepo.Connector) repository.CategoryRepository {
+func NewCategoryRepository(conn pkgRepo.ConnectorSql) repository.CategoryRepository {
 	return CategoryRepository{
 		conn:      conn,
 		mainTable: "tb_category",
@@ -53,7 +53,7 @@ func (r CategoryRepository) parseEntity(s pkgRepo.Scanner) (entity.Category, err
 }
 
 func (r CategoryRepository) Insert(ctx context.Context, category entity.Category) (uint32, error) {
-	res, err := r.conn.ExecContext(ctx,
+	res, err := r.conn.Exec(ctx,
 		"INSERT INTO tb_category (slug, name, user_id) VALUES (?,?,?)",
 		category.GetSlug(),
 		category.Name,
@@ -80,7 +80,7 @@ func (r CategoryRepository) FindBySlugAndUserID(ctx context.Context, slug string
 	q := fmt.Sprintf(query, r.selectFields)
 
 	category, err := r.parseEntity(
-		r.conn.QueryRowContext(
+		r.conn.QueryRow(
 			ctx,
 			q,
 			slug,
@@ -101,13 +101,13 @@ func (r CategoryRepository) FindByUserID(ctx context.Context, userID uint32) ([]
 
 	q := fmt.Sprintf(query, r.selectFields)
 
-	result, err := r.conn.QueryContext(
+	result, err := r.conn.Query(
 		ctx,
 		q,
 		userID,
 	)
 
-	list, err := pkgRepo.ParseEntities[entity.Category](
+	list, err := pkgRepo.ParseEntities(
 		r.parseEntity,
 		result,
 		err,
@@ -128,7 +128,7 @@ func (r CategoryRepository) FindByID(ctx context.Context, id uint32) (entity.Cat
 	q := fmt.Sprintf(query, r.selectFields)
 
 	category, err := r.parseEntity(
-		r.conn.QueryRowContext(
+		r.conn.QueryRow(
 			ctx,
 			q,
 			id,

@@ -11,12 +11,13 @@ RUN apk update && \
     git \
     tzdata
 
+RUN go install github.com/google/wire/cmd/wire@latest && go install github.com/swaggo/swag/cmd/swag@latest
+
 WORKDIR /app
+
 COPY . .
 
-RUN go mod download && go install github.com/swaggo/swag/cmd/swag@latest && swag init -d ./internal/pkg/server -g server.go -o ./api
-
-RUN go install github.com/google/wire/cmd/wire@latest
+RUN go mod download && swag init -d ./internal/pkg/server -g server.go -o ./api
 
 RUN wire ./application
 

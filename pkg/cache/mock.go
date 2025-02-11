@@ -28,6 +28,6 @@ func (c MockCache) ClearAll(ctx context.Context) error {
 	return nil
 }
 
-func (c MockCache) Ping(ctx context.Context) error {
-	return nil
+func (c MockCache) IsHealthy(ctx context.Context) (bool, error) {
+	return true, nil
 }

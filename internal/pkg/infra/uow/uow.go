@@ -10,12 +10,12 @@ import (
 )
 
 type Uow struct {
-	db         repository.DataManager
-	tx         repository.TransactionManager
+	db         repository.DataSqlManager
+	tx         repository.TransactionSqlManager
 	repository data.RepositoryManager
 }
 
-func NewUow(db repository.DataManager) Uow {
+func NewUow(db repository.DataSqlManager) Uow {
 	return Uow{
 		db: db,
 	}
@@ -35,7 +35,7 @@ func (u *Uow) Do(ctx context.Context, fn func(Uow *Uow) error) error {
 		return err
 	}
 	u.tx = tx
-	u.repository = data.NewRepositoryManager(tx)
+	u.repository = data.NewRepositoryManager(tx.Command())
 
 	err = fn(u)
 	if err != nil {

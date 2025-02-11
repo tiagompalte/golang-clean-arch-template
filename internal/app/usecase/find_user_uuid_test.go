@@ -23,7 +23,7 @@ func TestFindUserUUIDExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql)
+		userRepository := data.NewUserRepository(datasql.Command())
 
 		us := FindUserUUIDUseCaseImpl{
 			userRepository: userRepository,

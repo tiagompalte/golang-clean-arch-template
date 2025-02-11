@@ -26,7 +26,7 @@ func TestValidateUserPasswordExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql)
+		userRepository := data.NewUserRepository(datasql.Command())
 
 		us := ValidateUserPasswordUseCaseImpl{
 			userRepository: userRepository,
@@ -69,7 +69,7 @@ func TestValidateUserPasswordExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql)
+		userRepository := data.NewUserRepository(datasql.Command())
 
 		us := ValidateUserPasswordUseCaseImpl{
 			userRepository: userRepository,

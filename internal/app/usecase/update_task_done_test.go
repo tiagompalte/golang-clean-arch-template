@@ -24,7 +24,7 @@ func TestUpdateTaskDoneExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql)
+		taskRepository := data.NewTaskRepository(datasql.Command())
 
 		us := UpdateTaskDoneUseCaseImpl{
 			taskRepository: taskRepository,
@@ -58,7 +58,7 @@ func TestUpdateTaskDoneExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql)
+		taskRepository := data.NewTaskRepository(datasql.Command())
 
 		us := UpdateTaskDoneUseCaseImpl{
 			taskRepository: taskRepository,

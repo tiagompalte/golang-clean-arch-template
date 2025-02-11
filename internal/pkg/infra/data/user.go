@@ -12,12 +12,12 @@ import (
 )
 
 type UserRepository struct {
-	conn         pkgRepo.Connector
+	conn         pkgRepo.ConnectorSql
 	mainTable    string
 	selectFields string
 }
 
-func NewUserRepository(conn pkgRepo.Connector) repository.UserRepository {
+func NewUserRepository(conn pkgRepo.ConnectorSql) repository.UserRepository {
 	return UserRepository{
 		conn:      conn,
 		mainTable: "tb_user",
@@ -57,7 +57,7 @@ func (r UserRepository) Insert(ctx context.Context, user entity.User, passEncryp
 		return 0, errors.Repo(err, r.mainTable)
 	}
 
-	res, err := r.conn.ExecContext(ctx,
+	res, err := r.conn.Exec(ctx,
 		"INSERT INTO tb_user (uuid, name, email, pass_encrypted) VALUES (?,?,?,?)",
 		uuid,
 		user.Name,
@@ -84,7 +84,7 @@ func (r UserRepository) FindByID(ctx context.Context, id uint32) (entity.User, e
 	q := fmt.Sprintf(query, r.selectFields)
 
 	user, err := r.parseEntity(
-		r.conn.QueryRowContext(
+		r.conn.QueryRow(
 			ctx,
 			q,
 			id,
@@ -104,7 +104,7 @@ func (r UserRepository) FindByUUID(ctx context.Context, uuid string) (entity.Use
 	q := fmt.Sprintf(query, r.selectFields)
 
 	user, err := r.parseEntity(
-		r.conn.QueryRowContext(
+		r.conn.QueryRow(
 			ctx,
 			q,
 			uuid,
@@ -124,7 +124,7 @@ func (r UserRepository) FindByEmail(ctx context.Context, email string) (entity.U
 	q := fmt.Sprintf(query, r.selectFields)
 
 	user, err := r.parseEntity(
-		r.conn.QueryRowContext(
+		r.conn.QueryRow(
 			ctx,
 			q,
 			email,
@@ -143,7 +143,7 @@ func (r UserRepository) GetPassEncryptedByEmail(ctx context.Context, email strin
 			WHERE NOT deleted_at AND email = ?`
 
 	var passEncrypted string
-	err := r.conn.QueryRowContext(
+	err := r.conn.QueryRow(
 		ctx,
 		query,
 		email,

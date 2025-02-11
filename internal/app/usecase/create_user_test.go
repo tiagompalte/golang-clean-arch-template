@@ -26,7 +26,7 @@ func TestCreateUserExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql)
+		userRepository := data.NewUserRepository(datasql.Command())
 
 		us := CreateUserUseCaseImpl{
 			userRepository: userRepository,
@@ -77,7 +77,7 @@ func TestCreateUserExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql)
+		userRepository := data.NewUserRepository(datasql.Command())
 
 		us := CreateUserUseCaseImpl{
 			userRepository: userRepository,
@@ -114,7 +114,7 @@ func TestCreateUserExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql)
+		userRepository := data.NewUserRepository(datasql.Command())
 
 		us := CreateUserUseCaseImpl{
 			userRepository: userRepository,

@@ -17,7 +17,7 @@ type repo struct {
 	user     repository.UserRepository
 }
 
-func NewRepositoryManager(conn pkgRepo.Connector) RepositoryManager {
+func NewRepositoryManager(conn pkgRepo.ConnectorSql) RepositoryManager {
 	return repo{
 		task:     NewTaskRepository(conn),
 		category: NewCategoryRepository(conn),

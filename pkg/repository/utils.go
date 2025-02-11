@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"database/sql"
 	"strings"
 
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
@@ -23,7 +22,7 @@ func FmtParamList(length int, or ...string) string {
 	return strings.Repeat(",?", length)[1:]
 }
 
-func ParseEntities[T any](scan func(Scanner) (T, error), rows *sql.Rows, err error) ([]T, error) {
+func ParseEntities[T any](scan func(Scanner) (T, error), rows RowsSql, err error) ([]T, error) {
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}

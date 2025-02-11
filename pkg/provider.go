@@ -13,8 +13,8 @@ import (
 var ProviderSet = wire.NewSet(
 	config.ProviderSet,
 	cache.ProviderSet,
-	wire.Bind(new(repository.Connector), new(repository.DataManager)),
-	repository.ProviderSet,
+	repository.ProviderDataSqlManagerSet,
+	repository.ProviderConnectorSqlSet,
 	server.ProviderSet,
 	crypto.ProviderSet,
 	auth.ProviderSet,

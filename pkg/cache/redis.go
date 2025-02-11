@@ -84,11 +84,11 @@ func (c *RedisCache) ClearAll(ctx context.Context) error {
 	return nil
 }
 
-func (c *RedisCache) Ping(ctx context.Context) error {
+func (c *RedisCache) IsHealthy(ctx context.Context) (bool, error) {
 	err := c.redis.Ping(ctx).Err()
 	if err != nil {
-		return errors.Wrap(err)
+		return false, errors.Wrap(err)
 	}
 
-	return nil
+	return true, nil
 }

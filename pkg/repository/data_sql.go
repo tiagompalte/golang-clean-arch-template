@@ -13,7 +13,7 @@ type DataSql struct {
 	db *sql.DB
 }
 
-func NewDataSqlWithConfig(config configs.ConfigDatabase) DataManager {
+func NewDataSqlWithConfig(config configs.ConfigDatabase) DataSqlManager {
 	db, err := sql.Open(config.DriverName.String(), config.ConnectionSource)
 	if err != nil {
 		panic(fmt.Sprintf("error to connect in database: %v", err))
@@ -21,13 +21,13 @@ func NewDataSqlWithConfig(config configs.ConfigDatabase) DataManager {
 	return NewDataSql(db)
 }
 
-func NewDataSql(db *sql.DB) DataManager {
+func NewDataSql(db *sql.DB) DataSqlManager {
 	data := new(DataSql)
 	data.db = db
 	return data
 }
 
-func (d *DataSql) Begin() (TransactionManager, error) {
+func (d *DataSql) Begin() (TransactionSqlManager, error) {
 	tx, err := d.db.Begin()
 	if err != nil {
 		return nil, errors.Wrap(err)
@@ -39,18 +39,24 @@ func (d *DataSql) Close() (err error) {
 	return d.db.Close()
 }
 
-func (d *DataSql) ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
-	return d.db.ExecContext(ctx, query, args...)
+func (d *DataSql) IsHealthy(ctx context.Context) (bool, error) {
+	err := d.db.PingContext(ctx)
+	if err != nil {
+		return false, errors.Wrap(err)
+	}
+	return true, nil
 }
 
-func (d *DataSql) QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row {
-	return d.db.QueryRowContext(ctx, query, args...)
-}
-
-func (d *DataSql) QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
-	return d.db.QueryContext(ctx, query, args...)
-}
-
-func (d *DataSql) PingContext(ctx context.Context) error {
-	return d.db.PingContext(ctx)
+func (d *DataSql) Command() ConnectorSql {
+	return ConnectorSql{
+		Exec: func(ctx context.Context, query string, args ...any) (ResultSql, error) {
+			return d.db.ExecContext(ctx, query, args...)
+		},
+		QueryRow: func(ctx context.Context, query string, args ...any) RowSql {
+			return d.db.QueryRowContext(ctx, query, args...)
+		},
+		Query: func(ctx context.Context, query string, args ...any) (RowsSql, error) {
+			return d.db.QueryContext(ctx, query, args...)
+		},
+	}
 }

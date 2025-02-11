@@ -17,6 +17,8 @@ RUN apk update && \
     bash \
     docker
 
+RUN go install github.com/google/wire/cmd/wire@latest
+
 WORKDIR /app
 
 COPY go.* /app
@@ -25,7 +27,6 @@ RUN go mod download
 
 COPY . /app
 
-RUN go install github.com/google/wire/cmd/wire@latest
 RUN wire ./application
 
 CMD [ "go", "test", "-tags=integration", "-parallel=256", "-p=256", "-cpu=256", "-timeout=20m", "./test"]

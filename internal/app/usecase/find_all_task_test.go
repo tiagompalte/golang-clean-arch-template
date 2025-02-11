@@ -23,7 +23,7 @@ func TestFindAllTaskExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql)
+		taskRepository := data.NewTaskRepository(datasql.Command())
 
 		us := FindAllTaskUseCaseImpl{
 			taskRepository: taskRepository,

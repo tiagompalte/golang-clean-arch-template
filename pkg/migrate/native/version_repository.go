@@ -11,15 +11,15 @@ import (
 )
 
 type VersionRepositoryImpl struct {
-	conn repository.Connector
+	conn repository.ConnectorSql
 }
 
-func NewVersionRepositoryImpl(conn repository.Connector) VersionRepository {
+func NewVersionRepositoryImpl(conn repository.ConnectorSql) VersionRepository {
 	return VersionRepositoryImpl{conn: conn}
 }
 
 func (r VersionRepositoryImpl) CreateTable(ctx context.Context) error {
-	_, err := r.conn.ExecContext(
+	_, err := r.conn.Exec(
 		ctx,
 		`CREATE TABLE IF NOT EXISTS tb_db_version (
 			name 				VARCHAR(250) NOT NULL PRIMARY KEY
@@ -43,7 +43,7 @@ func (r VersionRepositoryImpl) InsertBatch(ctx context.Context, names []string) 
 	params := strings.Repeat(",(?)", len(args))[1:]
 	query := fmt.Sprintf(`INSERT IGNORE INTO tb_db_version (name) VALUES %s`, params)
 
-	_, err := r.conn.ExecContext(
+	_, err := r.conn.Exec(
 		ctx,
 		query,
 		args...,
@@ -65,7 +65,7 @@ func (r VersionRepositoryImpl) IsAlreadyApply(ctx context.Context, name string) 
 	`
 
 	var exists bool
-	err := r.conn.QueryRowContext(
+	err := r.conn.QueryRow(
 		ctx,
 		query,
 		name,
@@ -78,7 +78,7 @@ func (r VersionRepositoryImpl) IsAlreadyApply(ctx context.Context, name string) 
 }
 
 func (r VersionRepositoryImpl) ExecScript(ctx context.Context, script string) error {
-	_, err := r.conn.ExecContext(ctx, script)
+	_, err := r.conn.Exec(ctx, script)
 	if err != nil {
 		return errors.Wrap(err)
 	}
@@ -96,7 +96,7 @@ func (r VersionRepositoryImpl) FindLastInserted(ctx context.Context) (string, er
 	;`
 
 	var name string
-	err := r.conn.QueryRowContext(
+	err := r.conn.QueryRow(
 		ctx,
 		query,
 	).Scan(&name)
@@ -108,7 +108,7 @@ func (r VersionRepositoryImpl) FindLastInserted(ctx context.Context) (string, er
 }
 
 func (r VersionRepositoryImpl) UpdateAppliedAt(ctx context.Context, name string, appliedAt *time.Time) error {
-	_, err := r.conn.ExecContext(
+	_, err := r.conn.Exec(
 		ctx,
 		`UPDATE tb_db_version SET applied_at = ? WHERE name = ?`,
 		appliedAt,

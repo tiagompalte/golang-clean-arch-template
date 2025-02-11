@@ -3,9 +3,8 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/pkg/cache"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	pkgRepo "github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/healthcheck"
 )
 
 type HealthCheckUseCase interface {
@@ -13,26 +12,21 @@ type HealthCheckUseCase interface {
 }
 
 type HealthCheckUseCaseImpl struct {
-	data  pkgRepo.DataManager
-	cache cache.Cache
+	implements []healthcheck.HealthCheck
 }
 
-func NewHealthCheckUseCaseImpl(data pkgRepo.DataManager, cache cache.Cache) HealthCheckUseCase {
+func NewHealthCheckUseCaseImpl(implements []healthcheck.HealthCheck) HealthCheckUseCase {
 	return HealthCheckUseCaseImpl{
-		data:  data,
-		cache: cache,
+		implements,
 	}
 }
 
 func (u HealthCheckUseCaseImpl) Execute(ctx context.Context) error {
-	err := u.data.PingContext(ctx)
-	if err != nil {
-		return errors.Wrap(err)
-	}
-
-	err = u.cache.Ping(ctx)
-	if err != nil {
-		return errors.Wrap(err)
+	for _, i := range u.implements {
+		isHealthy, err := i.IsHealthy(ctx)
+		if !isHealthy {
+			return errors.Wrap(err)
+		}
 	}
 
 	return nil

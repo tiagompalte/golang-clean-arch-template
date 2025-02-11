@@ -13,12 +13,12 @@ import (
 )
 
 type TaskRepository struct {
-	conn         pkgRepo.Connector
+	conn         pkgRepo.ConnectorSql
 	mainTable    string
 	selectFields string
 }
 
-func NewTaskRepository(conn pkgRepo.Connector) repository.TaskRepository {
+func NewTaskRepository(conn pkgRepo.ConnectorSql) repository.TaskRepository {
 	return TaskRepository{
 		conn:      conn,
 		mainTable: "tb_task",
@@ -78,7 +78,7 @@ func (r TaskRepository) Insert(ctx context.Context, task entity.Task) (uint32, e
 		return 0, errors.Repo(err, r.mainTable)
 	}
 
-	res, err := r.conn.ExecContext(ctx,
+	res, err := r.conn.Exec(ctx,
 		"INSERT INTO tb_task (uuid, name, description, category_id, user_id) VALUES (?,?,?,?,?)",
 		uuid,
 		task.Name,
@@ -106,7 +106,7 @@ func (r TaskRepository) FindByID(ctx context.Context, id uint32) (entity.Task, e
 	q := fmt.Sprintf(query, r.selectFields)
 
 	task, err := r.parseEntity(
-		r.conn.QueryRowContext(
+		r.conn.QueryRow(
 			ctx,
 			q,
 			id,
@@ -126,7 +126,7 @@ func (r TaskRepository) FindByUUID(ctx context.Context, uuid string) (entity.Tas
 	q := fmt.Sprintf(query, r.selectFields)
 
 	task, err := r.parseEntity(
-		r.conn.QueryRowContext(
+		r.conn.QueryRow(
 			ctx,
 			q,
 			uuid,
@@ -145,7 +145,7 @@ func (r TaskRepository) FindByUserID(ctx context.Context, userID uint32) ([]enti
 
 	q := fmt.Sprintf(query, r.selectFields)
 
-	result, err := r.conn.QueryContext(
+	result, err := r.conn.Query(
 		ctx,
 		q,
 		userID,
@@ -163,7 +163,7 @@ func (r TaskRepository) FindByUserID(ctx context.Context, userID uint32) ([]enti
 }
 
 func (r TaskRepository) UpdateDone(ctx context.Context, task entity.Task) error {
-	_, err := r.conn.ExecContext(ctx,
+	_, err := r.conn.Exec(ctx,
 		`UPDATE tb_task
 			SET done = ?
 		WHERE NOT deleted_at AND id = ?
@@ -179,7 +179,7 @@ func (r TaskRepository) UpdateDone(ctx context.Context, task entity.Task) error 
 }
 
 func (r TaskRepository) DeleteByID(ctx context.Context, taskID uint32) error {
-	_, err := r.conn.ExecContext(ctx,
+	_, err := r.conn.Exec(ctx,
 		`UPDATE tb_task	SET deleted_at = NOW() WHERE NOT deleted_at AND id = ?`,
 		taskID,
 	)

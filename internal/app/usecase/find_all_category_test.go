@@ -23,7 +23,7 @@ func TestFindAllCategoryExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		categoryRepository := data.NewCategoryRepository(datasql)
+		categoryRepository := data.NewCategoryRepository(datasql.Command())
 
 		us := FindAllCategoryUseCaseImpl{
 			categoryRepository: categoryRepository,

@@ -36,7 +36,7 @@ func (m NativeMigrate) insertNames(ctx context.Context, names []string) error {
 	}
 	defer tx.Rollback()
 
-	versionRepo := m.repo.Version(tx)
+	versionRepo := m.repo.Version(tx.Command())
 
 	err = versionRepo.CreateTable(ctx)
 	if err != nil {
@@ -63,7 +63,7 @@ func (m NativeMigrate) execUpScript(ctx context.Context, name string) error {
 	}
 	defer tx.Rollback()
 
-	versionRepo := m.repo.Version(tx)
+	versionRepo := m.repo.Version(tx.Command())
 
 	isAlreadyApply, err := versionRepo.IsAlreadyApply(ctx, name)
 	if err != nil {
@@ -135,7 +135,7 @@ func (m NativeMigrate) Down(ctx context.Context) error {
 	}
 	defer tx.Rollback()
 
-	versionRepo := m.repo.Version(tx)
+	versionRepo := m.repo.Version(tx.Command())
 
 	name, err := versionRepo.FindLastInserted(ctx)
 	if err != nil {

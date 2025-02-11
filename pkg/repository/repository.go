@@ -2,28 +2,61 @@ package repository
 
 import (
 	"context"
-	"database/sql"
+
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/healthcheck"
 )
 
 type Scanner interface {
-	Scan(dest ...interface{}) error
+	Scan(dest ...any) error
+}
+
+type ResultSql interface {
+	LastInsertId() (int64, error)
+	RowsAffected() (int64, error)
+}
+
+type RowSql interface {
+	Scanner
+	Err() error
+}
+
+type RowsSql interface {
+	Scanner
+	Next() bool
+	Close() error
+}
+
+type ConnectorSql struct {
+	Exec     func(ctx context.Context, query string, args ...any) (ResultSql, error)
+	QueryRow func(ctx context.Context, query string, args ...any) RowSql
+	Query    func(ctx context.Context, query string, args ...any) (RowsSql, error)
+}
+
+type ConnectorMongo struct {
+	InsertOne func(ctx context.Context, doc any) error
 }
 
 type Connector interface {
-	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
-	QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row
-	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
+	ConnectorSql | ConnectorMongo
 }
 
-type DataManager interface {
-	Connector
-	Begin() (TransactionManager, error)
+type DataSqlManager = DataManager[ConnectorSql]
+
+type TransactionSqlManager = TransactionManager[ConnectorSql]
+
+type DataMongoManager = DataManager[ConnectorMongo]
+
+type TransactionMongoManager = TransactionManager[ConnectorMongo]
+
+type DataManager[T Connector] interface {
+	healthcheck.HealthCheck
+	Command() T
+	Begin() (TransactionManager[T], error)
 	Close() error
-	PingContext(ctx context.Context) error
 }
 
-type TransactionManager interface {
-	Connector
+type TransactionManager[T Connector] interface {
+	Command() T
 	Rollback() error
 	Commit() error
 }

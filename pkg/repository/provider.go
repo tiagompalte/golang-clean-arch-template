@@ -4,8 +4,15 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/configs"
 )
 
-func ProviderSet(
+func ProviderDataSqlManagerSet(
 	config configs.Config,
-) DataManager {
+) DataSqlManager {
 	return NewDataSqlWithConfig(config.Database)
+}
+
+func ProviderConnectorSqlSet(
+	config configs.Config,
+) ConnectorSql {
+	dataSql := ProviderDataSqlManagerSet(config)
+	return dataSql.Command()
 }

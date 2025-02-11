@@ -24,7 +24,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql)
+		taskRepository := data.NewTaskRepository(datasql.Command())
 
 		us := DeleteTaskUseCaseImpl{
 			taskRepository: taskRepository,
@@ -61,7 +61,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql)
+		taskRepository := data.NewTaskRepository(datasql.Command())
 
 		us := DeleteTaskUseCaseImpl{
 			taskRepository: taskRepository,
@@ -94,7 +94,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql)
+		taskRepository := data.NewTaskRepository(datasql.Command())
 
 		us := DeleteTaskUseCaseImpl{
 			taskRepository: taskRepository,
