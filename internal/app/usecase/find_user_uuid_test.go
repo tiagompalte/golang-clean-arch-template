@@ -32,17 +32,21 @@ func TestFindUserUUIDExecute(t *testing.T) {
 		mock.ExpectQuery(
 			`SELECT (.+) FROM tb_user u WHERE NOT u.deleted_at AND u.uuid = \?`,
 		).WithArgs("uuid").WillReturnRows(sqlmock.NewRows([]string{
-			"u.id", "u.created_at", "u.updated_at", "u.uuid", "u.name", "u.email",
-		}).AddRow(1, time.Time{}, time.Time{}, "uuid", "User", "user@email.com"))
+			"u.id", "u.created_at", "u.updated_at", "u.version", "u.uuid", "u.name", "u.email",
+		}).AddRow(1, time.Time{}, time.Time{}, 1, "uuid", "User", "user@email.com"))
 
-		task, err := us.Execute(ctx, "uuid")
+		user, err := us.Execute(ctx, "uuid")
 
 		if err != nil {
 			t.Error(err)
 		}
 
-		if task.UUID != "uuid" {
-			t.Errorf("task uuid should be uuid but is %s", task.UUID)
+		if user.UUID != "uuid" {
+			t.Errorf("task uuid should be uuid but is %s", user.UUID)
+		}
+
+		if user.Version != 1 {
+			t.Errorf("version should be 1 but is %d", user.Version)
 		}
 	})
 }

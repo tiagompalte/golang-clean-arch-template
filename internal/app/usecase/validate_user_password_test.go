@@ -42,8 +42,8 @@ func TestValidateUserPasswordExecute(t *testing.T) {
 		mock.ExpectQuery(
 			`SELECT (.+) FROM tb_user u WHERE NOT u.deleted_at AND u.email = \?`,
 		).WithArgs("user@email.com").WillReturnRows(sqlmock.NewRows([]string{
-			"u.id", "u.created_at", "u.updated_at", "u.uuid", "u.name", "u.email",
-		}).AddRow(1, time.Time{}, time.Time{}, "uuid", "User", "user@email.com"))
+			"u.id", "u.created_at", "u.updated_at", "u.version", "u.uuid", "u.name", "u.email",
+		}).AddRow(1, time.Time{}, time.Time{}, 1, "uuid", "User", "user@email.com"))
 
 		user, err := us.Execute(ctx, ValidateUserPasswordInput{
 			Email:    "user@email.com",

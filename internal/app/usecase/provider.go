@@ -21,6 +21,7 @@ var ProviderSet = wire.NewSet(
 	NewGenerateUserTokenUseCaseImpl,
 	NewFindUserUUIDUseCaseImpl,
 	ProviderHealthCheckUseCase,
+	NewUpdateUserNameUseCaseImpl,
 )
 
 func ProviderHealthCheckUseCase(cache cache.Cache, dataSqlManager repository.DataSqlManager) HealthCheckUseCase {

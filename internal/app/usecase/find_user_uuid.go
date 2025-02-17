@@ -12,10 +12,11 @@ type FindUserUUIDUseCase interface {
 }
 
 type FindUserUUIDOutput struct {
-	ID    uint32
-	UUID  string
-	Name  string
-	Email string
+	ID      uint32
+	Version uint32
+	UUID    string
+	Name    string
+	Email   string
 }
 
 type FindUserUUIDUseCaseImpl struct {
@@ -37,6 +38,7 @@ func (u FindUserUUIDUseCaseImpl) Execute(ctx context.Context, uuid string) (Find
 	var output FindUserUUIDOutput
 	output.ID = user.ID
 	output.UUID = user.UUID
+	output.Version = user.Version
 	output.Name = user.Name
 	output.Email = user.Email
 

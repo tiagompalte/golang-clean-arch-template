@@ -25,6 +25,7 @@ func NewUserRepository(conn pkgRepo.ConnectorSql) repository.UserRepository {
 			u.id
 			, u.created_at
 			, u.updated_at
+			, u.version
 			, u.uuid
 			, u.name
 			, u.email
@@ -40,6 +41,7 @@ func (r UserRepository) parseEntity(s pkgRepo.Scanner) (entity.User, error) {
 		&user.ID,
 		&user.CreatedAt,
 		&user.UpdatedAt,
+		&user.Version,
 		&user.UUID,
 		&user.Name,
 		&user.Email,
@@ -155,4 +157,33 @@ func (r UserRepository) GetPassEncryptedByEmail(ctx context.Context, email strin
 	}
 
 	return passEncrypted, nil
+}
+
+func (r UserRepository) UpdateName(ctx context.Context, user entity.User) error {
+	query := `
+		UPDATE tb_user
+			SET name = ?
+				, version = version + 1
+		WHERE NOT deleted_at
+			AND id = ?
+			AND version = ?
+	`
+
+	result, err := r.conn.Exec(
+		ctx,
+		query,
+		user.Name,
+		user.ID,
+		user.Version,
+	)
+	if err != nil {
+		return errors.Repo(err, r.mainTable)
+	}
+
+	err = r.conn.ValidateUpdateResult(ctx, result)
+	if err != nil {
+		return errors.Repo(err, r.mainTable)
+	}
+
+	return nil
 }

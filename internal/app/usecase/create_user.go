@@ -20,10 +20,11 @@ type CreateUserInput struct {
 }
 
 type CreateUserOutput struct {
-	ID    uint32
-	UUID  string
-	Name  string
-	Email string
+	ID      uint32
+	Version uint32
+	UUID    string
+	Name    string
+	Email   string
 }
 
 type CreateUserUseCaseImpl struct {
@@ -68,9 +69,10 @@ func (u CreateUserUseCaseImpl) Execute(ctx context.Context, input CreateUserInpu
 	}
 
 	return CreateUserOutput{
-		ID:    user.ID,
-		UUID:  user.UUID,
-		Name:  user.Name,
-		Email: user.Email,
+		ID:      user.ID,
+		Version: user.Version,
+		UUID:    user.UUID,
+		Name:    user.Name,
+		Email:   user.Email,
 	}, nil
 }

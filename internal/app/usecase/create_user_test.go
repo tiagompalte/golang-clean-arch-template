@@ -40,8 +40,8 @@ func TestCreateUserExecute(t *testing.T) {
 		mock.ExpectQuery(
 			`SELECT (.+) FROM tb_user u WHERE NOT u.deleted_at AND u.id = \?`,
 		).WithArgs(1).WillReturnRows(sqlmock.NewRows([]string{
-			"u.id", "u.created_at", "u.updated_at", "u.uuid", "u.name", "u.email",
-		}).AddRow(1, time.Time{}, time.Time{}, "uuid", "User", "user@email.com"))
+			"u.id", "u.created_at", "u.updated_at", "u.version", "u.uuid", "u.name", "u.email",
+		}).AddRow(1, time.Time{}, time.Time{}, 1, "uuid", "User", "user@email.com"))
 
 		input := CreateUserInput{
 			Name:     "User",
@@ -56,6 +56,10 @@ func TestCreateUserExecute(t *testing.T) {
 
 		if result.UUID != "uuid" {
 			t.Errorf("uuid should be uuid but is %s", result.UUID)
+		}
+
+		if result.Version != 1 {
+			t.Errorf("version should be 1 but is %d", result.Version)
 		}
 
 		if result.Name != "User" {

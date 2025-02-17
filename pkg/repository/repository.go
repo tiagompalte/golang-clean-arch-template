@@ -27,9 +27,10 @@ type RowsSql interface {
 }
 
 type ConnectorSql struct {
-	Exec     func(ctx context.Context, query string, args ...any) (ResultSql, error)
-	QueryRow func(ctx context.Context, query string, args ...any) RowSql
-	Query    func(ctx context.Context, query string, args ...any) (RowsSql, error)
+	Exec                 func(ctx context.Context, query string, args ...any) (ResultSql, error)
+	QueryRow             func(ctx context.Context, query string, args ...any) RowSql
+	Query                func(ctx context.Context, query string, args ...any) (RowsSql, error)
+	ValidateUpdateResult func(ctx context.Context, result ResultSql) error
 }
 
 type ConnectorMongo struct {

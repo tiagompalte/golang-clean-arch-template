@@ -14,4 +14,5 @@ type UseCase struct {
 	ValidateUserPasswordUseCase
 	GenerateUserTokenUseCase
 	FindUserUUIDUseCase
+	UpdateUserNameUseCase
 }

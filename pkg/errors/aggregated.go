@@ -30,3 +30,10 @@ func (e *AggregatedError) Add(err error) {
 func (e *AggregatedError) AddList(err []error) {
 	*e = append(*e, err...)
 }
+
+func (e AggregatedError) Return() error {
+	if e.Len() > 0 {
+		return Wrap(e)
+	}
+	return nil
+}

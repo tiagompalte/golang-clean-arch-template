@@ -52,5 +52,8 @@ func (t *TransactionSql) Command() ConnectorSql {
 		Query: func(ctx context.Context, query string, args ...any) (RowsSql, error) {
 			return t.tx.QueryContext(ctx, query, args...)
 		},
+		ValidateUpdateResult: func(ctx context.Context, result ResultSql) error {
+			return validateUpdateResult(ctx, result)
+		},
 	}
 }

@@ -15,6 +15,11 @@ func CreateGroupCurrentUserV1(app application.App) server.GroupRoute {
 			Method:  "GET",
 			Handler: handler.FindUserLoggedHandler(),
 		},
+		{
+			Path:    "/update-name",
+			Method:  "PUT",
+			Handler: handler.UpdateUserNameHandler(app.UseCase().UpdateUserNameUseCase),
+		},
 	}
 
 	return server.GroupRoute{

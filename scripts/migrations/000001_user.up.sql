@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS tb_user (
     , created_at        DATETIME NOT NULL DEFAULT NOW()
     , updated_at        DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
     , deleted_at        DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'
+    , version           INT UNSIGNED NOT NULL DEFAULT 0
     , uuid              CHAR(36) NOT NULL
     , name              VARCHAR(50) NOT NULL
     , email             VARCHAR(50) NOT NULL

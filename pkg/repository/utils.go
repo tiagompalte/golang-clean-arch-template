@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"strings"
 
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
@@ -39,4 +40,17 @@ func ParseEntities[T any](scan func(Scanner) (T, error), rows RowsSql, err error
 	}
 
 	return entitySet, nil
+}
+
+func validateUpdateResult(_ context.Context, result ResultSql) error {
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	if rows == 0 {
+		return errors.Wrap(errors.NewAppConcurrencyRepositoryError())
+	}
+
+	return nil
 }

@@ -10,9 +10,10 @@ import (
 )
 
 type UserResponse struct {
-	UUID  string `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	UUID    string `json:"id"`
+	Version uint32 `json:"version"`
+	Name    string `json:"name"`
+	Email   string `json:"email"`
 }
 
 // @Summary User Logged
@@ -32,9 +33,10 @@ func FindUserLoggedHandler() server.Handler {
 		}
 
 		resp := UserResponse{
-			UUID:  user.UUID,
-			Name:  user.Name,
-			Email: user.Email,
+			UUID:    user.UUID,
+			Version: user.Version,
+			Name:    user.Name,
+			Email:   user.Email,
 		}
 
 		err := server.RespondJSON(w, http.StatusOK, resp)

@@ -10,6 +10,7 @@ type User struct {
 	ID        uint32
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Version   uint32
 	UUID      string
 	Name      string
 	Email     string

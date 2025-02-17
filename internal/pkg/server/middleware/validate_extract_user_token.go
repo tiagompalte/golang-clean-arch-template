@@ -12,10 +12,11 @@ import (
 )
 
 type UserToken struct {
-	ID    uint32
-	UUID  string
-	Name  string
-	Email string
+	ID      uint32
+	Version uint32
+	UUID    string
+	Name    string
+	Email   string
 }
 
 func ValidateExtractUserTokenMiddleware(header string, auth auth.Auth, findUserUUIDUseCase usecase.FindUserUUIDUseCase) server.Middleware {
@@ -43,6 +44,7 @@ func ValidateExtractUserTokenMiddleware(header string, auth auth.Auth, findUserU
 
 			var userToken UserToken
 			userToken.ID = user.ID
+			userToken.Version = user.Version
 			userToken.UUID = user.UUID
 			userToken.Name = user.Name
 			userToken.Email = user.Email

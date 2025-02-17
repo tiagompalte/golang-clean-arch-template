@@ -12,4 +12,5 @@ type UserRepository interface {
 	FindByUUID(ctx context.Context, uuid string) (entity.User, error)
 	FindByEmail(ctx context.Context, email string) (entity.User, error)
 	GetPassEncryptedByEmail(ctx context.Context, email string) (string, error)
+	UpdateName(ctx context.Context, user entity.User) error
 }
