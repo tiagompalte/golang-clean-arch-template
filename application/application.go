@@ -4,6 +4,7 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/configs"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/auth"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/log"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
 
@@ -12,6 +13,7 @@ type App struct {
 	server  server.Server
 	useCase usecase.UseCase
 	auth    auth.Auth
+	log     log.Log
 }
 
 func ProvideApplication(
@@ -19,12 +21,14 @@ func ProvideApplication(
 	server server.Server,
 	useCase usecase.UseCase,
 	auth auth.Auth,
+	log log.Log,
 ) App {
 	return App{
 		config,
 		server,
 		useCase,
 		auth,
+		log,
 	}
 }
 
@@ -42,4 +46,8 @@ func (app App) UseCase() usecase.UseCase {
 
 func (app App) Auth() auth.Auth {
 	return app.auth
+}
+
+func (app App) Log() log.Log {
+	return app.log
 }

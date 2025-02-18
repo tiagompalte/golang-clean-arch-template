@@ -12,10 +12,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/handler"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
 func TestFindUserLoggedHandler(t *testing.T) {
 	t.Parallel()
+
+	httpTestUrl := testconfig.Instance().HttpUrl()
 
 	t.Run("it should return 200 and return user logged", func(t *testing.T) {
 		t.Parallel()

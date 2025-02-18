@@ -15,9 +15,11 @@ RUN go install github.com/google/wire/cmd/wire@latest && go install github.com/s
 
 WORKDIR /app
 
-COPY . .
+COPY go.* .
 
 RUN go mod download && go mod verify 
+
+COPY . .
 
 RUN swag init -d ./internal/pkg/server -g server.go -o ./api
 

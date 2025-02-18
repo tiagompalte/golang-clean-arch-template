@@ -12,10 +12,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/handler"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
 func TestSignupHandler(t *testing.T) {
 	t.Parallel()
+
+	httpTestUrl := testconfig.Instance().HttpUrl()
 
 	t.Run("it should create new user and return 200 and token", func(t *testing.T) {
 		t.Parallel()

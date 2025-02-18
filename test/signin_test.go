@@ -12,12 +12,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/handler"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
 func TestSigninHandler(t *testing.T) {
 	t.Parallel()
 
 	userLogged, _ := GenerateUserAndToken()
+	httpTestUrl := testconfig.Instance().HttpUrl()
 
 	t.Run("it should return 200 and token from user", func(t *testing.T) {
 		t.Parallel()

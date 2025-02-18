@@ -15,10 +15,13 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/handler"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
 func TestUpdateUserNameHandler(t *testing.T) {
 	t.Parallel()
+
+	httpTestUrl := testconfig.Instance().HttpUrl()
 
 	t.Run("it should update user name", func(t *testing.T) {
 		t.Parallel()

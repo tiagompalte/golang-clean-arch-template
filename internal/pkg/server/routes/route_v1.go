@@ -16,12 +16,12 @@ func CreateRouteV1(app application.App) server.GroupRoute {
 		},
 		Routes: []server.Route{
 			{
-				Method:  "POST",
+				Method:  server.RouteMethodPost,
 				Path:    "/signup",
 				Handler: handler.SignupHandler(app.UseCase().CreateUserUseCase, app.UseCase().GenerateUserTokenUseCase),
 			},
 			{
-				Method:  "POST",
+				Method:  server.RouteMethodPost,
 				Path:    "/signin",
 				Handler: handler.SigninHandler(app.UseCase().ValidateUserPasswordUseCase, app.UseCase().GenerateUserTokenUseCase),
 			},

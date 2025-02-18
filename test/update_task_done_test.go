@@ -12,12 +12,15 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
 func TestUpdateTaskDoneHandler(t *testing.T) {
 	t.Parallel()
 
 	user, token := GenerateUserAndToken()
+	httpTestUrl := testconfig.Instance().HttpUrl()
+	app := testconfig.Instance().App()
 
 	t.Run("it should return 204 and update task to done", func(t *testing.T) {
 		ctx := context.Background()

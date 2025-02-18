@@ -13,12 +13,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/handler"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
 func TestCreateTaskHandler(t *testing.T) {
 	t.Parallel()
 
 	_, token := GenerateUserAndToken()
+	httpTestUrl := testconfig.Instance().HttpUrl()
 
 	t.Run("it should return 201 when created task with success", func(t *testing.T) {
 		t.Parallel()

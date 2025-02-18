@@ -14,12 +14,15 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/handler"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
 func TestFindOneTaskHandler(t *testing.T) {
 	t.Parallel()
 
 	user, token := GenerateUserAndToken()
+	httpTestUrl := testconfig.Instance().HttpUrl()
+	app := testconfig.Instance().App()
 
 	ctx := context.Background()
 

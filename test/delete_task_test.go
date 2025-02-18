@@ -12,12 +12,15 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server/constant"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
 func TestDeleteTaskHandler(t *testing.T) {
 	t.Parallel()
 
 	userLogged, token := GenerateUserAndToken()
+	httpTestUrl := testconfig.Instance().HttpUrl()
+	app := testconfig.Instance().App()
 
 	t.Run("it should return 204 when deleted task with success", func(t *testing.T) {
 		t.Parallel()

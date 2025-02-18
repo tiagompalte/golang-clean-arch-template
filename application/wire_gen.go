@@ -14,6 +14,7 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/cache"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/config"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/log"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/server"
 )
@@ -62,6 +63,7 @@ func Build() (App, error) {
 		FindUserUUIDUseCase:         findUserUUIDUseCase,
 		UpdateUserNameUseCase:       updateUserNameUseCase,
 	}
-	app := ProvideApplication(configsConfig, serverServer, useCase, authAuth)
+	logLog := log.ProviderSet()
+	app := ProvideApplication(configsConfig, serverServer, useCase, authAuth, logLog)
 	return app, nil
 }

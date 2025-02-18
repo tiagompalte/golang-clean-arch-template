@@ -9,28 +9,14 @@ import (
 	"os"
 	"testing"
 
-	"github.com/tiagompalte/golang-clean-arch-template/application"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/server"
+	"github.com/tiagompalte/golang-clean-arch-template/test/testconfig"
 )
 
-var app application.App
-var httpTestUrl = ""
-
 func TestMain(t *testing.M) {
-	var err error
-	app, err = application.Build()
-	if err != nil {
-		log.Fatalf("failed to build the application: %v", err)
-	}
+	config := testconfig.Instance()
 
-	httpServer := server.NewServer(app)
-	httpTest := app.Server().StartTest(httpServer)
-
-	httpTestUrl = httpTest.URL
-
-	defer httpTest.Close()
-	defer httpServer.Close()
+	defer config.Close()
 
 	code := t.Run()
 
@@ -45,6 +31,8 @@ func GenerateUserAndToken() (usecase.CreateUserOutput, string) {
 		Email:    Email(),
 		Password: "Pass!1234",
 	}
+
+	app := testconfig.Instance().App()
 
 	userLogged, err := app.UseCase().CreateUserUseCase.Execute(ctx, createUserInput)
 	if err != nil {
