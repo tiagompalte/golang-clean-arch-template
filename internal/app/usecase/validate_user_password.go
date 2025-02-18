@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
@@ -24,11 +24,11 @@ type ValidateUserPasswordOutput struct {
 }
 
 type ValidateUserPasswordUseCaseImpl struct {
-	userRepository repository.UserRepository
+	userRepository protocols.UserRepository
 	crypto         crypto.Crypto
 }
 
-func NewValidateUserPasswordUseCaseImpl(userRepository repository.UserRepository, crypto crypto.Crypto) ValidateUserPasswordUseCase {
+func NewValidateUserPasswordUseCaseImpl(userRepository protocols.UserRepository, crypto crypto.Crypto) ValidateUserPasswordUseCase {
 	return ValidateUserPasswordUseCaseImpl{
 		userRepository: userRepository,
 		crypto:         crypto,

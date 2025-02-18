@@ -5,27 +5,19 @@ USER root
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
-    py-pip \
-    py-setuptools \
     ca-certificates \
     gcc \
     g++ \
-    curl \
-    groff \
-    less \
     git \
-    bash \
-    docker
-
-RUN go install github.com/google/wire/cmd/wire@latest
+    tzdata
 
 WORKDIR /app
 
-COPY go.* /app
+COPY . /app
 
 RUN go mod download
 
-COPY . /app
+RUN go install github.com/google/wire/cmd/wire@latest
 
 RUN wire ./application
 

@@ -5,18 +5,18 @@ import (
 	"fmt"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	pkgRepo "github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
 
 type CategoryRepository struct {
-	conn         pkgRepo.ConnectorSql
+	conn         repository.ConnectorSql
 	mainTable    string
 	selectFields string
 }
 
-func NewCategoryRepository(conn pkgRepo.ConnectorSql) repository.CategoryRepository {
+func NewCategoryRepository(conn repository.ConnectorSql) protocols.CategoryRepository {
 	return CategoryRepository{
 		conn:      conn,
 		mainTable: "tb_category",
@@ -33,7 +33,7 @@ func NewCategoryRepository(conn pkgRepo.ConnectorSql) repository.CategoryReposit
 	}
 }
 
-func (r CategoryRepository) parseEntity(s pkgRepo.Scanner) (entity.Category, error) {
+func (r CategoryRepository) parseEntity(s repository.Scanner) (entity.Category, error) {
 	var slug string
 	var category entity.Category
 	err := s.Scan(
@@ -107,7 +107,7 @@ func (r CategoryRepository) FindByUserID(ctx context.Context, userID uint32) ([]
 		userID,
 	)
 
-	list, err := pkgRepo.ParseEntities(
+	list, err := repository.ParseEntities(
 		r.parseEntity,
 		result,
 		err,

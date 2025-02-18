@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
@@ -17,10 +17,10 @@ type UpdateTaskDoneUseCaseInput struct {
 }
 
 type UpdateTaskDoneUseCaseImpl struct {
-	taskRepository repository.TaskRepository
+	taskRepository protocols.TaskRepository
 }
 
-func NewUpdateTaskDoneUseCaseImpl(taskRepository repository.TaskRepository) UpdateTaskDoneUseCase {
+func NewUpdateTaskDoneUseCaseImpl(taskRepository protocols.TaskRepository) UpdateTaskDoneUseCase {
 	return UpdateTaskDoneUseCaseImpl{
 		taskRepository: taskRepository,
 	}

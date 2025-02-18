@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
@@ -26,10 +26,10 @@ type UpdateUserNameOutput struct {
 }
 
 type UpdateUserNameUseCaseImpl struct {
-	userRepository repository.UserRepository
+	userRepository protocols.UserRepository
 }
 
-func NewUpdateUserNameUseCaseImpl(userRepository repository.UserRepository) UpdateUserNameUseCase {
+func NewUpdateUserNameUseCaseImpl(userRepository protocols.UserRepository) UpdateUserNameUseCase {
 	return UpdateUserNameUseCaseImpl{
 		userRepository: userRepository,
 	}

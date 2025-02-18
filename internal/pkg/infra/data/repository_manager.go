@@ -1,23 +1,23 @@
 package data
 
 import (
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
-	pkgRepo "github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
 
 type RepositoryManager interface {
-	Task() repository.TaskRepository
-	Category() repository.CategoryRepository
-	User() repository.UserRepository
+	Task() protocols.TaskRepository
+	Category() protocols.CategoryRepository
+	User() protocols.UserRepository
 }
 
 type repo struct {
-	task     repository.TaskRepository
-	category repository.CategoryRepository
-	user     repository.UserRepository
+	task     protocols.TaskRepository
+	category protocols.CategoryRepository
+	user     protocols.UserRepository
 }
 
-func NewRepositoryManager(conn pkgRepo.ConnectorSql) RepositoryManager {
+func NewRepositoryManager(conn repository.ConnectorSql) RepositoryManager {
 	return repo{
 		task:     NewTaskRepository(conn),
 		category: NewCategoryRepository(conn),
@@ -25,14 +25,14 @@ func NewRepositoryManager(conn pkgRepo.ConnectorSql) RepositoryManager {
 	}
 }
 
-func (r repo) Task() repository.TaskRepository {
+func (r repo) Task() protocols.TaskRepository {
 	return r.task
 }
 
-func (r repo) Category() repository.CategoryRepository {
+func (r repo) Category() protocols.CategoryRepository {
 	return r.category
 }
 
-func (r repo) User() repository.UserRepository {
+func (r repo) User() protocols.UserRepository {
 	return r.user
 }

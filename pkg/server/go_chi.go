@@ -54,23 +54,23 @@ func (s goChiServer) appendRoutes(routeMain *chi.Mux, routes []Route) {
 			}
 
 			switch r.Method {
-			case "GET":
+			case RouteMethodGet:
 				route.Get(r.Path, s.adapterHandler(r.Handler))
-			case "POST":
+			case RouteMethodPost:
 				route.Post(r.Path, s.adapterHandler(r.Handler))
-			case "PUT":
+			case RouteMethodPut:
 				route.Put(r.Path, s.adapterHandler(r.Handler))
-			case "PATCH":
+			case RouteMethodPatch:
 				route.Patch(r.Path, s.adapterHandler(r.Handler))
-			case "DELETE":
+			case RouteMethodDelete:
 				route.Delete(r.Path, s.adapterHandler(r.Handler))
-			case "HEAD":
+			case RouteMethodHead:
 				route.Head(r.Path, s.adapterHandler(r.Handler))
-			case "CONNECT":
+			case RouteMethodConnect:
 				route.Connect(r.Path, s.adapterHandler(r.Handler))
-			case "OPTIONS":
+			case RouteMethodOptions:
 				route.Options(r.Path, s.adapterHandler(r.Handler))
-			case "TRACE":
+			case RouteMethodTrace:
 				route.Trace(r.Path, s.adapterHandler(r.Handler))
 			}
 		})

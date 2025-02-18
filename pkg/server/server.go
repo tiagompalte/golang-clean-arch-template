@@ -17,7 +17,7 @@ type GroupRoute struct {
 }
 
 type Route struct {
-	Method      string
+	Method      RouteMethod
 	Path        string
 	Middlewares []Middleware
 	Handler     Handler

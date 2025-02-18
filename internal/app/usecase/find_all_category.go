@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
@@ -17,10 +17,10 @@ type FindAllCategoryOutput struct {
 }
 
 type FindAllCategoryUseCaseImpl struct {
-	categoryRepository repository.CategoryRepository
+	categoryRepository protocols.CategoryRepository
 }
 
-func NewFindAllCategoryUseCaseImpl(categoryRepository repository.CategoryRepository) FindAllCategoryUseCase {
+func NewFindAllCategoryUseCaseImpl(categoryRepository protocols.CategoryRepository) FindAllCategoryUseCase {
 	return FindAllCategoryUseCaseImpl{
 		categoryRepository: categoryRepository,
 	}

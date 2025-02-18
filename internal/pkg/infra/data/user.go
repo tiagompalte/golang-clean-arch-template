@@ -6,18 +6,18 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	pkgRepo "github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
 
 type UserRepository struct {
-	conn         pkgRepo.ConnectorSql
+	conn         repository.ConnectorSql
 	mainTable    string
 	selectFields string
 }
 
-func NewUserRepository(conn pkgRepo.ConnectorSql) repository.UserRepository {
+func NewUserRepository(conn repository.ConnectorSql) protocols.UserRepository {
 	return UserRepository{
 		conn:      conn,
 		mainTable: "tb_user",
@@ -35,7 +35,7 @@ func NewUserRepository(conn pkgRepo.ConnectorSql) repository.UserRepository {
 	}
 }
 
-func (r UserRepository) parseEntity(s pkgRepo.Scanner) (entity.User, error) {
+func (r UserRepository) parseEntity(s repository.Scanner) (entity.User, error) {
 	var user entity.User
 	err := s.Scan(
 		&user.ID,

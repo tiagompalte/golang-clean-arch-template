@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
@@ -28,11 +28,11 @@ type CreateUserOutput struct {
 }
 
 type CreateUserUseCaseImpl struct {
-	userRepository repository.UserRepository
+	userRepository protocols.UserRepository
 	crypto         crypto.Crypto
 }
 
-func NewCreateUserUseCaseImpl(userRepository repository.UserRepository, crypto crypto.Crypto) CreateUserUseCase {
+func NewCreateUserUseCaseImpl(userRepository protocols.UserRepository, crypto crypto.Crypto) CreateUserUseCase {
 	return CreateUserUseCaseImpl{
 		userRepository: userRepository,
 		crypto:         crypto,

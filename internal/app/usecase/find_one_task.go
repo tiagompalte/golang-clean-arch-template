@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
@@ -26,10 +26,10 @@ type FindOneTaskOutput struct {
 }
 
 type FindOneTaskUseCaseImpl struct {
-	taskRepository repository.TaskRepository
+	taskRepository protocols.TaskRepository
 }
 
-func NewFindOneTaskUseCaseImpl(taskRepository repository.TaskRepository) FindOneTaskUseCase {
+func NewFindOneTaskUseCaseImpl(taskRepository protocols.TaskRepository) FindOneTaskUseCase {
 	return FindOneTaskUseCaseImpl{
 		taskRepository: taskRepository,
 	}

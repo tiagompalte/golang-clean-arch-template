@@ -4,8 +4,8 @@ package configs
 type DatabaseType string
 
 const (
-	DatabaseMySql    = "mysql"
-	DatabasePostgres = "postgres"
+	DatabaseMySql    DatabaseType = "mysql"
+	DatabasePostgres DatabaseType = "postgres"
 )
 
 func (t DatabaseType) String() string {

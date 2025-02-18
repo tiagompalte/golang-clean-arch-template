@@ -7,18 +7,18 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
-	pkgRepo "github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
 
 type TaskRepository struct {
-	conn         pkgRepo.ConnectorSql
+	conn         repository.ConnectorSql
 	mainTable    string
 	selectFields string
 }
 
-func NewTaskRepository(conn pkgRepo.ConnectorSql) repository.TaskRepository {
+func NewTaskRepository(conn repository.ConnectorSql) protocols.TaskRepository {
 	return TaskRepository{
 		conn:      conn,
 		mainTable: "tb_task",
@@ -46,7 +46,7 @@ func NewTaskRepository(conn pkgRepo.ConnectorSql) repository.TaskRepository {
 	}
 }
 
-func (r TaskRepository) parseEntity(s pkgRepo.Scanner) (entity.Task, error) {
+func (r TaskRepository) parseEntity(s repository.Scanner) (entity.Task, error) {
 	var task entity.Task
 	var categorySlug string
 	err := s.Scan(
@@ -150,7 +150,7 @@ func (r TaskRepository) FindByUserID(ctx context.Context, userID uint32) ([]enti
 		q,
 		userID,
 	)
-	list, err := pkgRepo.ParseEntities[entity.Task](
+	list, err := repository.ParseEntities[entity.Task](
 		r.parseEntity,
 		result,
 		err,

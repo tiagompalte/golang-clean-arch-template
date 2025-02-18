@@ -17,7 +17,9 @@ WORKDIR /app
 
 COPY . .
 
-RUN go mod download && swag init -d ./internal/pkg/server -g server.go -o ./api
+RUN go mod download && go mod verify 
+
+RUN swag init -d ./internal/pkg/server -g server.go -o ./api
 
 RUN wire ./application
 

@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/tiagompalte/golang-clean-arch-template/internal/app/repository"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
@@ -20,10 +20,10 @@ type FindUserUUIDOutput struct {
 }
 
 type FindUserUUIDUseCaseImpl struct {
-	userRepository repository.UserRepository
+	userRepository protocols.UserRepository
 }
 
-func NewFindUserUUIDUseCaseImpl(userRepository repository.UserRepository) FindUserUUIDUseCase {
+func NewFindUserUUIDUseCaseImpl(userRepository protocols.UserRepository) FindUserUUIDUseCase {
 	return FindUserUUIDUseCaseImpl{
 		userRepository: userRepository,
 	}
