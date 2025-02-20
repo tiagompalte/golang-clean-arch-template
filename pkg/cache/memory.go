@@ -2,12 +2,15 @@ package cache
 
 import (
 	"context"
+	"encoding/json"
 	"sync"
 	"time"
+
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 )
 
 type item struct {
-	value     interface{}
+	value     []byte
 	createdAt int64
 	ttl       int64
 }
@@ -18,7 +21,7 @@ type MemoryCache struct {
 }
 
 // NewMemoryCache uses map to store key:value data in-memory.
-func NewMemoryCache() *MemoryCache {
+func NewMemoryCache() Cache {
 	c := &MemoryCache{cache: make(map[string]*item)}
 	go c.setTtlTimer()
 
@@ -40,9 +43,14 @@ func (c *MemoryCache) setTtlTimer() {
 }
 
 func (c *MemoryCache) Set(ctx context.Context, key string, value any, ttl time.Duration) error {
+	valueJson, err := json.Marshal(value)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
 	c.Lock()
 	c.cache[key] = &item{
-		value:     value,
+		value:     valueJson,
 		createdAt: time.Now().Unix(),
 		ttl:       int64(ttl),
 	}
@@ -51,16 +59,21 @@ func (c *MemoryCache) Set(ctx context.Context, key string, value any, ttl time.D
 	return nil
 }
 
-func (c *MemoryCache) Get(ctx context.Context, key string) (any, error) {
+func (c *MemoryCache) Get(ctx context.Context, key string, value any) error {
 	c.RLock()
 	item, ex := c.cache[key]
 	c.RUnlock()
 
 	if !ex {
-		return nil, ErrItemNotFound
+		return ErrItemNotFound
 	}
 
-	return item.value, nil
+	err := json.Unmarshal(item.value, &value)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	return nil
 }
 
 func (c *MemoryCache) Clear(ctx context.Context, key string) error {

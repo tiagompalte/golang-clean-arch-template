@@ -16,8 +16,8 @@ func (c MockCache) Set(ctx context.Context, key string, value any, ttl time.Dura
 	return nil
 }
 
-func (c MockCache) Get(ctx context.Context, key string) (any, error) {
-	return nil, ErrItemNotFound
+func (c MockCache) Get(ctx context.Context, key string, value any) error {
+	return ErrItemNotFound
 }
 
 func (c MockCache) Clear(ctx context.Context, key string) error {

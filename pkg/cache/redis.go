@@ -2,6 +2,7 @@ package cache
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -40,7 +41,12 @@ func (c *RedisCache) buildKey(key string) string {
 }
 
 func (c *RedisCache) Set(ctx context.Context, key string, value any, ttl time.Duration) error {
-	err := c.redis.Set(ctx, c.buildKey(key), value, ttl).Err()
+	valueJson, err := json.Marshal(value)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	err = c.redis.Set(ctx, c.buildKey(key), valueJson, ttl).Err()
 	if err != nil {
 		return errors.Wrap(err)
 	}
@@ -48,16 +54,21 @@ func (c *RedisCache) Set(ctx context.Context, key string, value any, ttl time.Du
 	return nil
 }
 
-func (c *RedisCache) Get(ctx context.Context, key string) (any, error) {
-	val, err := c.redis.Get(ctx, c.buildKey(key)).Bytes()
+func (c *RedisCache) Get(ctx context.Context, key string, value any) error {
+	data, err := c.redis.Get(ctx, c.buildKey(key)).Bytes()
 	if err == redis.Nil {
-		return val, ErrItemNotFound
+		return ErrItemNotFound
 	}
 	if err != nil {
-		return val, errors.Wrap(err)
+		return errors.Wrap(err)
 	}
 
-	return val, nil
+	err = json.Unmarshal(data, &value)
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	return nil
 }
 
 func (c *RedisCache) Clear(ctx context.Context, key string) error {
