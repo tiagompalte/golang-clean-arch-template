@@ -31,9 +31,5 @@ func (t Task) ValidateNew() error {
 		aggrErr.Add(errors.NewEmptyParameterError("user_id"))
 	}
 
-	if aggrErr.Len() > 0 {
-		return errors.Wrap(aggrErr)
-	}
-
-	return nil
+	return aggrErr.Return()
 }

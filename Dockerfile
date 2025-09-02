@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine3.19 AS builder
+FROM golang:1.24.6-alpine3.22 AS builder
 
 USER root
 
@@ -27,7 +27,7 @@ RUN wire ./application
 
 RUN GOOS=linux go build -o app -buildvcs=false /app/cmd/server/main.go
 
-FROM alpine:3.19
+FROM alpine:3.22
 
 USER root
 

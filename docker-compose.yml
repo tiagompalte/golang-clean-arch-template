@@ -8,6 +8,8 @@ services:
       - "5000:5000"
     environment:
       - ENV=docker
+    networks:
+      - golang_clean_arch_network
     depends_on:
       mysql:
         condition: service_healthy
@@ -18,13 +20,15 @@ services:
     container_name: golang-clean-arch-template-cache
     image: redis
     command: redis-server
+    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
-      - /tmp/redis-data:/var/lib/redis
-      - /tmp/redis.conf:/usr/local/etc/redis/redis.conf
+      - redis_volume:/data
     environment:
       - REDIS_REPLICATION_MODE=master
+    networks:
+      - golang_clean_arch_network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
 
@@ -41,6 +45,7 @@ services:
       LANG: en_US.utf8
     volumes:
       - ./scripts/migrations:/docker-entrypoint-initdb.d
+      - mysql_volume:/var/lib/mysql
     command:
       - "--character-set-server=utf8"
       - "--collation-server=utf8_general_ci"
@@ -50,10 +55,18 @@ services:
     tmpfs:
       - /var/lib/mysql/:rw,noexec,nosuid,size=600m
       - /tmp/:rw,noexec,nosuid,size=50m
+    networks:
+      - golang_clean_arch_network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
 
+networks:
+  golang_clean_arch_network:
+
 volumes:
-  dbdata:
+  redis_volume:
+    driver: local
+  mysql_volume:
+    driver: local

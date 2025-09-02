@@ -45,11 +45,7 @@ func (u ValidateUserPasswordUseCaseImpl) validateInput(input ValidateUserPasswor
 		aggrErr.Add(errors.NewEmptyParameterError("password"))
 	}
 
-	if aggrErr.Len() > 0 {
-		return errors.Wrap(aggrErr)
-	}
-
-	return nil
+	return aggrErr.Return()
 }
 
 func (u ValidateUserPasswordUseCaseImpl) Execute(ctx context.Context, input ValidateUserPasswordInput) (ValidateUserPasswordOutput, error) {

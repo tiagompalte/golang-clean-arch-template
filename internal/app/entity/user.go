@@ -26,9 +26,5 @@ func (u User) ValidateNew() error {
 		aggrErr.Add(errors.NewEmptyParameterError("email"))
 	}
 
-	if aggrErr.Len() > 0 {
-		return errors.Wrap(aggrErr)
-	}
-
-	return nil
+	return aggrErr.Return()
 }
