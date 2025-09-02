@@ -33,6 +33,11 @@ type ConfigMigrate struct {
 	PathMigrations string      `mapstructure:"PATH_MIGRATIONS"`
 }
 
+type ConfigQueue struct {
+	DriverName       QueueType `mapstructure:"DRIVER_NAME"`
+	ConnectionSource string    `mapstructure:"CONNECTION_SOURCE"`
+}
+
 type Config struct {
 	AppName  string         `mapstructure:"APP_NAME"`
 	WebPort  string         `mapstructure:"WEB_PORT"`
@@ -41,4 +46,5 @@ type Config struct {
 	Bcrypt   ConfigBcrypt   `mapstructure:"BCRYPT"`
 	Jwt      ConfigJwt      `mapstructure:"JWT"`
 	Migrate  ConfigMigrate  `mapstructure:"MIGRATE"`
+	Queue    ConfigQueue    `mapstructure:"QUEUE"`
 }

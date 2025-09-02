@@ -27,3 +27,7 @@ DURATION = 60000 # seconds
 DRIVER_NAME = "native"
 PATH_MIGRATIONS = "./scripts/migrations"
 # PATH_MIGRATIONS = "./../../scripts/migrations"
+
+[QUEUE]
+DRIVER_NAME = "rabbit-mq"
+CONNECTION_SOURCE = "amqp://guest:guest@localhost:5672"

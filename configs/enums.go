@@ -28,3 +28,10 @@ const (
 	GolangMigrate MigrateType = "golang-migrate"
 	NativeMigrate MigrateType = "native"
 )
+
+type QueueType string
+
+// Queue
+const (
+	QueueRabbitMQ QueueType = "rabbit-mq"
+)

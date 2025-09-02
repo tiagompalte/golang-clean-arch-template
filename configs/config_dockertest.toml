@@ -19,3 +19,6 @@ DURATION = 60000 # seconds
 [MIGRATE]
 DRIVER_NAME = "native"
 PATH_MIGRATIONS = "./scripts/migrations"
+
+[QUEUE]
+DRIVER_NAME = "mock"
