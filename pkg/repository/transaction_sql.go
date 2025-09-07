@@ -8,12 +8,12 @@ import (
 )
 
 type TransactionSql struct {
-	tx         *sql.Tx
-	committed  bool
-	rolledback bool
+	tx        *sql.Tx
+	committed bool
+	rollback  bool
 }
 
-func newTransaction(tx *sql.Tx) TransactionSqlManager {
+func newTransactionSql(tx *sql.Tx) TransactionSqlManager {
 	transaction := new(TransactionSql)
 	transaction.tx = tx
 	return transaction
@@ -31,12 +31,12 @@ func (t *TransactionSql) Commit() error {
 }
 
 func (t *TransactionSql) Rollback() error {
-	if t != nil && !t.committed && !t.rolledback {
+	if t != nil && !t.committed && !t.rollback {
 		err := t.tx.Rollback()
 		if err != nil {
 			return errors.Wrap(err)
 		}
-		t.rolledback = true
+		t.rollback = true
 	}
 	return nil
 }

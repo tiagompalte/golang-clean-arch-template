@@ -13,6 +13,7 @@ func CreateRouteV1(app application.App) server.GroupRoute {
 			CreateGroupTaskV1(app),
 			CreateGroupCategoryV1(app),
 			CreateGroupCurrentUserV1(app),
+			CreateGroupLogV1(app),
 		},
 		Routes: []server.Route{
 			{

@@ -33,8 +33,37 @@ type ConnectorSql struct {
 	ValidateUpdateResult func(ctx context.Context, result ResultSql) error
 }
 
+type RowsMongo interface {
+	Next(ctx context.Context) bool
+	Decode(value any) error
+}
+
+type ResultInsertMongo struct {
+	InsertedID any
+}
+
+type ResultInsertManyMongo struct {
+	InsertedIDs []any
+}
+
+type ResultUpdateMongo struct {
+	AffectedCount int64
+}
+
+type ResultDeleteMongo struct {
+	AffectedCount int64
+}
+
 type ConnectorMongo struct {
-	InsertOne func(ctx context.Context, doc any) error
+	Aggregate  func(ctx context.Context, collection string, pipeline any) (RowsMongo, error)
+	Find       func(ctx context.Context, collection string, filter any) (RowsMongo, error)
+	FindOne    func(ctx context.Context, collection string, filter any, result any) error
+	InsertOne  func(ctx context.Context, collection string, doc any) (ResultInsertMongo, error)
+	InsertMany func(ctx context.Context, collection string, docs []any) (ResultInsertManyMongo, error)
+	UpdateOne  func(ctx context.Context, collection string, filter any, update any) (ResultUpdateMongo, error)
+	UpdateMany func(ctx context.Context, collection string, filter any, update any) (ResultUpdateMongo, error)
+	DeleteOne  func(ctx context.Context, collection string, filter any) (ResultDeleteMongo, error)
+	DeleteMany func(ctx context.Context, collection string, filter any) (ResultDeleteMongo, error)
 }
 
 type Connector interface {

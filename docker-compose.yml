@@ -62,6 +62,25 @@ services:
       timeout: 20s
       retries: 10
 
+  mongo:
+    container_name: golang-clean-arch-template-mongo
+    image: mongo:noble
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: db_todo
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - golang_clean_arch_network
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
 networks:
   golang_clean_arch_network:
 
@@ -69,4 +88,6 @@ volumes:
   redis_volume:
     driver: local
   mysql_volume:
+    driver: local
+  mongo_data:
     driver: local

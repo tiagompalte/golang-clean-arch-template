@@ -1,8 +1,25 @@
 {
+    "schemes": [
+        "http",
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "TODO API",
+        "title": "TODO API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
+    "basePath": "/",
     "paths": {
         "/api/health-check": {
             "get": {
@@ -69,6 +86,79 @@
                         "description": "User",
                         "schema": {
                             "$ref": "#/definitions/handler.UserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/current/user/update-name": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update user name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User Name",
+                "parameters": [
+                    {
+                        "description": "Update User Name",
+                        "name": "update_user_name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.UpdateUserName"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User",
+                        "schema": {
+                            "$ref": "#/definitions/handler.UserResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/logs": {
+            "post": {
+                "description": "Create new Log",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Create Log",
+                "parameters": [
+                    {
+                        "description": "New Log",
+                        "name": "new_log",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.CreateLogRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Create Log success",
+                        "schema": {
+                            "$ref": "#/definitions/handler.LogResponse"
                         }
                     }
                 }
@@ -336,6 +426,17 @@
                 }
             }
         },
+        "handler.CreateLogRequest": {
+            "type": "object",
+            "properties": {
+                "level": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
         "handler.CreateTaskRequest": {
             "type": "object",
             "properties": {
@@ -348,6 +449,12 @@
                 "name": {
                     "type": "string"
                 }
+            }
+        },
+        "handler.LogResponse": {
+            "type": "object",
+            "properties": {
+                "id": {}
             }
         },
         "handler.SigninRequest": {
@@ -411,12 +518,20 @@
                 }
             }
         },
+        "handler.UpdateUserName": {
+            "type": "object",
+            "properties": {
+                "new_name": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
         "handler.UserResponse": {
             "type": "object",
             "properties": {
-                "created_at": {
-                    "type": "string"
-                },
                 "email": {
                     "type": "string"
                 },
@@ -425,6 +540,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "version": {
+                    "type": "integer"
                 }
             }
         }

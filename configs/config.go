@@ -1,8 +1,15 @@
 package configs
 
-type ConfigDatabase struct {
+type ConfigDatabaseSQL struct {
 	DriverName       DatabaseType `mapstructure:"DRIVER_NAME"`
 	ConnectionSource string       `mapstructure:"CONNECTION_SOURCE"`
+}
+
+type ConfigDatabaseMongo struct {
+	URI      string `mapstructure:"URI"`
+	DbName   string `mapstructure:"DB_NAME"`
+	User     string `mapstructure:"USER"`
+	Password string `mapstructure:"PASSWORD"`
 }
 
 type ConfigRedis struct {
@@ -34,11 +41,12 @@ type ConfigMigrate struct {
 }
 
 type Config struct {
-	AppName  string         `mapstructure:"APP_NAME"`
-	WebPort  string         `mapstructure:"WEB_PORT"`
-	Database ConfigDatabase `mapstructure:"DATABASE"`
-	Cache    ConfigCache    `mapstructure:"CACHE"`
-	Bcrypt   ConfigBcrypt   `mapstructure:"BCRYPT"`
-	Jwt      ConfigJwt      `mapstructure:"JWT"`
-	Migrate  ConfigMigrate  `mapstructure:"MIGRATE"`
+	AppName       string              `mapstructure:"APP_NAME"`
+	WebPort       string              `mapstructure:"WEB_PORT"`
+	DatabaseSQL   ConfigDatabaseSQL   `mapstructure:"DATABASE_SQL"`
+	DatabaseMongo ConfigDatabaseMongo `mapstructure:"DATABASE_MONGO"`
+	Cache         ConfigCache         `mapstructure:"CACHE"`
+	Bcrypt        ConfigBcrypt        `mapstructure:"BCRYPT"`
+	Jwt           ConfigJwt           `mapstructure:"JWT"`
+	Migrate       ConfigMigrate       `mapstructure:"MIGRATE"`
 }

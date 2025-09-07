@@ -9,6 +9,7 @@ package application
 import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/mongo"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/auth"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/cache"
@@ -27,6 +28,9 @@ func Build() (App, error) {
 	connectorSql := repository.ProviderConnectorSqlSet(configsConfig)
 	categoryRepository := data.NewCategoryRepository(connectorSql)
 	createCategoryUseCase := usecase.NewCreateCategoryUseCaseImpl(categoryRepository)
+	connectorMongo := repository.ProviderConnectorMongoSet(configsConfig)
+	logRepository := mongo.NewLogRepository(connectorMongo)
+	createLogUseCase := usecase.NewCreateLogUseCaseImpl(logRepository)
 	dataManager := repository.ProviderDataSqlManagerSet(configsConfig)
 	uowUow := uow.NewUow(dataManager)
 	createTaskUseCase := usecase.NewCreateTaskUseCaseImpl(uowUow)
@@ -38,7 +42,8 @@ func Build() (App, error) {
 	updateTaskUndoneUseCase := usecase.NewUpdateTaskUndoneUseCaseImpl(taskRepository)
 	deleteTaskUseCase := usecase.NewDeleteTaskUseCaseImpl(taskRepository)
 	cacheCache := cache.ProviderSet(configsConfig)
-	healthCheckUseCase := usecase.ProviderHealthCheckUseCase(cacheCache, dataManager)
+	repositoryDataManager := repository.ProviderDataMongoManagerSet(configsConfig)
+	healthCheckUseCase := usecase.ProviderHealthCheckUseCase(cacheCache, dataManager, repositoryDataManager)
 	userRepository := data.NewUserRepository(connectorSql)
 	cryptoCrypto := crypto.ProviderSet(configsConfig)
 	createUserUseCase := usecase.NewCreateUserUseCaseImpl(userRepository, cryptoCrypto)
@@ -49,6 +54,7 @@ func Build() (App, error) {
 	updateUserNameUseCase := usecase.NewUpdateUserNameUseCaseImpl(userRepository)
 	useCase := usecase.UseCase{
 		CreateCategoryUseCase:       createCategoryUseCase,
+		CreateLogUseCase:            createLogUseCase,
 		CreateTaskUseCase:           createTaskUseCase,
 		FindAllCategoryUseCase:      findAllCategoryUseCase,
 		FindAllTaskUseCase:          findAllTaskUseCase,

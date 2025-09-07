@@ -7,7 +7,7 @@ import (
 func ProviderDataSqlManagerSet(
 	config configs.Config,
 ) DataSqlManager {
-	return NewDataSqlWithConfig(config.Database)
+	return NewDataSqlWithConfig(config.DatabaseSQL)
 }
 
 func ProviderConnectorSqlSet(
@@ -15,4 +15,17 @@ func ProviderConnectorSqlSet(
 ) ConnectorSql {
 	dataSql := ProviderDataSqlManagerSet(config)
 	return dataSql.Command()
+}
+
+func ProviderDataMongoManagerSet(
+	config configs.Config,
+) DataMongoManager {
+	return NewDataMongoWithConfig(config.DatabaseMongo)
+}
+
+func ProviderConnectorMongoSet(
+	config configs.Config,
+) ConnectorMongo {
+	dataMongo := ProviderDataMongoManagerSet(config)
+	return dataMongo.Command()
 }

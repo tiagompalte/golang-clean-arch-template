@@ -16,6 +16,8 @@ var ProviderSet = wire.NewSet(
 	cache.ProviderSet,
 	repository.ProviderDataSqlManagerSet,
 	repository.ProviderConnectorSqlSet,
+	repository.ProviderDataMongoManagerSet,
+	repository.ProviderConnectorMongoSet,
 	server.ProviderSet,
 	crypto.ProviderSet,
 	auth.ProviderSet,

@@ -1,9 +1,15 @@
 APP_NAME = "TODO API"
 WEB_PORT = ":5000"
 
-[DATABASE]
+[DATABASE_SQL]
 DRIVER_NAME = "mysql"
 CONNECTION_SOURCE = "root:root@tcp(localhost:3306)/db_todo_test?parseTime=true"
+
+[DATABASE_MONGO]
+URI = "mongodb://localhost:27017"
+DB_NAME = "db_todo_test"
+USER = "root"
+PASSWORD = "root"
 
 [CACHE]
 DRIVER_NAME = "mock"
@@ -14,7 +20,7 @@ ROUND = 12
 [JWT]
 ALGORITHM = "HS256"
 KEY_SECRET = "Secr3t"
-DURATION = 60000 # seconds
+DURATION = 60000      # seconds
 
 [MIGRATE]
 DRIVER_NAME = "native"

@@ -9,6 +9,7 @@ import (
 
 var ProviderSet = wire.NewSet(
 	NewCreateCategoryUseCaseImpl,
+	NewCreateLogUseCaseImpl,
 	NewCreateTaskUseCaseImpl,
 	NewFindAllCategoryUseCaseImpl,
 	NewFindAllTaskUseCaseImpl,
@@ -24,8 +25,8 @@ var ProviderSet = wire.NewSet(
 	NewUpdateUserNameUseCaseImpl,
 )
 
-func ProviderHealthCheckUseCase(cache cache.Cache, dataSqlManager repository.DataSqlManager) HealthCheckUseCase {
+func ProviderHealthCheckUseCase(cache cache.Cache, dataSqlManager repository.DataSqlManager, dataMongoManager repository.DataMongoManager) HealthCheckUseCase {
 	return NewHealthCheckUseCaseImpl([]healthcheck.HealthCheck{
-		cache, dataSqlManager,
+		cache, dataSqlManager, dataMongoManager,
 	})
 }

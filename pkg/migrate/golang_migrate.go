@@ -15,7 +15,7 @@ import (
 )
 
 type GolangMigrate struct {
-	configDatabase configs.ConfigDatabase
+	configDatabase configs.ConfigDatabaseSQL
 	configMigrate  configs.ConfigMigrate
 }
 
@@ -23,7 +23,7 @@ func NewGolangMigrate(
 	config configs.Config,
 ) Migrate {
 	return GolangMigrate{
-		configDatabase: config.Database,
+		configDatabase: config.DatabaseSQL,
 		configMigrate:  config.Migrate,
 	}
 }

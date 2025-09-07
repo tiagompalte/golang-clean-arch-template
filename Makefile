@@ -35,4 +35,4 @@ docker-up-all:
 
 docker-up-db-cache:
 	docker compose down --remove-orphans
-	docker compose up --build mysql redis
+	docker compose up --build mysql mongo redis

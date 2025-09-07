@@ -13,7 +13,7 @@ type DataSql struct {
 	db *sql.DB
 }
 
-func NewDataSqlWithConfig(config configs.ConfigDatabase) DataSqlManager {
+func NewDataSqlWithConfig(config configs.ConfigDatabaseSQL) DataSqlManager {
 	db, err := sql.Open(config.DriverName.String(), config.ConnectionSource)
 	if err != nil {
 		panic(fmt.Sprintf("error to connect in database: %v", err))
@@ -32,7 +32,7 @@ func (d *DataSql) Begin() (TransactionSqlManager, error) {
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
-	return newTransaction(tx), nil
+	return newTransactionSql(tx), nil
 }
 
 func (d *DataSql) Close() (err error) {

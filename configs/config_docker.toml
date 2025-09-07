@@ -1,19 +1,25 @@
 APP_NAME = "TODO API"
 WEB_PORT = ":5000"
 
-[DATABASE]
+[DATABASE_SQL]
 DRIVER_NAME = "mysql"
 CONNECTION_SOURCE = "root:root@tcp(mysql:3306)/db_todo?parseTime=true"
+
+[DATABASE_MONGO]
+URI = "mongodb://mongo:27017"
+DB_NAME = "db_todo"
+USER = "root"
+PASSWORD = "root"
 
 [CACHE]
 DRIVER_NAME = "redis"
 
-    [CACHE.REDIS]
-    HOST = "redis"
-    PORT = 6379
-    DB = 0
-    PASS = ""
-    PREFIX = "dev"
+[CACHE.REDIS]
+HOST = "redis"
+PORT = 6379
+DB = 0
+PASS = ""
+PREFIX = "dev"
 
 [BCRYPT]
 ROUND = 12
@@ -21,7 +27,7 @@ ROUND = 12
 [JWT]
 ALGORITHM = "HS256"
 KEY_SECRET = "Secr3t"
-DURATION = 60000 # seconds
+DURATION = 60000      # seconds
 
 [MIGRATE]
 DRIVER_NAME = "native"
