@@ -6,7 +6,7 @@ import (
 	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/sql"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
 
@@ -23,7 +23,7 @@ func TestFindAllTaskExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql.Command())
+		taskRepository := sql.NewTaskRepository(datasql.Command())
 
 		us := FindAllTaskUseCaseImpl{
 			taskRepository: taskRepository,

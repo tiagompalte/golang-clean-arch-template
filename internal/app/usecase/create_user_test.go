@@ -6,7 +6,7 @@ import (
 	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/sql"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/crypto"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
@@ -26,7 +26,7 @@ func TestCreateUserExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql.Command())
+		userRepository := sql.NewUserRepository(datasql.Command())
 
 		us := CreateUserUseCaseImpl{
 			userRepository: userRepository,
@@ -81,7 +81,7 @@ func TestCreateUserExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql.Command())
+		userRepository := sql.NewUserRepository(datasql.Command())
 
 		us := CreateUserUseCaseImpl{
 			userRepository: userRepository,
@@ -118,7 +118,7 @@ func TestCreateUserExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		userRepository := data.NewUserRepository(datasql.Command())
+		userRepository := sql.NewUserRepository(datasql.Command())
 
 		us := CreateUserUseCaseImpl{
 			userRepository: userRepository,

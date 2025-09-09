@@ -6,7 +6,7 @@ import (
 	"time"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/sql"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
@@ -24,7 +24,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql.Command())
+		taskRepository := sql.NewTaskRepository(datasql.Command())
 
 		us := DeleteTaskUseCaseImpl{
 			taskRepository: taskRepository,
@@ -61,7 +61,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql.Command())
+		taskRepository := sql.NewTaskRepository(datasql.Command())
 
 		us := DeleteTaskUseCaseImpl{
 			taskRepository: taskRepository,
@@ -94,7 +94,7 @@ func TestDeleteTaskExecute(t *testing.T) {
 		}
 
 		datasql := repository.NewDataSql(db)
-		taskRepository := data.NewTaskRepository(datasql.Command())
+		taskRepository := sql.NewTaskRepository(datasql.Command())
 
 		us := DeleteTaskUseCaseImpl{
 			taskRepository: taskRepository,

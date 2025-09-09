@@ -4,8 +4,10 @@ import (
 	"context"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
 
 type CreateTaskUseCase interface {
@@ -29,10 +31,10 @@ type CreateTaskOutput struct {
 }
 
 type CreateTaskUseCaseImpl struct {
-	uow uow.Uow
+	uow uow.Uow[repository.ConnectorSql, data.SqlManager]
 }
 
-func NewCreateTaskUseCaseImpl(uow uow.Uow) CreateTaskUseCase {
+func NewCreateTaskUseCaseImpl(uow uow.Uow[repository.ConnectorSql, data.SqlManager]) CreateTaskUseCase {
 	return CreateTaskUseCaseImpl{
 		uow: uow,
 	}
@@ -60,12 +62,12 @@ func (u CreateTaskUseCaseImpl) Execute(ctx context.Context, input CreateTaskInpu
 		return CreateTaskOutput{}, errors.Wrap(err)
 	}
 
-	err = u.uow.Do(ctx, func(uow *uow.Uow) error {
-		category, err := uow.Repository().Category().FindBySlugAndUserID(ctx, categoryNew.GetSlug(), categoryNew.UserID)
+	err = u.uow.Do(ctx, func(data data.Manager[data.SqlManager]) error {
+		category, err := data.Repository().Category().FindBySlugAndUserID(ctx, categoryNew.GetSlug(), categoryNew.UserID)
 		if err != nil && !errors.IsAppError(err, errors.ErrorCodeNotFound) {
 			return errors.Wrap(err)
 		} else if errors.IsAppError(err, errors.ErrorCodeNotFound) {
-			category.ID, err = uow.Repository().Category().Insert(ctx, categoryNew)
+			category.ID, err = data.Repository().Category().Insert(ctx, categoryNew)
 			if err != nil {
 				return errors.Wrap(err)
 			}
@@ -73,12 +75,12 @@ func (u CreateTaskUseCaseImpl) Execute(ctx context.Context, input CreateTaskInpu
 
 		task.Category = category
 
-		id, err := uow.Repository().Task().Insert(ctx, task)
+		id, err := data.Repository().Task().Insert(ctx, task)
 		if err != nil {
 			return errors.Wrap(err)
 		}
 
-		task, err = uow.Repository().Task().FindByID(ctx, id)
+		task, err = data.Repository().Task().FindByID(ctx, id)
 		if err != nil {
 			return errors.Wrap(err)
 		}

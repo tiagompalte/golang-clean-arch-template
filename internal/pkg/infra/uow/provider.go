@@ -3,5 +3,6 @@ package uow
 import "github.com/google/wire"
 
 var ProviderSet = wire.NewSet(
-	NewUow,
+	NewUowSql,
+	NewUowMongo,
 )

@@ -8,8 +8,8 @@ package application
 
 import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/usecase"
-	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/mongo"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/sql"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/uow"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/auth"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/cache"
@@ -26,16 +26,16 @@ func Build() (App, error) {
 	configsConfig := config.ProviderSet()
 	serverServer := server.ProviderSet(configsConfig)
 	connectorSql := repository.ProviderConnectorSqlSet(configsConfig)
-	categoryRepository := data.NewCategoryRepository(connectorSql)
+	categoryRepository := sql.NewCategoryRepository(connectorSql)
 	createCategoryUseCase := usecase.NewCreateCategoryUseCaseImpl(categoryRepository)
 	connectorMongo := repository.ProviderConnectorMongoSet(configsConfig)
 	logRepository := mongo.NewLogRepository(connectorMongo)
 	createLogUseCase := usecase.NewCreateLogUseCaseImpl(logRepository)
 	dataManager := repository.ProviderDataSqlManagerSet(configsConfig)
-	uowUow := uow.NewUow(dataManager)
+	uowUow := uow.NewUowSql(dataManager)
 	createTaskUseCase := usecase.NewCreateTaskUseCaseImpl(uowUow)
 	findAllCategoryUseCase := usecase.NewFindAllCategoryUseCaseImpl(categoryRepository)
-	taskRepository := data.NewTaskRepository(connectorSql)
+	taskRepository := sql.NewTaskRepository(connectorSql)
 	findAllTaskUseCase := usecase.NewFindAllTaskUseCaseImpl(taskRepository)
 	findOneTaskUseCase := usecase.NewFindOneTaskUseCaseImpl(taskRepository)
 	updateTaskDoneUseCase := usecase.NewUpdateTaskDoneUseCaseImpl(taskRepository)
@@ -44,7 +44,7 @@ func Build() (App, error) {
 	cacheCache := cache.ProviderSet(configsConfig)
 	repositoryDataManager := repository.ProviderDataMongoManagerSet(configsConfig)
 	healthCheckUseCase := usecase.ProviderHealthCheckUseCase(cacheCache, dataManager, repositoryDataManager)
-	userRepository := data.NewUserRepository(connectorSql)
+	userRepository := sql.NewUserRepository(connectorSql)
 	cryptoCrypto := crypto.ProviderSet(configsConfig)
 	createUserUseCase := usecase.NewCreateUserUseCaseImpl(userRepository, cryptoCrypto)
 	validateUserPasswordUseCase := usecase.NewValidateUserPasswordUseCaseImpl(userRepository, cryptoCrypto)

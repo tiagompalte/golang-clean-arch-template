@@ -25,7 +25,7 @@ func TestCreateTaskExecute(t *testing.T) {
 		}
 
 		data := repository.NewDataSql(db)
-		uow := uow.NewUow(data)
+		uow := uow.NewUowSql(data)
 		us := NewCreateTaskUseCaseImpl(uow)
 
 		input := CreateTaskInput{
@@ -51,7 +51,7 @@ func TestCreateTaskExecute(t *testing.T) {
 		}
 
 		data := repository.NewDataSql(db)
-		uow := uow.NewUow(data)
+		uow := uow.NewUowSql(data)
 		us := NewCreateTaskUseCaseImpl(uow)
 
 		mock.ExpectBegin()
@@ -111,7 +111,7 @@ func TestCreateTaskExecute(t *testing.T) {
 		}
 
 		data := repository.NewDataSql(db)
-		uow := uow.NewUow(data)
+		uow := uow.NewUowSql(data)
 		us := NewCreateTaskUseCaseImpl(uow)
 
 		mock.ExpectBegin()
@@ -169,7 +169,7 @@ func TestCreateTaskExecute(t *testing.T) {
 		}
 
 		data := repository.NewDataSql(db)
-		uow := uow.NewUow(data)
+		uow := uow.NewUowSql(data)
 		us := NewCreateTaskUseCaseImpl(uow)
 
 		mock.ExpectBegin()

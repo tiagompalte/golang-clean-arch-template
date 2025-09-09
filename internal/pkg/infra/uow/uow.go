@@ -6,26 +6,36 @@ import (
 	"fmt"
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/data"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/mongo"
+	"github.com/tiagompalte/golang-clean-arch-template/internal/pkg/infra/sql"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
 )
 
-type Uow struct {
-	db         repository.DataSqlManager
-	tx         repository.TransactionSqlManager
-	repository data.RepositoryManager
+type Uow[T repository.Connector, U data.RepositoryManager] struct {
+	db             repository.DataManager[T]
+	tx             repository.TransactionManager[T]
+	newRepoManager func(conn T) data.Manager[U]
 }
 
-func NewUow(db repository.DataSqlManager) Uow {
-	return Uow{
+func NewUowSql(db repository.DataSqlManager) Uow[repository.ConnectorSql, data.SqlManager] {
+	return Uow[repository.ConnectorSql, data.SqlManager]{
 		db: db,
+		newRepoManager: func(conn repository.ConnectorSql) data.Manager[data.SqlManager] {
+			return sql.NewRepositoryManager(conn)
+		},
 	}
 }
 
-func (u *Uow) Repository() data.RepositoryManager {
-	return u.repository
+func NewUowMongo(db repository.DataMongoManager) Uow[repository.ConnectorMongo, data.MongoManager] {
+	return Uow[repository.ConnectorMongo, data.MongoManager]{
+		db: db,
+		newRepoManager: func(conn repository.ConnectorMongo) data.Manager[data.MongoManager] {
+			return mongo.NewRepositoryManager(conn)
+		},
+	}
 }
 
-func (u *Uow) Do(ctx context.Context, fn func(Uow *Uow) error) error {
+func (u *Uow[T, U]) Do(ctx context.Context, fn func(data data.Manager[U]) error) error {
 	if u.tx != nil {
 		return fmt.Errorf("transaction already started")
 	}
@@ -35,9 +45,9 @@ func (u *Uow) Do(ctx context.Context, fn func(Uow *Uow) error) error {
 		return err
 	}
 	u.tx = tx
-	u.repository = data.NewRepositoryManager(tx.Command())
+	dataManager := u.newRepoManager(u.tx.Command())
 
-	err = fn(u)
+	err = fn(dataManager)
 	if err != nil {
 		errRb := u.Rollback()
 		if errRb != nil {
@@ -49,7 +59,7 @@ func (u *Uow) Do(ctx context.Context, fn func(Uow *Uow) error) error {
 	return u.CommitOrRollback()
 }
 
-func (u *Uow) Rollback() error {
+func (u *Uow[T, U]) Rollback() error {
 	if u.tx == nil {
 		return errors.New("no transaction to rollback")
 	}
@@ -64,7 +74,7 @@ func (u *Uow) Rollback() error {
 	return nil
 }
 
-func (u *Uow) CommitOrRollback() error {
+func (u *Uow[T, U]) CommitOrRollback() error {
 	err := u.tx.Commit()
 	if err != nil {
 		errRb := u.Rollback()
