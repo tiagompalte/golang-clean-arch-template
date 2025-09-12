@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/healthcheck"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type Scanner interface {
@@ -56,7 +57,7 @@ type ResultDeleteMongo struct {
 
 type ConnectorMongo struct {
 	Aggregate  func(ctx context.Context, collection string, pipeline any) (RowsMongo, error)
-	Find       func(ctx context.Context, collection string, filter any) (RowsMongo, error)
+	Find       func(ctx context.Context, collection string, filter any, opts ...options.Lister[options.FindOptions]) (RowsMongo, error)
 	FindOne    func(ctx context.Context, collection string, filter any, result any) error
 	InsertOne  func(ctx context.Context, collection string, doc any) (ResultInsertMongo, error)
 	InsertMany func(ctx context.Context, collection string, docs []any) (ResultInsertManyMongo, error)

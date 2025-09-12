@@ -134,6 +134,36 @@ const docTemplate = `{
             }
         },
         "/api/v1/logs": {
+            "get": {
+                "description": "Find all logs",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Find All Logs",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 100,
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Logs list",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/handler.LogResponse"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create new Log",
                 "consumes": [
@@ -160,6 +190,35 @@ const docTemplate = `{
                 "responses": {
                     "201": {
                         "description": "Create Log success",
+                        "schema": {
+                            "$ref": "#/definitions/handler.LogResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/logs/{id}": {
+            "get": {
+                "description": "Find log by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Find Log by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Log ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Log found",
                         "schema": {
                             "$ref": "#/definitions/handler.LogResponse"
                         }
@@ -435,9 +494,7 @@ const docTemplate = `{
                 "level": {
                     "type": "string"
                 },
-                "message": {
-                    "type": "string"
-                }
+                "message": {}
             }
         },
         "handler.CreateTaskRequest": {
@@ -457,7 +514,16 @@ const docTemplate = `{
         "handler.LogResponse": {
             "type": "object",
             "properties": {
-                "id": {}
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "string"
+                },
+                "message": {}
             }
         },
         "handler.SigninRequest": {

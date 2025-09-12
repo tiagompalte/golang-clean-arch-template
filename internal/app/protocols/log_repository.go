@@ -8,5 +8,6 @@ import (
 
 type LogRepository interface {
 	Insert(ctx context.Context, log entity.Log) (any, error)
-	Find(ctx context.Context, filter any) ([]entity.Log, error)
+	FindAll(ctx context.Context, limit int64) ([]entity.Log, error)
+	FindByID(ctx context.Context, id string) (entity.Log, error)
 }

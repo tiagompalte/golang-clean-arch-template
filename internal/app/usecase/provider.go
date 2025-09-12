@@ -23,6 +23,8 @@ var ProviderSet = wire.NewSet(
 	NewFindUserUUIDUseCaseImpl,
 	ProviderHealthCheckUseCase,
 	NewUpdateUserNameUseCaseImpl,
+	NewFindAllLogUseCaseImpl,
+	NewFindByIDLogUseCaseImpl,
 )
 
 func ProviderHealthCheckUseCase(cache cache.Cache, dataSqlManager repository.DataSqlManager, dataMongoManager repository.DataMongoManager) HealthCheckUseCase {

@@ -16,4 +16,6 @@ type UseCase struct {
 	GenerateUserTokenUseCase
 	FindUserUUIDUseCase
 	UpdateUserNameUseCase
+	FindAllLogUseCase
+	FindByIDLogUseCase
 }

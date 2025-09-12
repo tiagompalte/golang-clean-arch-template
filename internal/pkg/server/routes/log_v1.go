@@ -15,6 +15,16 @@ func CreateGroupLogV1(app application.App) server.GroupRoute {
 			Method:  http.MethodPost,
 			Handler: handler.CreateLogHandler(app.UseCase().CreateLogUseCase),
 		},
+		{
+			Path:    "/",
+			Method:  http.MethodGet,
+			Handler: handler.FindAllLogHandler(app.UseCase().FindAllLogUseCase),
+		},
+		{
+			Path:    "/{id}",
+			Method:  http.MethodGet,
+			Handler: handler.FindByIDLogHandler(app.UseCase().FindByIDLogUseCase),
+		},
 	}
 
 	return server.GroupRoute{

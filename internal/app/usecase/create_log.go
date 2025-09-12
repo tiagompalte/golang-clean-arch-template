@@ -6,15 +6,20 @@ import (
 
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/entity"
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
+	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type CreateLogInput struct {
 	Level   string
-	Message string
+	Message any
 }
 
 type CreateLogOutput struct {
-	ID any
+	ID        string
+	CreatedAt time.Time
+	Level     string
+	Message   any
 }
 
 type CreateLogUseCase interface {
@@ -39,8 +44,23 @@ func (uc CreateLogUseCaseImpl) Execute(ctx context.Context, input CreateLogInput
 
 	id, err := uc.logRepo.Insert(ctx, log)
 	if err != nil {
-		return CreateLogOutput{}, err
+		return CreateLogOutput{}, errors.Wrap(err)
 	}
 
-	return CreateLogOutput{ID: id}, nil
+	objectID, ok := id.(bson.ObjectID)
+	if !ok {
+		return CreateLogOutput{}, errors.NewAppInternalServerError()
+	}
+
+	log, err = uc.logRepo.FindByID(ctx, objectID.Hex())
+	if err != nil {
+		return CreateLogOutput{}, errors.Wrap(err)
+	}
+
+	return CreateLogOutput{
+		ID:        log.ID.Hex(),
+		CreatedAt: log.CreatedAt,
+		Level:     log.Level,
+		Message:   log.Message,
+	}, nil
 }

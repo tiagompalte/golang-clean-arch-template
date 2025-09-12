@@ -11,8 +11,7 @@ definitions:
     properties:
       level:
         type: string
-      message:
-        type: string
+      message: {}
     type: object
   handler.CreateTaskRequest:
     properties:
@@ -25,7 +24,13 @@ definitions:
     type: object
   handler.LogResponse:
     properties:
-      id: {}
+      created_at:
+        type: string
+      id:
+        type: string
+      level:
+        type: string
+      message: {}
     type: object
   handler.SigninRequest:
     properties:
@@ -165,6 +170,26 @@ paths:
       tags:
       - User
   /api/v1/logs:
+    get:
+      description: Find all logs
+      parameters:
+      - default: 100
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logs list
+          schema:
+            items:
+              $ref: '#/definitions/handler.LogResponse'
+            type: array
+      summary: Find All Logs
+      tags:
+      - Log
     post:
       consumes:
       - application/json
@@ -184,6 +209,25 @@ paths:
           schema:
             $ref: '#/definitions/handler.LogResponse'
       summary: Create Log
+      tags:
+      - Log
+  /api/v1/logs/{id}:
+    get:
+      description: Find log by ID
+      parameters:
+      - description: Log ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Log found
+          schema:
+            $ref: '#/definitions/handler.LogResponse'
+      summary: Find Log by ID
       tags:
       - Log
   /api/v1/signin:

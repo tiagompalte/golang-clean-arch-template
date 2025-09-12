@@ -11,11 +11,7 @@ import (
 
 type CreateLogRequest struct {
 	Level   string `json:"level"`
-	Message string `json:"message"`
-}
-
-type LogResponse struct {
-	ID any `json:"id"`
+	Message any    `json:"message"`
 }
 
 func (r *CreateLogRequest) toInput() usecase.CreateLogInput {
@@ -51,7 +47,10 @@ func CreateLogHandler(createLogUseCase usecase.CreateLogUseCase) server.Handler 
 		}
 
 		response := LogResponse{
-			ID: output.ID,
+			ID:        output.ID,
+			CreatedAt: output.CreatedAt,
+			Level:     output.Level,
+			Message:   output.Message,
 		}
 
 		err = server.RespondJSON(w, http.StatusCreated, response)

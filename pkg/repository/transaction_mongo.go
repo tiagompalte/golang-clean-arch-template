@@ -5,6 +5,7 @@ import (
 
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type TransactionMongo struct {
@@ -45,8 +46,8 @@ func (t *TransactionMongo) Rollback() error {
 
 func (t *TransactionMongo) Command() ConnectorMongo {
 	return ConnectorMongo{
-		Find: func(ctx context.Context, collection string, filter any) (RowsMongo, error) {
-			cursor, err := t.session.Client().Database(t.dbName).Collection(collection).Find(ctx, filter)
+		Find: func(ctx context.Context, collection string, filter any, opts ...options.Lister[options.FindOptions]) (RowsMongo, error) {
+			cursor, err := t.session.Client().Database(t.dbName).Collection(collection).Find(ctx, filter, opts...)
 			if err != nil {
 				return nil, errors.Wrap(err)
 			}

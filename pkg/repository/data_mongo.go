@@ -71,8 +71,8 @@ func (d *DataMongo) Command() ConnectorMongo {
 			}
 			return cursor, nil
 		},
-		Find: func(ctx context.Context, collection string, filter any) (RowsMongo, error) {
-			cursor, err := d.client.Database(d.dbName).Collection(collection).Find(ctx, filter)
+		Find: func(ctx context.Context, collection string, filter any, opts ...options.Lister[options.FindOptions]) (RowsMongo, error) {
+			cursor, err := d.client.Database(d.dbName).Collection(collection).Find(ctx, filter, opts...)
 			if err != nil {
 				return nil, errors.Wrap(err)
 			}

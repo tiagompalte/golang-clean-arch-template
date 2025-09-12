@@ -7,6 +7,8 @@ import (
 	"github.com/tiagompalte/golang-clean-arch-template/internal/app/protocols"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/errors"
 	"github.com/tiagompalte/golang-clean-arch-template/pkg/repository"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type LogRepository struct {
@@ -29,8 +31,8 @@ func (r LogRepository) Insert(ctx context.Context, log entity.Log) (any, error) 
 	return res.InsertedID, nil
 }
 
-func (r LogRepository) Find(ctx context.Context, filter any) ([]entity.Log, error) {
-	result, err := r.conn.Find(ctx, r.collection, filter)
+func (r LogRepository) FindAll(ctx context.Context, limit int64) ([]entity.Log, error) {
+	result, err := r.conn.Find(ctx, r.collection, bson.D{}, options.Find().SetLimit(limit))
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
@@ -45,4 +47,18 @@ func (r LogRepository) Find(ctx context.Context, filter any) ([]entity.Log, erro
 	}
 
 	return logs, nil
+}
+
+func (r LogRepository) FindByID(ctx context.Context, id string) (entity.Log, error) {
+	objectID, err := bson.ObjectIDFromHex(id)
+	if err != nil {
+		return entity.Log{}, errors.Wrap(err)
+	}
+
+	var log entity.Log
+	err = r.conn.FindOne(ctx, r.collection, bson.M{"_id": objectID}, &log)
+	if err != nil {
+		return entity.Log{}, errors.Wrap(err)
+	}
+	return log, nil
 }

@@ -1,10 +1,14 @@
 package entity
 
-import "time"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
+)
 
 type Log struct {
-	ID        any       `bson:"_id,omitempty"`
-	CreatedAt time.Time `bson:"created_at"`
-	Level     string    `bson:"level"`
-	Message   string    `bson:"message"`
+	ID        bson.ObjectID `bson:"_id,omitempty"`
+	CreatedAt time.Time     `bson:"created_at"`
+	Level     string        `bson:"level"`
+	Message   any           `bson:"message"`
 }

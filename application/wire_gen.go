@@ -52,6 +52,8 @@ func Build() (App, error) {
 	generateUserTokenUseCase := usecase.NewGenerateUserTokenUseCaseImpl(authAuth)
 	findUserUUIDUseCase := usecase.NewFindUserUUIDUseCaseImpl(userRepository)
 	updateUserNameUseCase := usecase.NewUpdateUserNameUseCaseImpl(userRepository)
+	findAllLogUseCase := usecase.NewFindAllLogUseCaseImpl(logRepository)
+	findByIDLogUseCase := usecase.NewFindByIDLogUseCaseImpl(logRepository)
 	useCase := usecase.UseCase{
 		CreateCategoryUseCase:       createCategoryUseCase,
 		CreateLogUseCase:            createLogUseCase,
@@ -68,6 +70,8 @@ func Build() (App, error) {
 		GenerateUserTokenUseCase:    generateUserTokenUseCase,
 		FindUserUUIDUseCase:         findUserUUIDUseCase,
 		UpdateUserNameUseCase:       updateUserNameUseCase,
+		FindAllLogUseCase:           findAllLogUseCase,
+		FindByIDLogUseCase:          findByIDLogUseCase,
 	}
 	logLog := log.ProviderSet()
 	app := ProvideApplication(configsConfig, serverServer, useCase, authAuth, logLog)
